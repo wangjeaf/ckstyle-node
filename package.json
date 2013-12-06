@@ -1,0 +1,32 @@
+{ 
+  "name": "ckstyle",
+  "description": "Parse & Check & Format & Comb & Compress CSS, and more ...",
+  "version": "0.0.2",
+  "author": "wangjeaf <wangjeaf@gmail.com>",
+  "contributors": [
+  ],
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "keywords": [
+    "css",
+    "code style",
+    "parser",
+    "check",
+    "format",
+    "comb",
+    "compress",
+    "browser"
+  ],
+  "repository": "git://github.com/wangjeaf/ckstyle-node",
+  "main": "index",
+  "bin": {
+    "ckstyle": "./bin/ckstyle"
+  },
+  "scripts": {
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  }
+}
