@@ -4,21 +4,22 @@
   "version": "0.0.6",
 
   "author": "wangjeaf <wangjeaf@gmail.com>",
-  "contributors": [
-  ],
-  "dependencies": {
-  },
+  "homepage": "http://www.csscheckstyle.com",
+  "contributors": [ ],
+  "dependencies": {},
   "devDependencies": {
+     "grunt": "~0.4.1",
+     "underscore": "~1.5.1"
+     "grunt-contrib-jshint": "~0.6.4",
+     "grunt-contrib-watch": "~0.5.3",
+     "grunt-contrib-concat": "~0.3.0",
+     "grunt-contrib-copy": "~0.4.1",
+     "grunt-contrib-clean": "~0.5.0",
+     "grunt-contrib-uglify": "~0.2.2",
+     "grunt-markdown": "~0.4.0"
   },
   "keywords": [
-    "css",
-    "code style",
-    "CSS parser",
-    "CSS check",
-    "CSS format",
-    "CSS comb",
-    "CSS compress",
-    "browser"
+     "CSS", "code style", "checker", "fixer", "compressor"
   ],
   "repository": "git://github.com/wangjeaf/ckstyle-node",
   "main": "./dist/index.js",
