@@ -1,7 +1,7 @@
 { 
   "name": "ckstyle",
   "description": "Parse & Check & Format & Comb & Compress CSS, and more ...",
-  "version": "0.0.3",
+  "version": "0.0.4",
 
   "author": "wangjeaf <wangjeaf@gmail.com>",
   "contributors": [
@@ -21,7 +21,10 @@
     "browser"
   ],
   "repository": "git://github.com/wangjeaf/ckstyle-node",
-  "main": "./dist/index.js",
+  "main": "./index.js",
+  "bin": {
+     "ckstyle" "./dist/index.js"
+  },
   "scripts": {
     "test": "grunt travis --verbose"
   },
