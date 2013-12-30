@@ -1,7 +1,7 @@
 { 
   "name": "ckstyle",
   "description": "Parse & Check & Format & Comb & Compress CSS, and more ...",
-  "version": "0.0.2",
+  "version": "0.0.3",
 
   "author": "wangjeaf <wangjeaf@gmail.com>",
   "contributors": [
@@ -13,21 +13,25 @@
   "keywords": [
     "css",
     "code style",
-    "parser",
-    "check",
-    "format",
-    "comb",
-    "compress",
+    "CSS parser",
+    "CSS check",
+    "CSS format",
+    "CSS comb",
+    "CSS compress",
     "browser"
   ],
   "repository": "git://github.com/wangjeaf/ckstyle-node",
-  "main": "index",
-  "bin": {
-    "ckstyle": "./bin/ckstyle"
-  },
+  "main": "./dist/index.js",
   "scripts": {
+    "test": "grunt travis --verbose"
   },
   "engines": {
     "node": ">= 0.8.0"
-  }
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/wangjeaf/ckstyle-node/blob/master/README.md"
+    }
+  ]
 }
