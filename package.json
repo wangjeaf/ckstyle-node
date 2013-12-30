@@ -22,11 +22,7 @@
   ],
   "repository": "git://github.com/wangjeaf/ckstyle-node",
   "main": "./index.js",
-  "bin": {
-     "ckstyle": "./dist/index.js"
-  },
   "scripts": {
-    "test": "grunt travis --verbose"
   },
   "engines": {
     "node": ">= 0.8.0"
