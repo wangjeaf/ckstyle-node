@@ -1,1 +1,4 @@
-console.log('ckstyle index.js');
+
+exports.hello = function() {
+    console.log('ckstyle index.js');
+}
