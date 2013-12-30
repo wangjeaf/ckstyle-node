@@ -21,7 +21,8 @@
     "browser"
   ],
   "repository": "git://github.com/wangjeaf/ckstyle-node",
-  "main": "./index.js",
+  "main": "./dist/index.js",
+  "bin": { "ckstyle": "./index.js" },
   "scripts": {
   },
   "engines": {
