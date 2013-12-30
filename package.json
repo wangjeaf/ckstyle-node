@@ -1,7 +1,7 @@
 { 
   "name": "ckstyle",
   "description": "Parse & Check & Format & Comb & Compress CSS, and more ...",
-  "version": "0.0.4",
+  "version": "0.0.5",
 
   "author": "wangjeaf <wangjeaf@gmail.com>",
   "contributors": [
