@@ -1,0 +1,23 @@
+<script type="text/javascript" src="../libs/sea.js"></script>
+
+<!-- <script type="text/javascript" src="ckstyle.js"></script> -->
+
+<script type="text/javascript">
+seajs.config({
+  base: "./",
+})
+
+var global = window;
+
+define('fs', function(require, exports) {
+    exports.realpathSync = function(file) { return file; }
+    exports.readdirSync = function(file) { return [file]; }
+})
+
+define('path', function() {
+
+})
+
+seajs.use('ckstyle/test.js', function(a) {
+})
+</script>
