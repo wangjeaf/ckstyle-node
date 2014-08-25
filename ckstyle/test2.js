@@ -6,10 +6,10 @@ checker.prepare() // load plugins, do css parser;
 
 checker.doCheck();
 var errors = checker.getErrors()
-console.log(errors);
+//console.log(errors);
 
 var fixed = checker.doFix();
 console.log(fixed);
 
 var compressed = checker.doCompress();
-console.log(compressed);
+//console.log(compressed);

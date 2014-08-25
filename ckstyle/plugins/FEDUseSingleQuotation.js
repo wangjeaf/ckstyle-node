@@ -22,7 +22,7 @@ module.exports = global.FEDUseSingleQuotation = new Class(RuleChecker, function(
 
     this.fix = function(self, rule, config) {
         if (self._findDouble(rule.value)) {
-            rule.fixedValue = rule.value.replace('"', "'")
+            rule.fixedValue = rule.fixedValue.replace(/"/g, "'")
         }
     }
 

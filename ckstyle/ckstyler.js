@@ -186,6 +186,7 @@ var CssChecker = new Class(function() {
         if (errors == null) {
             errors = [checker.msg || checker.errorMsg]
         }
+		
         errors.forEach(function(errorMsg) {
             obj = {}
             if (!errorMsg)
@@ -193,8 +194,8 @@ var CssChecker = new Class(function() {
 
             if (errorMsg.indexOf('${file}') == -1) {
                 errorMsg = errorMsg + ' (from "' + styleSheet.getFile() + '")'
-            // } else {
-            //    errorMsg = errorMsg.replace('${file}', styleSheet.getFile())
+             } else {
+                errorMsg = errorMsg.replace('${file}', styleSheet.getFile())
             }
 
             obj["errorMsg"] = errorMsg
@@ -210,6 +211,7 @@ var CssChecker = new Class(function() {
         if (!errors)
             errors = [checker.msg || checker.errorMsg]
         errors.forEach(function(errorMsg) {
+					
             obj = {}
             if (!errorMsg) {
                 console.error('[TOOL] no errorMsg in your plugin, please check it')
@@ -217,8 +219,8 @@ var CssChecker = new Class(function() {
             }
             if (errorMsg.indexOf('${selector}') == -1) {
                 errorMsg = errorMsg + ' (from "' + rule.selector + '")'
-            //} else {
-            //    errorMsg = errorMsg.replace('${selector}', rule.selector)
+            } else {
+                errorMsg = errorMsg.replace('${selector}', rule.selector)
             }
             //errorMsg = errorMsg.replace('${name}', rule.roughName.trim())
             //errorMsg = errorMsg.replace('${value}', rule.value.trim())
@@ -239,10 +241,11 @@ var CssChecker = new Class(function() {
         }
         errors.forEach(function(errorMsg) {
             obj = {}
+
             if (errorMsg.indexOf('${selector}') == -1) {
                 errorMsg = errorMsg + ' (from "' + ruleSet.selector + '")'
-            //} else {
-            //    errorMsg = errorMsg.replace('${selector}', ruleSet.selector)
+			} else {
+                errorMsg = errorMsg.replace('${selector}', ruleSet.selector)
             }
             obj["errorMsg"] = errorMsg
             obj["selector"] = ruleSet.selector
@@ -251,6 +254,7 @@ var CssChecker = new Class(function() {
         });
     }
 
+	
     this.doCompress = function(self, browser) {
         browser = browser || ALL;
         self.config._curBrowser = browser
@@ -280,6 +284,7 @@ var CssChecker = new Class(function() {
 
         // fix规则
         function fixRules(ruleSet) {
+			//console.log( self.ruleCheckers)
             self.ruleCheckers.forEach(function(checker) {
                 ruleSet.getRules().forEach(function(rule) {
                     if (!checker.fix) {
