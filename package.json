@@ -26,6 +26,9 @@
   "bin": { "ckstyle": "./index.js" },
   "scripts": {
   },
+  "scripts": {
+    "test": "mocha"
+  },
   "engines": {
     "node": ">= 0.8.0"
   },
