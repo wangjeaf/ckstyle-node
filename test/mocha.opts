@@ -1,2 +1,4 @@
+**/*.spec.js
 --recursive
 -r test/_init.js
+--reporter list
