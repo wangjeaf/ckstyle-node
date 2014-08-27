@@ -66,7 +66,7 @@ var CssChecker = new Class(function() {
         return self.logMsgs.length != 0 || self.warningMsgs.length != 0 || self.errorMsgs.length != 0
     }
 
-    this.getErrors = function(self) {
+    this.getErrors = this.errors = function(self) {
         // 把错误信息导出
         return [self.logMsgs, self.warningMsgs, self.errorMsgs]
     }
@@ -79,7 +79,7 @@ var CssChecker = new Class(function() {
             }
             return;
         }
-        pluginDir = pluginDir || (fs.realpathSync('.') + '/plugins');
+        pluginDir = pluginDir || (fs.realpathSync(__dirname) + '/plugins');
         self._doLoadPlugins(pluginDir)
     }
 

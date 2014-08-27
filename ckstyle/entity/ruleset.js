@@ -238,6 +238,7 @@ RuleSet.prototype.existRoughNames = function(name) {
 RuleSet.prototype.getRuleByStrippedName = function(name) {
     var self = this;
     for(var i = 0; i < self._rules.length; i++) {
+        var rule = self._rules[i];
         if (rule.strippedName == name) {
             return rule
         }
@@ -246,14 +247,19 @@ RuleSet.prototype.getRuleByStrippedName = function(name) {
 RuleSet.prototype.getRuleByRoughName = function(name) {
     var self = this;
     for(var i = 0; i < self._rules.length; i++) {
+        var rule = self._rules[i];
         if (rule.roughName == name) {
             return rule
         }
     }
 }
 RuleSet.prototype.getRuleByName = function(name) {
+    if (!name) {
+        return;
+    }
     var self = this;
     for(var i = 0; i < self._rules.length; i++) {
+        var rule = self._rules[i];
         if (rule.name == name) {
             return rule
         }

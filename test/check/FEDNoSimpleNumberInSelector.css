@@ -1,0 +1,48 @@
+/*
+ * @author: zhifu.wang@renren-inc.com
+ */
+@unit-test-expecteds {
+    1: do not simply use 1,2,3 as selector(use v1/step1/item1), in ".class1"
+    1: do not simply use 1,2,3 as selector(use v1/step1/item1), in ".class2"
+    1: do not simply use 1,2,3 as selector(use v1/step1/item1), in ".class6"
+    1: do not simply use 1,2,3 as selector(use v1/step1/item1), in ".fdjas6"
+    1: do not simply use 1,2,3 as selector(use v1/step1/item1), in ".test1000"
+
+    1: ".class1, .class2, .class6, .class .ok, .v6, .class .step3, .fdjas6, .test1000, .test-item111" contains the same rules in "FEDNoSimpleNumberInSelector.css"
+}
+
+.class1 {
+    width: 100px;
+}
+
+.class2 {
+    width: 100px;
+}
+
+.class6 {
+    width: 100px;
+}
+
+.class .ok {
+    width: 100px;
+}
+
+.v6 {
+    width: 100px;
+}
+
+.class .step3 {
+    width: 100px;
+}
+
+.fdjas6 {
+    width: 100px;
+}
+
+.test1000 {
+    width: 100px;
+}
+
+.test-item111 {
+    width: 100px;
+}

@@ -188,7 +188,7 @@ var RULE_HACKS = [
 var RULESET_HACKS = [
     [new RegExp('\\*html'),                 1, IE6],
     [new RegExp('\\*\\+html'),               1, IE7],
-    [new RegExp('\\*:first\-child\+html'),  1, IE7],
+    [new RegExp('\\*:first\-child\\+html'),  1, IE7],
     [new RegExp('html>body'),              1, IE7 | IE8 | IE9PLUS],
     [new RegExp('html>/\\*\\*/body'),        1, IE8 | IE9PLUS],
     [new RegExp('.*\-webkit\-'),           1, WEBKIT],

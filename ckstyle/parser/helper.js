@@ -41,8 +41,8 @@ function isNestedStatement(selector) {
 }
 
 function handleSpecialStatement(text, i, length, char) {
-    for(var i = 0; i < specialTexts.length; i++) {
-        var obj = specialTexts[i];
+    for(var k = 0; k < specialTexts.length; k++) {
+        var obj = specialTexts[k];
         if (char == obj['start'] && isSpecialString(text, i, obj["text"])) {
             tmp = findCharFrom(text, i, length, obj["end"])
             tmp.push(obj["text"])
@@ -54,11 +54,11 @@ function handleSpecialStatement(text, i, length, char) {
 
 function findCharFrom(text, i, length, left, right) {
     right = right || null;
-    counter = 1
-    collector = ''
+    var counter = 1
+    var collector = ''
     for(var j = i + 1; j < length; j++) {
         if (right == null) {
-            if (text[j] == left || left.find(text[j]) != -1) {
+            if (text[j] == left || left.indexOf(text[j]) != -1) {
                 break;
             } else {
                 collector = collector + text[j]
