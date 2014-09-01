@@ -5,7 +5,7 @@ var RuleSetChecker = base.RuleSetChecker
 var helper = require('./helper');
 
 module.exports = global.FEDStyleShouldInOrder = new Class(RuleSetChecker, function() {
-    
+
     this.__init__ = function(self) {
         self.id = 'keep-in-order'
         self.errorLevel = ERROR_LEVEL.WARNING
@@ -49,7 +49,6 @@ module.exports = global.FEDStyleShouldInOrder = new Class(RuleSetChecker, functi
         for(var i = 0; i < mapping.length; i++) {
             sortedRules.push(mapping[i][1])
         }
-            
         ruleSet.setRules(sortedRules)
     }
 

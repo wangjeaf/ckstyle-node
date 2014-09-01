@@ -112,3 +112,4 @@ function compressDirRecursively(directory, config) {
 }
 
 exports.doCompress = doCompress;
+exports.prepare = prepare

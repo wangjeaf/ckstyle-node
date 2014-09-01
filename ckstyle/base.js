@@ -55,6 +55,9 @@ RuleSetChecker.type = 'ruleset'
 var StyleSheetChecker = new Class(Checker, function() {})
 StyleSheetChecker.type = 'stylesheet'
 
+var ExtraChecker = new Class(Checker, function() {})
+ExtraChecker.type = 'extra'
+
 var ERROR_LEVEL = {
     ERROR: 0,
     WARNING: 1,
@@ -82,6 +85,7 @@ exports.ERROR_LEVEL = ERROR_LEVEL
 exports.RuleChecker = RuleChecker
 exports.RuleSetChecker = RuleSetChecker
 exports.StyleSheetChecker = StyleSheetChecker
+exports.ExtraChecker = ExtraChecker
 exports.findInArray = findInArray
 exports.isObject = isObject
 exports.isFunction = isFunction

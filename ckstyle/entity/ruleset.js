@@ -207,7 +207,7 @@ RuleSet.prototype.existNames = function(name) {
         var name = names[i];
         name = name.trim()
         for(var j = 0; j < self._rules.length; j++) {
-            var rule = self._rules[i]
+            var rule = self._rules[j]
             if (rule.name == name) {
                 return true;
             }
@@ -227,7 +227,7 @@ RuleSet.prototype.existRoughNames = function(name) {
         var name = names[i];
         name = name.trim()
         for(var j = 0; j < self._rules.length; j++) {
-            var rule = self._rules[i]
+            var rule = self._rules[j]
             if (rule.strippedName == name) {
                 return true;
             }

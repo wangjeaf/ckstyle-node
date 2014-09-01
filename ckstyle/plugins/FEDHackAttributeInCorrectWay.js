@@ -7,36 +7,28 @@ var helper = require('./helper');
 module.exports = global.FEDHackAttributeInCorrectWay = new Class(RuleChecker, function () {
 
     this.__init__ = function (self) {
-        self.id = 'hack-prop';
-        self.errorLevel = ERROR_LEVEL.ERROR;
-        self.errorMsg = '"${name}" is not in correct hacking way in "${selector}"';
+        self.id = 'hack-prop'
+        self.errorLevel = ERROR_LEVEL.ERROR
+        self.errorMsg = '"${name}" is not in correct hacking way in "${selector}"'
     }
 
     this.check = function (self, rule, config) {
         if (rule.value.indexOf('\\0') != -1)
-            return false;
+            return false
 
-        var stripped = rule.roughName.trim();
+        var stripped = rule.roughName.trim()
         if (rule.name == stripped.toLowerCase())
-            return true;
+            return true
 
         if (helper.isCss3PrefixProp(rule.name))
-            return true;
+            return true
 
-        if (!self.startswith(stripped, '_') && !self.startswith(stripped, '*') && self.startswith(stripped, '+'))
-            return false;
+        if (!helper.startswith(stripped, '_') && 
+            !helper.startswith(stripped, '*') && 
+            helper.startswith(stripped, '+'))
+            return false
 
         return true
-    }
-
-    this.startswith = function (self, v, str) {
-        if (str[0] == '*' || str[0] == '+') {
-            str = '\\' + str;
-        }
-        //console.log(v)
-
-        var reg = new RegExp("^" + str);
-        return reg.test(v.replace(/\'"/g, ''));
     }
 
     this.__doc__ = {

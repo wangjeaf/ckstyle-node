@@ -6,6 +6,34 @@ exports.heredoc = function(fn) {
         .replace(/[\s\xA0]+$/, "");
 };
 
+
+function len(arr) {
+    return arr.length;
+}
+exports.len = len;
+
+function startswith(str, pattern) {
+    return str.indexOf(pattern) == 0;
+}
+exports.startswith = startswith;
+
+function endswith(str, pattern) {
+    if (str.length < pattern.length) {
+        return false;
+    }
+    return str.slice(pattern.length * -1) == pattern;
+}
+exports.endswith = endswith;
+
+function times(str, time) {
+    var collector = '';
+    for(var i = 0; i < time; i++) {
+        collector += str;
+    }
+    return collector;
+}
+exports.times = times;
+
 exports.isFontFamilyName = function(font) {
     font = font.toLowerCase()
     var added = "," + font + ","

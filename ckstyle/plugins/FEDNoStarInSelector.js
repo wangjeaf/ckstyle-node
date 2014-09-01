@@ -2,6 +2,7 @@ var base = require('../base')
 var ERROR_LEVEL = base.ERROR_LEVEL
 var Class = base.Class
 var RuleSetChecker = base.RuleSetChecker
+var helper = require('./helper')
 
 module.exports = global.FEDNoStarInSelector = new Class(RuleSetChecker, function () {
 
@@ -17,7 +18,7 @@ module.exports = global.FEDNoStarInSelector = new Class(RuleSetChecker, function
             return true;
 
         var replaced = selector.replace(' ', '');
-        if (this.startWith(replaced, '*html') || this.startWith(replaced, '*+html'))
+        if (helper.startswith(replaced, '*html') || helper.startswith(replaced, '*+html'))
             return true;
 
         if (replaced.indexOf('*:not') != -1)
@@ -30,16 +31,6 @@ module.exports = global.FEDNoStarInSelector = new Class(RuleSetChecker, function
 
         return false;
 
-    }
-
-    this.startWith = function (self,v, str) {
-        if (str[0] == '*') {
-            str = '\\' + str
-        }
-        //console.log(v)
-
-        var reg = new RegExp("^" + str);
-        return reg.test(v.replace(/\'"/g, ''));
     }
 
     this.__doc__ = {

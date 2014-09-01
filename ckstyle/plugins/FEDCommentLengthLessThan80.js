@@ -11,7 +11,11 @@ module.exports = global.FEDCommentLengthLessThan80 = new Class(StyleSheetChecker
     }
 
     this.check = function (self, styleSheet, config) {
-        var comment = styleSheet.getRuleSets()[0].roughComment;
+        var ruleSet = styleSheet.getRuleSets()[0]
+        if (!ruleSet) {
+            return true;
+        }
+        var comment = ruleSet.roughComment;
         if (comment.length == 0) {
             return true
         }
