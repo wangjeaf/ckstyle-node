@@ -35,7 +35,7 @@ NestedStatement.prototype.compress = function(browser) {
 
 NestedStatement.prototype.fixed = function(config) {
     var self = this;
-    return self.fixedSelector + ' {\n    ' + '\n    '.join(self.fixedStatement.split('\n')) + '\n}'
+    return self.fixedSelector + ' {\n    ' + self.fixedStatement.split('\n').join('\n    ') + '\n}'
 }
 NestedStatement.prototype._compressedStatement = function() {
     var self = this;

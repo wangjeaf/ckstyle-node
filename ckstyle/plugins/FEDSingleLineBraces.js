@@ -15,10 +15,10 @@ module.exports = global.FEDSingleLineBraces = new Class(RuleSetChecker, function
     }
 
     this.check = function(self, ruleSet, config) {
-        singleLine = ruleSet.getSingleLineFlag()
+        var singleLine = ruleSet.getSingleLineFlag()
         if (!singleLine)
             return true
-        selector = ruleSet.roughSelector
+        var selector = ruleSet.roughSelector
         if (selector.indexOf(',') == -1) {
             if (selector.slice(-2) == '  ' || selector.slice(-1) != ' ') {
                 self.errorMsg = self.errorMsg_openingBrace
@@ -28,7 +28,7 @@ module.exports = global.FEDSingleLineBraces = new Class(RuleSetChecker, function
             return true
         }
 
-        value = ruleSet.roughValue
+        var value = ruleSet.roughValue
         if (value.slice(0, 1) != ' ' || value.slice(0, 2) == '  ') {
             self.errorMsg = self.errorMsg_openingBraceEnd
             return false
@@ -45,6 +45,3 @@ module.exports = global.FEDSingleLineBraces = new Class(RuleSetChecker, function
         "desc":"与单行CSS编码风格相关的括号检查"
     }
 })
-
-
-    

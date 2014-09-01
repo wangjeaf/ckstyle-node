@@ -4,6 +4,9 @@ var path = require('path')
 exports.simpleRunTests = function(dirname) {
   fs.readdirSync(dirname).forEach(function(filename) {
     if (path.extname(filename) == '.css') {
+      if (filename.indexOf('_') == 0) {
+        return;
+      }
       describe(filename, function(){
         var css = fs.readFileSync(path.join(dirname, filename), {charset: 'utf-8'});
         if (css) {

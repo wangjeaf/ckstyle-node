@@ -35,11 +35,9 @@ function fixFile(filePath, config) {
         extension = null
     if (extension != null && endswith(filePath, extension))
         return
-
-
     fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
     if (!config.printFlag)
-        console.log('[fixstyle] fixing %s' % filePath)
+        console.log('[fixstyle] fixing ' + filePath)
 
     var result = doFix(fileContent, filePath, config)
     checker = result[0]

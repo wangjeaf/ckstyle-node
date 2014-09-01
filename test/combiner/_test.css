@@ -1,0 +1,33 @@
+/* @author wangjeaf */ 
+
+@import (url-here);
+
+.test {
+    _width: 100px; 
+    *height: 100px;
+}
+
+.test2 {
+    _width: 100px; 
+    *height: 100px;
+}
+.test3 {
+    _width: 100px;
+    *height: 100px;
+}
+
+.test4 {
+    _width: 100px; 
+    *height: 100px;
+}
+
+.test5 {
+    *height: 100px;
+    _width: 100px;
+}
+
+.test6 {
+    _width: 100px; 
+    *height: 100px;
+    display:none;
+}

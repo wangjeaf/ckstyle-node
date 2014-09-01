@@ -1,0 +1,19 @@
+*html a {
+	width: 100px;
+}
+
+*+html a {
+	width: 200px;
+}
+
+a {
+	-webkit-transform: 1s;
+	-moz-transform: 1s;
+	-o-transform: 1s;
+}
+
+b {
+	-moz-transform: 1s;
+	width: 300px;
+	_width: 400px;
+}
