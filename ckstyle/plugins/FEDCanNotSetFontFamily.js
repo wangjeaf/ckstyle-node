@@ -2,7 +2,7 @@ var base = require('../base')
 var ERROR_LEVEL = base.ERROR_LEVEL
 var Class = base.Class
 var RuleChecker = base.RuleChecker
-var isFontFamilyName = require('./helper').isFontFamilyName
+var helper = require('./helper')
 
 module.exports = global.FEDCanNotSetFontFamily = new Class(RuleChecker, function() {
     this.__init__ = function(self) {
@@ -22,7 +22,7 @@ module.exports = global.FEDCanNotSetFontFamily = new Class(RuleChecker, function
 
             // one font
             var splited = rule.value.split(' ')
-            if (isFontFamilyName(splited[splited.length - 1])) {
+            if (helper.isFontFamilyName(splited[splited.length - 1])) {
                 return false
             }
         }

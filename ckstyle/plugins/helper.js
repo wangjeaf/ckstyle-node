@@ -102,7 +102,7 @@ exports.isCss3PrefixProp = isCss3PrefixProp;
 
 var wordsPattern = /\w+/g
 function existsAppearanceWords(selector) {
-    selector = selector.lower()
+    selector = selector.toLowerCase()
     words = selector.match(wordsPattern)
     for(var i = 0; i < words.length; i++) {
         var w = words[i];
