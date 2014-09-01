@@ -11,10 +11,15 @@ var allCss3Props = ('animation-name animation-duration animation-timing-function
 //from https://github.com/stubbornella/csslint/wiki/Require-compatible-vendor-prefixes
 var prefixCss3Props = ('animation animation-delay animation-direction animation-duration animation-fill-mode animation-iteration-count animation-name animation-play-state animation-timing-function appearance border-end border-end-color border-end-style border-end-width border-image border-radius border-start border-start-color border-start-style border-start-width box-align box-direction box-flex box-lines box-ordinal-group box-orient box-pack box-sizing box-shadow column-count column-gap column-rule column-rule-color column-rule-style column-rule-width column-width hyphens line-break margin-end margin-start marquee-speed marquee-style padding-end padding-start tab-size text-size-adjust transform transform-origin transition transition-delay transition-duration transition-property transition-timing-function user-modify user-select background-size writing-mode').split(' ')
 
+var simpleSelectors = ('.nav .sub #main #main2 #sidebar #sidebar2 .header .footer .publisher .box .login .site-nav .side').split(' ');
+
+var validHTMLTags = ('a abbr acronym address applet area article aside audio b base basefont bdi bdo big blockquote body br button canvas caption center cite code col colgroup command datalist dd del details dfn dir div dl dt em embed fieldset figcaption figure font footer form frame frameset h1 h2 h3 h4 h5 h6 head header hgroup hr html i iframe img input ins kbd keygen label legend li link map mark menu meta meter nav noframes noscript object ol optgroup option output p param pre progress q rp rt ruby s samp script section select small source span strike strong style sub summary sup table tbody td textarea tfoot th thead time title tr track tt u ul var video wbr').split(' ')
+var appearanceWords = ("left right top bottom float" + " aqua aquamarine azure beige bisque black blanchedalmond blue blueviolet brown burlywood cadetblue chartreuse chocolate coral cornflowerblue cornsilk crimson cyan darkblue darkcyan darkgoldenrod darkgray darkgrey darkgreen darkkhaki darkmagenta darkolivegreen darkorange darkorchid darkred darksalmon darkseagreen darkslateblue darkslategray darkslategrey darkturquoise darkviolet deeppink deepskyblue dimgray dimgrey dodgerblue firebrick floralwhite forestgreen fuchsia gainsboro ghostwhite goldenrod gray grey green greenyellow honeydew hotpink indianred indigo ivory khaki lavender lavenderblush lawngreen lemonchiffon lightblue lightcoral lightcyan lightgoldenrodyellow lightgray lightgrey lightgreen lightpink lightsalmon lightseagreen lightskyblue lightslategray lightslategrey lightsteelblue lightyellow lime limegreen linen magenta maroon mediumaquamarine mediumblue mediumorchid mediumpurple mediumseagreen mediumslateblue mediumspringgreen mediumturquoise mediumvioletred midnightblue mintcream mistyrose moccasin navajowhite navy oldlace olive olivedrab orange orangered orchid palegoldenrod palegreen paleturquoise palevioletred papayawhip peachpuff peru pink plum powderblue purple red rosybrown royalblue saddlebrown salmon sandybrown seagreen seashell sienna silver skyblue slateblue slategray slategrey snow springgreen steelblue thistle tomato turquoise violet wheat white whitesmoke yellow yellowgreen").split(' ')
+
 
 exports.isFontFamilyName = function(font) {
-    font = font.toLowerCase()
-    var added = "," + font + ","
+    var font = font.toLowerCase();
+    var added = "," + font + ",";
     return fontFamilyNames.indexOf(font) != -1 || fontFamilyNames.indexOf(added) != -1
 }
 exports.isCss3PrefixProp = function(prop) {
@@ -23,6 +28,32 @@ exports.isCss3PrefixProp = function(prop) {
 exports.isCss3Prop = function(prop) {
 	return valueInArray(prefixCss3Props, prop)
 }
+
+exports.isSimpleSelector = function (selector) {
+	for (var i = 0, l = simpleSelectors.length; i < l; i++) {
+		if (simpleSelectors[i] == selector)
+			return true;
+	}
+	return false
+}
+exports.isHTMLTag = function(tag){
+    return valueInArray(validHTMLTags, tag)
+}
+exports.existsAppearanceWords = function(selector){
+    var selector = selector.toLowerCase();
+    var words = selector.match(/\w+/g);
+	
+	if(words == null)
+		return null
+	
+    for (var i = 0,l = words.length;i<l;i++){
+	        if(valueInArray(appearanceWords,words[i]))
+            return words[i]
+	}
+
+    return null	
+}
+
 function valueInArray(arr,val){
 	for(var i =0,l = arr.length;i<l;i++){
 		if(arr[i]==val)

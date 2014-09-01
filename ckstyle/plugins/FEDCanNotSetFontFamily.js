@@ -17,7 +17,7 @@ module.exports = global.FEDCanNotSetFontFamily = new Class(RuleChecker, function
 
         if (rule.name == 'font') {
             // many fonts
-            if (rule.value.find(',') != -1)
+            if (rule.value.indexOf(',') != -1)
                 return false
 
             // one font

@@ -27,18 +27,15 @@ var base = require('../base')
 
 		this.fix = function (self, rule, config) {
 			var fixedValue = rule.fixedValue;
+			var splittedValue = fixedValue.split(' ');
+			for (var i = 0,l =splittedValue.length;i<l;i++) {
 			
-			for (v in fixedValue.split(' ')) {
-			console.log(v,self._startsWithZeroDot(v))
-				if (self._startsWithZeroDot(v)){
-						rule.fixedValue = fixedValue.replace(v, a.substring(1));
+				if (self._startsWithZeroDot(splittedValue[i])){
+						rule.fixedValue = fixedValue.replace(splittedValue[i], splittedValue[i].substring(1));
 					}
 					
 			}
 			
-		}
-		this._findOutlineNone = function (self, value) {
-			return value.indexOf('none') !== -1
 		}
 		this._startsWithZeroDot = function (self, value) {
 			return startWith(value, '0.')
@@ -46,7 +43,7 @@ var base = require('../base')
 
 		function startWith(value, str) {
 			var reg = new RegExp("^" + str);
-			return reg.test(value);
+			return reg.test(value.replace(/\'"/g,''));
 		}
 
 		this.__doc__ = {
