@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+
+var ckstyle = require('../')
+
+ckstyle.start(process.argv)

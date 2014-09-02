@@ -1,30 +1,35 @@
-{ 
+{
   "name": "ckstyle",
   "description": "Parse & Check & Format & Comb & Compress CSS, and more ...",
   "version": "0.0.6",
-
   "author": "wangjeaf <wangjeaf@gmail.com>",
   "homepage": "http://www.csscheckstyle.com",
-  "contributors": [ ],
+  "contributors": [],
   "dependencies": {},
   "devDependencies": {
-     "grunt": "~0.4.1",
-     "underscore": "~1.5.1",
-     "grunt-contrib-jshint": "~0.6.4",
-     "grunt-contrib-watch": "~0.5.3",
-     "grunt-contrib-concat": "~0.3.0",
-     "grunt-contrib-copy": "~0.4.1",
-     "grunt-contrib-clean": "~0.5.0",
-     "grunt-contrib-uglify": "~0.2.2",
-     "grunt-markdown": "~0.4.0"
+    "colors": "^0.6.2",
+    "commander": "^2.3.0",
+    "grunt": "~0.4.1",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-contrib-jshint": "~0.6.4",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-markdown": "~0.4.0",
+    "underscore": "~1.5.1"
   },
   "keywords": [
-     "CSS", "code style", "checker", "fixer", "compressor"
+    "CSS",
+    "code style",
+    "checker",
+    "fixer",
+    "compressor"
   ],
   "repository": "git://github.com/wangjeaf/ckstyle-node",
   "main": "./dist/index.js",
-  "bin": { "ckstyle": "./index.js" },
-  "scripts": {
+  "bin": {
+    "ckstyle": "./bin/ckstyle"
   },
   "scripts": {
     "test": "mocha"
