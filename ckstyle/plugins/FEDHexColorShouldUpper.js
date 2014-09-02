@@ -81,7 +81,7 @@ module.exports = global.FEDHexColorShouldUpper = new Class(RuleChecker, function
             return
 
         if (!hasImportant && self._wrongLength(found)) {
-            var finalColor = helper.len(found) > 6 ? found.slice(0, 6) : (found + (6 - helper.len(found)) * 'F')
+            var finalColor = helper.len(found) > 6 ? found.slice(0, 6) : (found + helper.times('F', 6 - helper.len(found)))
             rule.fixedValue = rule.fixedValue.replace('#' + found, '#' + finalColor)
             found = finalColor
         }

@@ -2,6 +2,7 @@ var base = require('../base')
 var ERROR_LEVEL = base.ERROR_LEVEL
 var Class = base.Class
 var RuleChecker = base.RuleChecker
+var helper = require('./helper')
 
 module.exports = global.FEDFixCommentInValue = new Class(RuleChecker, function() {
     

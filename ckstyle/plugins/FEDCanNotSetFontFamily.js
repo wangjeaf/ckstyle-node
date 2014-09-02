@@ -5,6 +5,7 @@ var RuleChecker = base.RuleChecker
 var helper = require('./helper')
 
 module.exports = global.FEDCanNotSetFontFamily = new Class(RuleChecker, function() {
+    
     this.__init__ = function(self) {
         self.id = 'no-font-family'
         self.errorLevel = ERROR_LEVEL.ERROR

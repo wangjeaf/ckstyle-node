@@ -19,7 +19,7 @@ module.exports = global.FEDStyleShouldInOrder = new Class(RuleSetChecker, functi
             return true
 
         var order = self._generateNameOrderMapping(rules)
-        length = len(order)
+        length = helper.len(order)
         for(var i = 0; i < order.length; i++) {
             if (i == length - 1)
                 break

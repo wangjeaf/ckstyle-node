@@ -10,7 +10,9 @@ function _rgba_no_space() {
         box-shadow: inset 0 0px 0 0 rgba(0,0px,0px,0.1);\n\
     }'
 
-    fixer, msg = doFix(css, '')
+    var result = doFix(css, '')
+    fixer = result[0]
+    msg = result[1]
     expectedFixed = '.test1 {\n\
     box-shadow: inset 0 0 0 0 rgba(0,0,0,.1);\n\
 }'
@@ -46,5 +48,5 @@ function _rgba() {
 }'
 
     var msg = doFix(css, '')[1]
-    equal(msg.strip(), expectedFixed.strip(), 'transition is ok, 0s can not be shorter')
+    equal(msg.trim(), expectedFixed.trim(), 'transition is ok, 0s can not be shorter')
 }

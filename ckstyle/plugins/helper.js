@@ -12,6 +12,11 @@ function len(arr) {
 }
 exports.len = len;
 
+function str(num) {
+    return '' + num;
+}
+exports.str = str;
+
 function startswith(str, pattern) {
     return str.indexOf(pattern) == 0;
 }
@@ -194,7 +199,7 @@ for(var key in cssAttrOrdersMap) {
     var value = cssAttrOrdersMap[key];
     counter = 0;
     value.forEach(function(x) {
-        cssAttrOrders[x] = key + counter
+        cssAttrOrders[x] = parseInt(key) + counter
         counter = counter + 6
     })
 }

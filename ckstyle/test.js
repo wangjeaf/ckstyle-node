@@ -1,15 +1,19 @@
 var styler = require('./ckstyler');
 
 var CssChecker = styler.CssChecker;
-var checker = new CssChecker('.a {width: 100px; font-family: "sanrif"} .b, .c {width: 200px;} .a.b,.c.d{width:200px; color: black; background-color:red;}');
+var checker = new CssChecker('.html {\
+              -moz-box-sizing: 1px;\
+          -webkit-box-sizing: 1px;\
+                   box-sizing: 1px;\
+       }');
 checker.prepare() // load plugins, do css parser;
 
 checker.doCheck();
 var errors = checker.getErrors()
-console.log(errors);
+//console.log(errors);
 
 var fixed = checker.doFix();
 console.log(fixed);
 
 var compressed = checker.doCompress();
-console.log(compressed);
+//console.log(compressed);
