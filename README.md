@@ -5,9 +5,16 @@ ckstyle-node
 
 nodejs version of ckstyle
 
-### Development
+### 开发
 
-- npm install
-- (sudo) npm install -g mocha
-- (sudo) npm install -g grunt-cli
-- (sudo) npm link
+准备
+
+- `npm install` 安装依赖包
+- `(sudo) npm install -g mocha` 安装mocha命令行测试工具
+- `(sudo) npm install -g grunt-cli` 安装grunt命令行工具
+- `(sudo) npm link` 连接ckstyle命令行工具
+
+然后
+
+- `ckstyle demo` 运行demo命令
+- `ckstyle demo2` 运行demo命令2
