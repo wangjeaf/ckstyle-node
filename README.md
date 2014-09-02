@@ -5,7 +5,7 @@ ckstyle-node
 
 nodejs version of ckstyle
 
-### 命令行开发
+### 开发
 
 准备
 
@@ -18,14 +18,3 @@ nodejs version of ckstyle
 
 - `ckstyle demo` 运行demo命令
 - `ckstyle demo2` 运行demo命令2
-
-#### 目标
-
-一期先达到如下几个目标：
-
-1. `(sudo) npm install -g ckstyle` 一键安装
-2. `ckstyle check xxxxxx` 检查
-3. `ckstyle fix xxxxxx` 修复
-4. `ckstyle compress xxxxxx` 压缩
-
-具体每个命令的参数，请参见 [https://github.com/wangjeaf/CSSCheckStyle#usag(https://github.com/wangjeaf/CSSCheckStyle#usage)
