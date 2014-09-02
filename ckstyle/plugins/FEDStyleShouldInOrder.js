@@ -40,7 +40,12 @@ module.exports = global.FEDStyleShouldInOrder = new Class(RuleSetChecker, functi
             return true
 
         function comp(a, b) {
-            return a[0] - b[0]
+            if (a[0] != b[0]) {
+                return a[0] - b[0]
+            }
+            var a1 = a[1].fixedValue
+            var b1 = b[1].fixedValue
+            return helper.getCss3PrefixValue(a1) - helper.getCss3PrefixValue(b1)
         }
 
         var mapping = self._generateNameRuleMapping(rules)

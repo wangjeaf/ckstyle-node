@@ -85,7 +85,8 @@ module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, fu
                 // 第二点主要是因为有的属性合并以后，由于兼容性不同，受不兼容的selector影响，使本应该兼容的selector失效。
                 var browserI = doRuleSetDetect(mapping[i][0])
                 var browserJ = doRuleSetDetect(mapping[j][0])
-                if (!(browserI & browser != 0 && browserJ & browser != 0 && browserI ^ browserJ == 0))
+                // mapping.debug && console.log(mapping[i][0], mapping[j][0], browserI, browserJ)
+                if (!((browserI & browser) != 0 && (browserJ & browser) != 0 && (browserI ^ browserJ) == 0))
                     continue
 
                 // bakcground-position is dangerous, position设置必须在background-image之后
@@ -138,6 +139,7 @@ module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, fu
     this._gen_hash = function(self, ruleSets, browser) {
         var mapping = []
         var counter = 0
+        //var flag = false;
         ruleSets.forEach(function(r) {
             if (r.extra) {// or doRuleSetDetect(r.selector) != STD:
                 // make it impossible to equal
@@ -145,8 +147,13 @@ module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, fu
                 counter = counter + 1
                 return
             }
+            //flag = r.compressRules(browser).indexOf('width:300px;-moz-transform:1s') != -1;
             mapping.push([r.selector, r.compressRules(browser)])
         });
+        // if (flag) {
+        //     console.log(mapping)
+        // }
+        // mapping.debug = flag;
         return mapping
     }
 

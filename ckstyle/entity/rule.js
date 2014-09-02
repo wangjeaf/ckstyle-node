@@ -1,6 +1,7 @@
 var helper = require('./entityutil');
 var Cleaner = helper.Cleaner;
-var ALL = helper.ALL;
+var doRuleDetect = require('../browsers/Hacks').doRuleDetect
+var ALL = require('../browsers/BinaryRule').ALL
 
 function Rule(selector, name, value, ruleSet) {
     var self = this;
@@ -22,7 +23,7 @@ function Rule(selector, name, value, ruleSet) {
 
     self.ruleSet = ruleSet
 
-    self.browser = ALL
+    self.browser = doRuleDetect(self.roughName, self.roughValue)
     self.toBeUsed = {}
 }
 
@@ -41,11 +42,15 @@ Rule.prototype.reset = function(name, value) {
 Rule.prototype.compress = function(browser) {
     var self = this;
     browser = browser || ALL;
-    if (self.browser && !(self.browser & browser)) {
+
+    if (!self.browser) {
+        return '';
+    }
+    if ((self.browser & browser) == 0) {
         return ''
     }
-    name = self.fixedName ? (self.fixedName + '').trim() : self.name
-    value = self.fixedValue ? (self.fixedValue + '').trim() : self.value
+    var name = self.fixedName ? (self.fixedName + '').trim() : self.name
+    var value = self.fixedValue ? (self.fixedValue + '').trim() : self.value
     return name + ':' + Cleaner.clean(value) + ';'
 }
 

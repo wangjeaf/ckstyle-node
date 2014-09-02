@@ -12,18 +12,16 @@ function _combine_should_not_make_mistake() {
 .a, .b{width:1px}\n\
 .b{width:0px}'
 
-    expected = '.a {\n\
+    expected = '.a,\n\
+.b {\n\
     width: 0;\n\
 }\n\
 \n\
 .a,\n\
 .b {\n\
     width: 1px;\n\
-}\n\
-\n\
-.b {\n\
-    width: 0;\n\
 }'
+    // safe mode is not default mode.
     var result = doFix(css, '')
     var fixer = result[0]
     var msg = result[1]

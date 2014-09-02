@@ -1,6 +1,7 @@
 var helper = require('./entityutil');
 var Cleaner = helper.Cleaner;
-var ALL = helper.ALL;
+var doRuleSetDetect = require('../browsers/Hacks').doRuleSetDetect
+var ALL = require('../browsers/BinaryRule').ALL
 
 var Rule = require('./rule');
 
@@ -23,7 +24,7 @@ function RuleSet(selector, values, comment, styleSheet) {
 
     self.singleLineFlag = (self.roughValue.split('\n').length == 1)
 
-    self.browser = ALL
+    self.browser = doRuleSetDetect(self.roughSelector)
     self.toBeUsed = {}
 }
 
@@ -87,7 +88,10 @@ RuleSet.prototype.compressRules = function(browser) {
 RuleSet.prototype.compress = function(browser) {
     var self = this;
     browser = browser || ALL;
-    if (self.browser && !(self.browser & browser))
+    if (!self.browser) {
+        return '';
+    }
+    if (!(self.browser & browser))
         return ''
     var result = self.fixedSelector || self.selector;
     if (result.indexOf(',') != -1) {

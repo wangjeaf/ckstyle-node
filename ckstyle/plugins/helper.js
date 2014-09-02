@@ -64,24 +64,24 @@ exports.containsHack = containsHack;
 
 function getAttrOrder(attr, strippedName) {
     if (attr in cssAttrOrders)
-        return cssAttrOrders[attr] + addCss3PrefixValue(strippedName)
+        return cssAttrOrders[attr] + getCss3PrefixValue(strippedName)
     if (attr.indexOf('-') != -1) {
         var splited = attr.split('-')
         var tmp = splited[0] + '-' + splited[len(splited) - 1]
         if (tmp in cssAttrOrders)
-            return cssAttrOrders[tmp] + addCss3PrefixValue(strippedName)
+            return cssAttrOrders[tmp] + getCss3PrefixValue(strippedName)
         while (len(splited) != 0) {
             splited = splited.slice(0, -1);
             tmp = splited.join('-')
             if (tmp in cssAttrOrders)
-                return cssAttrOrders[tmp] + addCss3PrefixValue(strippedName)
+                return cssAttrOrders[tmp] + getCss3PrefixValue(strippedName)
         }
     }
-    return 6000 + addCss3PrefixValue(strippedName)
+    return 6000 + getCss3PrefixValue(strippedName)
 }
 exports.getAttrOrder = getAttrOrder
 
-function addCss3PrefixValue(attr) {
+function getCss3PrefixValue(attr) {
     var value = 0
     if (attr.indexOf('-webkit') == 0)
         value = value - 5
@@ -95,6 +95,7 @@ function addCss3PrefixValue(attr) {
         value = value - 1
     return value
 }
+exports.getCss3PrefixValue = getCss3PrefixValue;
 
 function isHTMLTag(tag) {
     return containsInArray(validHTMLTags, tag)

@@ -97,7 +97,7 @@ global.doCSSCheck = function(css, filename, silent) {
 }
 
 global.equal = function(a, b, msg) {
-    assert.equal(a, b, msg);
+    assert.equal(b, a, msg);
 }
 
 global.ok = function(a) {
