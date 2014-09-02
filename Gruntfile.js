@@ -22,7 +22,15 @@ module.exports = function(grunt) {
     },
     copy: {
       main: {
-        src: 'ckstyle/**/*.js',
+        src: [
+          'ckstyle/entity/**/*.js',
+          'ckstyle/parser/**/*.js',
+          'ckstyle/browsers/**/*.js', 
+          'ckstyle/plugins/**/*.js',
+          'ckstyle/reporter/**/*.js',
+          'ckstyle/command/**/*.js',
+          'ckstyle/*.js'
+        ],
         dest: 'dist/',
         flatten: true,
         options: {
