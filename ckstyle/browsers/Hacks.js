@@ -305,9 +305,9 @@ exports.doRuleDetect = doRuleDetect
 exports.doRuleSetDetect = doRuleSetDetect
 exports.doExtraDetect = doExtraDetect
 
-if (!module.parent) {
+// if (!module.parent) {
     // console.log(doRuleDetect('_width', 100))
-    console.log((doRuleSetDetect('.a, .b')).toString(2))
+    // console.log((doRuleSetDetect('.a, .b')).toString(2))
     // console.log((doExtraDetect('@media screen and (-webkit-min-device-pixel-ratio:0)')).toString(2))
     // console.log((doExtraDetect('@media all and (-webkit-min-device-pixel-ratio:10000), not all and (-webkit-min-device-pixel-ratio:0)')).toString(2))
-}
+// }

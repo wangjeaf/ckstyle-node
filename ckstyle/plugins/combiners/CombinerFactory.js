@@ -2,13 +2,13 @@ var base = require('../../base')
 var Class = base.Class
 var helper = require('./helper')
 
+var combiners = {
+    margin: require('./MarginCombiner'),
+    padding: require('./PaddingCombiner')
+}
+
 function doCombine(name, props) {
-    var pluginName = helper.camelCase(name) + 'Combiner'
-    var pluginClass = NullCombiner
-    try {
-        // attempt to load combiner
-        pluginClass = require('./' + pluginName)
-    } catch(e) {}
+    var pluginClass = combiners[name] || NullCombiner
     var instance = new pluginClass(name, props)
     return instance.combine()
 }
@@ -23,11 +23,11 @@ var NullCombiner = new Class(function() {
 exports.doCombine = doCombine
 
 
-if (!module.parent) {
-    console.log(doCombine('margin', [
-        ['margin', 'margin', '50px auto 0 auto']
-    ]))
-    console.log(doCombine('padding', [
-        ['padding', 'padding', '50px auto 50px auto']
-    ]))
-}
+// if (!module.parent) {
+//     console.log(doCombine('margin', [
+//         ['margin', 'margin', '50px auto 0 auto']
+//     ]))
+//     console.log(doCombine('padding', [
+//         ['padding', 'padding', '50px auto 50px auto']
+//     ]))
+// }

@@ -1,5 +1,4 @@
 var fs = require('fs');
-var path = require('path');
 var CSSParser = require('./parser/index').CSSParser;
 
 var base = require('./base');

@@ -11,8 +11,7 @@ checker.prepare() // load plugins, do css parser;
 // var errors = checker.getErrors()
 //console.log(errors);
 
-// var fixed = checker.doFix();
-// console.log(fixed);
-
+var fixed = checker.doFix();
+console.log(fixed);
 var compressed = checker.doCompress(STD | FIREFOX);
 console.log(compressed);

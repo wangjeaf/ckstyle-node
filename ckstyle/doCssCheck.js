@@ -1,10 +1,10 @@
 var fs = require('fs');
 var pathm = require('path');
 
-var CssParser = require('./parser').CSSParser
+var CssParser = require('./parser/index').CSSParser
 var CssChecker = require('./ckstyler').CssChecker
 var args = require('./command/args');
-var ReporterUtil = require('./reporter').ReporterUtil
+var ReporterUtil = require('./reporter/index').ReporterUtil
 
 var defaultConfig = new args.CommandArgs()
 

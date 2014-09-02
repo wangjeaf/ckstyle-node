@@ -28,17 +28,17 @@ var TextReporter = new Class(function() {
 
         errors.forEach(function(error) {
             counter = counter + 1
-            self.appendMsg('[ERROR] ' + counter + '. ' + fill(error)))
+            self.appendMsg('[ERROR] ' + counter + '. ' + fill(error))
         })
 
         warns.forEach(function(warn) {
             counter = counter + 1
-            self.appendMsg(' [WARN] ' + counter + '. ' + fill(warn)))
+            self.appendMsg(' [WARN] ' + counter + '. ' + fill(warn))
         })
 
         logs.forEach(function(log) {
             counter = counter + 1
-            self.appendMsg('  [LOG] ' + counter + '. ' + fill(log)))
+            self.appendMsg('  [LOG] ' + counter + '. ' + fill(log))
         })
     }
 

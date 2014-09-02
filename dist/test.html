@@ -1,23 +1,30 @@
 <script type="text/javascript" src="../libs/sea.js"></script>
-
-<!-- <script type="text/javascript" src="ckstyle.js"></script> -->
+<script type="text/javascript" src="./ckstyle.min.js"></script>
 
 <script type="text/javascript">
-seajs.config({
-  base: "./",
+
+define('ckstyle/test', function(require, exports, module) {
+    var styler = require('./ckstyler');
+    var BinaryRule = require('./browsers/BinaryRule');
+    var STD = BinaryRule.STD
+    var FIREFOX = BinaryRule.FIREFOX
+
+    var CssChecker = styler.CssChecker;
+    var checker = new CssChecker('.a {width: 100px;} .b {width: 100px;}');
+    checker.prepare()
+
+    checker.doCheck();
+    var errors = checker.getErrors()
+    console.log(errors);
+
+    var fixed = checker.doFix();
+    console.log(fixed);
+    
+    var compressed = checker.doCompress(STD | FIREFOX);
+    console.log(compressed);
 })
 
-var global = window;
-
-define('fs', function(require, exports) {
-    exports.realpathSync = function(file) { return file; }
-    exports.readdirSync = function(file) { return [file]; }
+seajs.use('ckstyle/test', function(a) {
 })
 
-define('path', function() {
-
-})
-
-seajs.use('ckstyle/test.js', function(a) {
-})
 </script>

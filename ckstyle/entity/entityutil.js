@@ -1,9 +1,6 @@
-//from ckstyle.browsers.BinaryRule import ALL
+var ALL = require('../browsers/BinaryRule').ALL
 
-var ALL = 11111111;
-
-function Cleaner() {
-}
+var Cleaner = {};
 
 Cleaner.clean = function(msg) {
     msg = msg.trim().replace('\r', '').replace('\n', '').replace('    ', ' ')

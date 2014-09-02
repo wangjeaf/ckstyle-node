@@ -71,7 +71,6 @@ module.exports = global.FEDNoUnitAfterZero = new Class(RuleChecker, function() {
 
             collector.push(finalV)
         })
-            
 
         rule.fixedValue = collector.join(' ').replace(replacer_unit, ', ')
     }

@@ -1,6 +1,7 @@
 var helper = require('./entityutil');
 Cleaner = helper.Cleaner;
-ALL = helper.ALL;
+var doExtraDetect = require('../browsers/Hacks').doExtraDetect
+var ALL = require('../browsers/BinaryRule').ALL
 
 function ExtraStatement(operator, statement, comment, styleSheet) {
     var self = this;
@@ -14,7 +15,7 @@ function ExtraStatement(operator, statement, comment, styleSheet) {
     self.fixedSelector = ''
     self.fixedStatement = ''
 
-    self.browser = ALL
+    self.browser = doExtraDetect(self.selector)
     self.toBeUsed = {}
 }
 
@@ -43,6 +44,7 @@ ExtraStatement.prototype.compress = function(browser) {
 
     if (!(self.browser & browser))
         return ''
+    
     msg = Cleaner.clean(self.statement)
     if (msg.slice(-1) != '}' && msg.slice(-1) != ';') {
         msg = msg + ';'

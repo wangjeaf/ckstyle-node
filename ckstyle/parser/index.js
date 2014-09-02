@@ -182,19 +182,19 @@ CSSParser.prototype.doParseRules = function(ruleSet) {
 
 exports.CSSParser = CSSParser;
 
-if (!module.parent) {
-    text = '/*fdsafdas*/.publisher-c .global-publisher-selector{ top:5px;}\
- .publisher-a .global-publisher-selector-status a,\
- .publisher-a .global-publisher-selector-status .global-publisher-status-trigger:hover,\
- .publisher-a .global-publisher-selector .active .global-publisher-status-trigger {\
-    background-position: 0 1px;\
-}\
- .publisher-a .global-publisher-selector-share a,\
- .publisher-a .global-publisher-selector-share a:hover,\
- .publisher-a .global-publisher-selector .active .global-publisher-share-trigger{\
-    background-position: 0 -48px;\
- }'
-    var parser = new CSSParser(text)
-    parser.doParse();
-    console.log(parser.styleSheet.getRuleSets()[0]);
-}
+// if (!module.parent) {
+//     text = '/*fdsafdas*/.publisher-c .global-publisher-selector{ top:5px;}\
+//  .publisher-a .global-publisher-selector-status a,\
+//  .publisher-a .global-publisher-selector-status .global-publisher-status-trigger:hover,\
+//  .publisher-a .global-publisher-selector .active .global-publisher-status-trigger {\
+//     background-position: 0 1px;\
+// }\
+//  .publisher-a .global-publisher-selector-share a,\
+//  .publisher-a .global-publisher-selector-share a:hover,\
+//  .publisher-a .global-publisher-selector .active .global-publisher-share-trigger{\
+//     background-position: 0 -48px;\
+//  }'
+//     var parser = new CSSParser(text)
+//     parser.doParse();
+//     console.log(parser.styleSheet.getRuleSets()[0]);
+// }

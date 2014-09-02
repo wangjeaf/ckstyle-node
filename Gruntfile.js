@@ -51,27 +51,25 @@ module.exports = function(grunt) {
         }
       },
     },
-    concat: {  
-      options: {  
-        // banner: banner,
-        // footer: footer,
-        // separator: separator,
-        process: function(src, filepath) {
-          var code = '';
-          if (shouldAdd) {
-            code = '\n\n' + code;
-          }
-          shouldAdd = true;
-          var code = code + banner.replace('${path}', filepath);
-
-          code = code + src + '\n' + footer;
-          return code;
-        }
-      },  
+    concat: {
       dist: {  
-        src: ['ckstyle/**/*.js'],
+        src: ['dist/**/*.js', 'compatible/*.js'],
         dest: 'dist/<%= pkg.name %>.js'  
       }  
+    },
+    clean: {
+      all: ["dist/ckstyle", "dist/ckstyle.js", "dist/ckstyle.min.js"],
+      dir: ["dist/ckstyle"]
+    },
+    uglify: {
+      options: {
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+      },
+      dist: {
+        files: {
+          'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']  
+        }
+      }
     },
   });
 
@@ -79,7 +77,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  grunt.registerTask('default', ['copy']);
+  grunt.registerTask('default', ['clean:all', 'copy', 'concat', 'clean:dir', 'uglify']);
   grunt.registerTask('dev', ['watch']);
 };

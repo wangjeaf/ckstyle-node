@@ -1,6 +1,7 @@
 var helper = require('./entityutil');
 Cleaner = helper.Cleaner;
-ALL = helper.ALL;
+var doExtraDetect = require('../browsers/Hacks').doExtraDetect
+var ALL = require('../browsers/BinaryRule').ALL
 
 function NestedStatement(selector, statement, comments, styleSheet) {
     var self = this;
@@ -15,7 +16,7 @@ function NestedStatement(selector, statement, comments, styleSheet) {
     self.fixedSelector = ''
     self.fixedStatement = ''
 
-    self.browser = ALL
+    self.browser = doExtraDetect(self.selector)
     self.toBeUsed = {}
 }
 
