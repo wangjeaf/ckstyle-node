@@ -15910,12 +15910,12 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 
     function bindEvents() {
         close.click(function() {
-            container.hide();
-            trigger.show();
+            container.hide('slow');
+            trigger.show('slow');
         });
         trigger.click(function() {
-            trigger.hide();
-            container.show();
+            trigger.hide('slow');
+            container.show('slow');
         });
 
         container.delegate('.replacer a', 'click', function() {
@@ -15995,6 +15995,8 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
     }
 
     function init() {
+        $('.ckstyle-container').remove();
+        $('.ckstyle-trigger').remove();
         $('.ckservice-loading').remove();
         initDOM();
         bindEvents();
