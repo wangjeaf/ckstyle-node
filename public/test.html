@@ -1,30 +1,48 @@
 <script type="text/javascript" src="./libs/sea.js"></script>
 <script type="text/javascript" src="../dist/ckstyle.min.js"></script>
 
-<script type="text/javascript">
+<textarea style="width: 100%; height: 300px;" id="code">
+.a {
+    width: 100px;
+}
 
+.b {
+    width: 100px;
+}
+</textarea>
+<input type="button" id="button" value="run"/>
+<hr>
+<pre id="result"></pre>
+<script type="text/javascript">
 define('ckstyle/test', function(require, exports, module) {
     var styler = require('./ckstyler');
     var BinaryRule = require('./browsers/BinaryRule');
     var STD = BinaryRule.STD
     var FIREFOX = BinaryRule.FIREFOX
-
     var CssChecker = styler.CssChecker;
-    var checker = new CssChecker('.a {width: 100px;} .b {width: 100px;}');
-    checker.prepare()
 
-    checker.doCheck();
-    var errors = checker.getErrors()
-    console.log(errors);
+    var result = document.getElementById('result');
 
-    var fixed = checker.doFix();
-    console.log(fixed);
-    
-    var compressed = checker.doCompress(STD | FIREFOX);
-    console.log(compressed);
+    document.getElementById('button').onclick = function() {
+        var css = document.getElementById('code').value;
+
+        var checker = new CssChecker(css);
+        checker.prepare()
+
+        checker.doCheck();
+        result.innerHTML = 'RESULT: \n\n';
+        var errors = checker.getErrors()
+        result.innerHTML += 'CHECK:\n\n' + JSON.stringify(errors, null, 2);
+
+        var fixed = checker.doFix();
+        result.innerHTML += '\n\nFIXED:\n\n' + fixed + '\n';
+        
+        var compressed = checker.doCompress();
+        result.innerHTML += '\n\nCOMPRESSED:\n\n' + compressed;
+    }
 })
 
-seajs.use('ckstyle/test', function(a) {
-})
+// go
+seajs.use('ckstyle/test', function() {})
 
 </script>
