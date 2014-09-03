@@ -16001,7 +16001,9 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
         handleCSSFiles();
     }
 
-    init();
+    exports.go = init;
 })
 
-seajs.use('ckstyle/run-ckservice', function() {})
+seajs.use('ckstyle/run-ckservice', function(runner) {
+    runner.go();
+})
