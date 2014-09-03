@@ -11,9 +11,13 @@ exports.meta = {
 }
 
 exports.handle = function() {
-  var ckstyler = require('../ckstyle/ckstyler');
-  var checker = new ckstyler.CssChecker('.a {width: 100px}');
+  var CssChecker = require('../').CssChecker;
+  var checker = new CssChecker('.a {width: 100px}');
   checker.prepare();
   var fixed = checker.doFix();
   console.log(fixed);
+
+  var detector = require('../').Detector;
+  var res = detector.doRuleDetect('*width', '100px');
+  console.log(res.toString(2));
 }
