@@ -60,10 +60,20 @@ module.exports = function(grunt) {
       },
     },
     concat: {
-      dist: {  
-        src: ['dist/**/*.js', 'compatible/*.js'],
+      ckstyle: {
+        src: ['dist/ckstyle/**/*.js', 'compatible/*.js'],
         dest: 'dist/<%= pkg.name %>.js'  
-      }  
+      },
+      ckservice: {
+        src: [
+          'ckservice/libs/jquery.js', 
+          'ckservice/libs/mustache.js', 
+          'ckservice/libs/sea.js', 
+          '<%= concat.ckstyle.dest %>',
+          'ckservice/main.js'
+        ],
+        dest: 'dist/ckservice.js'
+      }
     },
     clean: {
       all: ["dist/ckstyle", "dist/ckstyle.js", "dist/ckstyle.min.js"],
@@ -73,9 +83,14 @@ module.exports = function(grunt) {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
-      dist: {
+      ckstyle: {
         files: {
-          'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']  
+          'dist/<%= pkg.name %>.min.js': ['<%= concat.ckstyle.dest %>']  
+        }
+      },
+      ckservice: {
+        files: {
+          'dist/ckservice.min.js': ['<%= concat.ckservice.dest %>']  
         }
       }
     },
@@ -88,6 +103,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  grunt.registerTask('default', ['clean:all', 'copy', 'concat', 'clean:dir', 'uglify']);
+  grunt.registerTask('default', ['clean:all', 
+    'copy', 'concat:ckstyle', 'clean:dir', 'uglify:ckstyle', 
+    'concat:ckservice', 'uglify:ckservice']);
   grunt.registerTask('dev', ['watch']);
 };
