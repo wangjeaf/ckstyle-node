@@ -1,5 +1,16 @@
-$(function() {
+define('ckstyle/ckservice', function(require, exports, module) {
+    var styler = require('./ckstyler');
+    var BinaryRule = require('./browsers/BinaryRule');
+    var CssChecker = styler.CssChecker;
 
+    exports.doCompress = function(css) {
+        var checker = new CssChecker(css);
+        checker.prepare()
+        return checker.doCompress();
+    }
+})
+
+define('ckstyle/run-ckservice', function(require, exports, module) {
     var container, content, loading, content, trigger, close, counter
 
     var TMPLS = {
@@ -14,7 +25,8 @@ $(function() {
 '    </h3>',
 '    <div class="ckstyle-content"></div>',
 '</div>',
-'<div class="ckstyle-trigger">CKService</div>'].join(''),
+'<div class="ckstyle-trigger">CKService</div>'
+].join(''),
 
         data: [
 '<table border=1 class="ckstyle-result-table">',
@@ -44,7 +56,8 @@ $(function() {
 '        <tr>',
 '        {{/cssfiles}}',
 '    </tbody>',
-'</table>'].join(''),
+'</table>'
+].join(''),
 
         replacer: '<a href="javascript:;" class="status-a">替换试试</a>'
     }
@@ -172,18 +185,6 @@ $(function() {
         })
     }
 
-    define('ckstyle/ckservice', function(require, exports, module) {
-        var styler = require('./ckstyler');
-        var BinaryRule = require('./browsers/BinaryRule');
-        var CssChecker = styler.CssChecker;
-
-        exports.doCompress = function(css) {
-            var checker = new CssChecker(css);
-            checker.prepare()
-            return checker.doCompress();
-        }
-    })
-
     var loaderCounter = 0;
 
     function loadLink(record) {
@@ -245,4 +246,6 @@ $(function() {
     }
 
     init();
-});
+})
+
+seajs.use('ckstyle/run-ckservice', function() {})
