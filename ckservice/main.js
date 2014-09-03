@@ -11,6 +11,9 @@ define('ckstyle/ckservice', function(require, exports, module) {
 })
 
 define('ckstyle/run-ckservice', function(require, exports, module) {
+
+    var service = require('./ckservice');
+
     var container, content, loading, content, trigger, close, counter
 
     var TMPLS = {
@@ -111,7 +114,13 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
             style.cssText = cssText;
             return style;
         } else {
-            return $('<style>').attr('type', 'text/css').append(document.createTextNode(cssText)).appendTo('head');
+            var style = $('<style>').attr('type', 'text/css').append(document.createTextNode(cssText));
+            if (target) {
+                style.insertAfter(target);
+            } else {
+                style.appendTo('head');
+            }
+            return style;
         }
     }
 
@@ -192,25 +201,24 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
         jQuery.get(record.url, function(content) {
             var before = content.length;
             $('.before-' + index).html(before);
-            seajs.use('ckstyle/ckservice', function(service) {
-                var compressed = service.doCompress(content);
-                var after = compressed.length;
-                record.compressed = compressed;
-                var delta = before - after;
-                $('.after-' + index).html(after);
-                $('.delta-' + index).html(delta)
-                $('.delta-byte-' + index).html(getBytes(delta) + 'KB')
-                $('.percent-' + index).html(((delta / before)*100).toFixed(2) + '%')
-                $('.total-' + index).html(getSavedTotalGB(delta) + ' MB')
-                $('.replacer-' + index).html(TMPLS.replacer)
+            var compressed = service.doCompress(content);
+            var after = compressed.length;
+            record.compressed = compressed;
 
-                loaderCounter++;
+            var delta = before - after;
+            $('.after-' + index).html(after);
+            $('.delta-' + index).html(delta)
+            $('.delta-byte-' + index).html(getBytes(delta) + 'KB')
+            $('.percent-' + index).html(((delta / before)*100).toFixed(2) + '%')
+            $('.total-' + index).html(getSavedTotalGB(delta) + ' MB')
+            $('.replacer-' + index).html(TMPLS.replacer)
 
-                if (loaderCounter == cssfiles.length - 1) {
-                    loading.hide();
-                    loaderCounter = 0;
-                }
-            })
+            loaderCounter++;
+
+            if (loaderCounter == cssfiles.length - 1) {
+                loading.hide();
+                loaderCounter = 0;
+            }
         })
     }
 
