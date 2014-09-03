@@ -11,6 +11,9 @@ exports.meta = {
 }
 
 exports.handle = function() {
-  console.log(arguments);
-  console.log('[ckstyle]'.green + ' welcome to demo2 command'.red);
+  var ckstyler = require('../ckstyle/ckstyler');
+  var checker = new ckstyler.CssChecker('.a {width: 100px}');
+  checker.prepare();
+  var fixed = checker.doFix();
+  console.log(fixed);
 }
