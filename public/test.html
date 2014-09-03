@@ -1,7 +1,7 @@
 <script type="text/javascript" src="./libs/sea.js"></script>
 <script type="text/javascript" src="../dist/ckstyle.min.js"></script>
-
-<textarea style="width: 100%; height: 300px;" id="code">
+<div style="float: left;">
+<textarea style="width: 400px; height: 300px;" id="code">
 .a {
     width: 100px;
 }
@@ -10,9 +10,11 @@
     width: 100px;
 }
 </textarea>
+<br>
 <input type="button" id="button" value="go"/>
-<hr>
-<pre id="result"></pre>
+</div>
+
+<pre id="result" style="float:left; width: 600px;">RESULT: </pre>
 <script type="text/javascript">
 define('ckstyle/test', function(require, exports, module) {
     var styler = require('./ckstyler');
