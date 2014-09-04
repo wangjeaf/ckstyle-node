@@ -12929,9 +12929,7 @@ module.exports = global.FEDFixOutlineZero = new Class(RuleChecker, function() {
     this.fix = function(self, rule, config) {
         if (rule.name == 'outline') {
             if (self._findOutlineNone(rule.value)){
-                
                  rule.fixedValue = rule.fixedValue.replace(/none/, "0");
-                 console.log(rule.fixedValue)
             }
         }
     }
@@ -15764,7 +15762,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 
     var serverRoot;
 
-    var container, content, loading, content, trigger, close, counter
+    var container, content, loading, content, trigger, close, counter, errormsg
 
     var TMPLS = {
         container: [
@@ -15775,6 +15773,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 '            Github',
 '        </a>]',
 '        <span class="ckstyle-loading">Loading & Parsing <span class="ckstyle-file-count"></span> CSS files, please wait...</span>',
+'        <span class="ckstyle-errormsg"></span>',
 '    </h3>',
 '    <div class="ckstyle-content"></div>',
 '</div>',
@@ -15820,7 +15819,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 '.ckstyle-container {text-align: left; color: #333; width:100%;background-color:#EEE;position:fixed;top:0;right:0;z-index:2147483647;border-bottom:1px solid #DDD;box-shadow: 1px 1px 12px #AAA;opacity:0.9;}',
 '.ckstyle-container .ckstyle-close {color: #666; float:right;margin-right:10px;font-size:20px;margin-top:3px;cursor:pointer;}',
 '.ckstyle-container .ckstyle-header {padding:5px;margin:0;font-size:16px;line-height:22px;border-bottom:1px solid #DDD;}',
-'.ckstyle-container .ckstyle-loading {display: none; padding:5px;margin:0; font-weight: normal; margin-left: 100px;}',
+'.ckstyle-container .ckstyle-loading, .ckstyle-container .ckstyle-errormsg {display: none; padding:5px;margin:0; font-weight: normal; margin-left: 100px;}',
 '.ckstyle-container .ckstyle-content {padding:5px;display:none;}',
 '.ckstyle-trigger {border:1px solid #DDD; border-right: none; border-top: none; color: #666; box-shadow:1px 1px 2px #666;display:none;top:0;right:0;position:fixed;z-index:2147483647;background-color:#EEE;padding:5px;cursor:pointer;}',
 '.ckstyle-result-table {border-color: #AAA; width: 100%; text-align:left;font-size:14px; border-spacing: 0;border-collapse:collapse;}',
@@ -15939,6 +15938,10 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 
     function loadCss(urls) {
         content.show();
+        if (urls.length == 0) {
+            errormsg.show().html('No css file.');
+            return loading.hide();
+        }
         urls.forEach(function(url) {
             loadLink(url);
         })
@@ -15991,6 +15994,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 
         container = $('.ckstyle-container');
         loading = $('.ckstyle-loading');
+        errormsg = $('.ckstyle-errormsg');
         content = $('.ckstyle-content');
         trigger = $('.ckstyle-trigger');
         close = $('.ckstyle-close');

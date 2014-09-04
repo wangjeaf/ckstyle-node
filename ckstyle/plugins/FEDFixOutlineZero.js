@@ -18,14 +18,12 @@ module.exports = global.FEDFixOutlineZero = new Class(RuleChecker, function() {
             }
         }
         return true
-    }   
+    }
     
     this.fix = function(self, rule, config) {
         if (rule.name == 'outline') {
             if (self._findOutlineNone(rule.value)){
-                
                  rule.fixedValue = rule.fixedValue.replace(/none/, "0");
-                 console.log(rule.fixedValue)
             }
         }
     }
