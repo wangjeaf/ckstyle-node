@@ -18,5 +18,6 @@ exports.meta = {
 }
 
 exports.handle = function() {
+  console.log(arguments[0])
   console.log('[ckstyle]'.green + ' welcome to demo command'.red + Array.prototype.slice.call(arguments));
 }
