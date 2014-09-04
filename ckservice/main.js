@@ -115,8 +115,8 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
     }
 
     function cut(url) {
-        if (url.length > 80) {
-            url = url.substring(0, 80) + '...';
+        if (url.length > 70) {
+            url = url.substring(0, 70) + '...';
         }
         return url;
     }
