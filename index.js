@@ -3,6 +3,7 @@ var join = require('path').join
 var path = require('path')
 var rootDir = __dirname
 var fs = require('fs')
+var colors = require('colors')
 
 var cmdPath = function(file) {
   return join(rootDir, 'cmds', file)
@@ -37,8 +38,21 @@ exports.command = function(args) {
 
   commander.parse(args)
 
-  if (commander.rawArgs.length == 2) {
+  var rawArgs = commander.rawArgs
+  //[ 'node', '/usr/local/bin/ckstyle', 'demo' ]
+  if (rawArgs.length == 2) {
     commander.help()
+  } else if (rawArgs.length > 2) {
+    var name = rawArgs[2];
+
+    var found = commander.commands.some(function(cmd) {
+      return cmd._name == name;
+    })
+
+    if (!found) {
+      console.log('[CKStyle] Sorry, ckstyle can not find sub command: '.red + name.red)
+      return;
+    }
   }
 }
 
