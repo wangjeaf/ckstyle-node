@@ -51,7 +51,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 '    <tbody>',
 '        {{#cssfiles}}',
 '        <tr>',
-'            <td> <a target="_blank" href="{{url}}">{{urlDisplay}}</a> </td>',
+'            <td> <a target="_blank" title="{{url}}" href="{{url}}">{{urlDisplay}}</a> </td>',
 '            <td class="before before-{{id}}">-</td>',
 '            <td class="after after-{{id}}">-</td>',
 '            <td class="delta delta-{{id}}">-</td>',
