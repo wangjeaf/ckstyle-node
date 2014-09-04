@@ -81,11 +81,18 @@ function fixDirSubFiles(directory, config) {
 
 function fixDirRecursively(directory, config) {
     config = config || defaultConfig
-    // for dirpath, dirnames, filenames in os.walk(directory):
-    //     for filename in filenames:
-    //         if not filename.endswith('.css') or filename.startswith('_'):
-    //             continue
-    //         checkFile(os.path.join(dirpath, filename), config)
+
+    fs.readdirSync(dirname).forEach(function(filename) {
+        if ((!endswith(filename, '.css')) || filename.indexOf('_') == 0)
+            return
+        if (fs.statSync(filename).isDirectory()){
+            fixDirRecursively(pathm.join(directory, fileName), config)
+            return
+        }
+        fixFile(pathm.join(directory, filename), config)
+    });
 }
 
-exports.doFix = doFix;
+exports.doFix = doFix
+exports.fixDirSubFiles = fixDirSubFiles
+exports.fixDirRecursively = fixDirRecursively

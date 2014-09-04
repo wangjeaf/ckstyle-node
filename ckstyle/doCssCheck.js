@@ -78,11 +78,16 @@ function checkDirSubFiles(directory, config) {
 
 function checkDirRecursively(directory, config) {
     config = config || defaultConfig
-    // for dirpath, dirnames, filenames in os.walk(directory):
-    //     for filename in filenames:
-    //         if not filename.endswith('.css') or filename.startswith('_'):
-    //             continue
-    //         checkFile(os.path.join(dirpath, filename), config)
+
+    fs.readdirSync(dirname).forEach(function(filename) {
+        if ((!endswith(filename, '.css')) || filename.indexOf('_') == 0)
+            return
+        if (fs.statSync(filename).isDirectory()){
+            checkDirRecursively(pathm.join(directory, fileName), config)
+            return
+        }
+        checkFile(pathm.join(directory, filename), config)
+    });
 }
 
 function checkCssText(text) {
@@ -93,3 +98,5 @@ function checkCssText(text) {
 }
 
 exports.doCheck = doCheck;
+exports.checkDirSubFiles = checkDirSubFiles
+exports.checkDirRecursively = checkDirRecursively

@@ -104,12 +104,20 @@ function compressDirSubFiles(directory, config) {
 
 function compressDirRecursively(directory, config) {
     config = config || defaultConfig
-    // for dirpath, dirnames, filenames in os.walk(directory):
-    //     for filename in filenames:
-    //         if not filename.endswith('.css') or filename.startswith('_'):
-    //             continue
-    //         checkFile(os.path.join(dirpath, filename), config)
+
+    fs.readdirSync(dirname).forEach(function(filename) {
+        if ((!endswith(filename, '.css')) || filename.indexOf('_') == 0)
+            return
+        if (fs.statSync(filename).isDirectory()){
+            compressDirRecursively(pathm.join(directory, fileName), config)
+            return
+        }
+        compressFile(pathm.join(directory, filename), config)
+    });
 }
 
-exports.doCompress = doCompress;
 exports.prepare = prepare
+
+exports.doCompress = doCompress;
+exports.compressDirSubFiles = compressDirSubFiles
+exports.compressDirRecursively = compressDirRecursively

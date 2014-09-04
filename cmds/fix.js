@@ -1,13 +1,19 @@
 var colors = require('colors')
+var o = require('./helper/options')
 
 exports.meta = {
-  name: 'demo2',
-  options: [{
-    flags: "-s, --save",
-    description: 'option示例',
-    defaultValue: false
-  }],
-  description: '示例命令2'
+  name: 'fix',
+  options: [
+    o.config,
+    o.recursive, 
+    o.print, 
+    o.include, 
+    o.exclude, 
+    o.ignores, 
+    o.safe, 
+    o.fixextension
+  ],
+  description: '自动修复和美化CSS'
 }
 
 exports.handle = function() {
