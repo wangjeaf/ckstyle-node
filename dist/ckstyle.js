@@ -3330,7 +3330,7 @@ module.exports = global.FEDFixOutlineZero = new Class(RuleChecker, function() {
             }
         }
         return true
-    }   
+    }
     
     this.fix = function(self, rule, config) {
         if (rule.name == 'outline') {

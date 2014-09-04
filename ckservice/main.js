@@ -16,7 +16,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 
     var serverRoot;
 
-    var container, content, loading, content, trigger, close, counter, errormsg
+    var container, content, loading, content, trigger, close, counter, errormsg, ckcssNode
 
     var TMPLS = {
         container: [
@@ -37,7 +37,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
         data: [
 '<table border=1 class="ckstyle-result-table">',
 '    <thead>',
-'        <tr>',
+'        <tr class="header">',
 '            <th width="40%">URL</th>',
 '            <th>Chars Before</th>',
 '            <th>Chars After</th>',
@@ -45,7 +45,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 '            <th>Delta Bytes</th>',
 '            <th>Delta %</th>',
 '            <th>Saved/1wPVs</th>',
-'            <th>Operations</th>',
+'            <th>Replace origin CSS!</th>',
 '        </tr>',
 '    </thead>',
 '    <tbody>',
@@ -61,13 +61,23 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 '            <td class="replacer replacer-{{id}}" data-index="{{id}}">handling...</td>',
 '        <tr>',
 '        {{/cssfiles}}',
+'        <tr class="total">',
+'            <td> TOTAL </td>',
+'            <td class="before before-total">-</td>',
+'            <td class="after after-total">-</td>',
+'            <td class="delta delta-total">-</td>',
+'            <td class="delta-byte delta-byte-total">-</td>',
+'            <td class="percent percent-total">-</td>',
+'            <td class="total total-total">-</td>',
+'            <td class="replacer replacer-total"></td>',
+'        <tr>',
 '    </tbody>',
 '</table>'
 ].join(''),
 
-        replacer: '<a href="javascript:;" class="status-a ok">Replace CSS</a>'
+        replacer: '<a href="javascript:;" class="status-a ok">Replace ==></a>',
+        replaceAll: ''
     }
-
 
     var CSS = [
 '.ckstyle-container {text-align: left; color: #333; width:100%;background-color:#EEE;position:fixed;top:0;right:0;z-index:2147483647;border-bottom:1px solid #DDD;box-shadow: 1px 1px 12px #AAA;opacity:0.9;}',
@@ -77,7 +87,8 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 '.ckstyle-container .ckstyle-content {padding:5px;display:none;}',
 '.ckstyle-trigger {border:1px solid #DDD; border-right: none; border-top: none; color: #666; box-shadow:1px 1px 2px #666;display:none;top:0;right:0;position:fixed;z-index:2147483647;background-color:#EEE;padding:5px;cursor:pointer;}',
 '.ckstyle-result-table {border-color: #AAA; width: 100%; text-align:left;font-size:14px; border-spacing: 0;border-collapse:collapse;}',
-'.ckstyle-result-table th, .ckstyle-result-table td {padding: 3px 5px; font-size: 12px !important;}'
+'.ckstyle-result-table th, .ckstyle-result-table td {padding: 5px; font-size: 12px !important;}',
+'.ckstyle-result-table .header td, .ckstyle-result-table .total td {font-weight: bold}'
     ].join('');
 
     
@@ -117,7 +128,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
             style.cssText = cssText;
             return style;
         } else {
-            var style = $('<style>').attr('type', 'text/css').append(document.createTextNode(cssText));
+            var style = $('<style>').attr('type', 'text/css').append(document.createTextNode(cssText)).attr('ck-append-node', 1);
             if (target) {
                 style.insertAfter(target);
             } else {
@@ -176,7 +187,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
         container.delegate('.replacer a.ok', 'click', function() {
             var me = $(this);
             var statusA = me.hasClass('status-a');
-            me.html(statusA ? 'Recover CSS' : 'Replace CSS')
+            me.html(statusA ? 'Recover <==' : 'Replace ==>')
                 .toggleClass('status-a').toggleClass('status-b');
             var index = me.parent().data('index');
             var node = cssfiles[index].node;
@@ -204,7 +215,6 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
     var loaderCounter = 0;
 
     function loadLink(record) {
-        var index = record.id;
         $.ajax({
             url: serverRoot + '/cssfile/' + encodeURIComponent(record.url), 
             type: 'GET',
@@ -217,12 +227,11 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
             var code = content.code;
 
             var before = code.length;
-            $('.before-' + index).html(before);
             var compressed = service.doCompress(code);
             var after = compressed.length;
-            record.compressed = compressed;
-
             var delta = before - after;
+
+            $('.before-' + index).html(before);
             $('.after-' + index).html(after);
             $('.delta-' + index).html(delta)
             $('.delta-byte-' + index).html(getBytes(delta) + 'KB')
@@ -230,19 +239,45 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
             $('.total-' + index).html(getSavedTotalGB(delta) + ' MB')
             $('.replacer-' + index).html(TMPLS.replacer)
 
+            record.compressed = compressed;
+            record.before = before;
+            record.after = after;
+
             loaderCounter++;
 
-            if (loaderCounter == cssfiles.length - 1) {
+            if (loaderCounter == cssfiles.length) {
                 loading.hide();
                 loaderCounter = 0;
+                
+                countAll();
             }
         }).error(function(content) {
             $('.replacer-' + index).html(TMPLS.replacerError)
         });
     }
 
+    function countAll() {
+        var before = 0,
+            after = 0;
+        for(var i = 0, current; i < cssfiles.length; i++) {
+            current = cssfiles[i];
+            before += current.before;
+            after += current.after;
+        }
+        var delta = before - after;
+        var index = 'total'
+        $('.before-' + index).html(before);
+        $('.after-' + index).html(after);
+        $('.delta-' + index).html(delta)
+        $('.delta-byte-' + index).html(getBytes(delta) + 'KB')
+        $('.percent-' + index).html(((delta / before)*100).toFixed(2) + '%')
+        $('.total-' + index).html(getSavedTotalGB(delta) + ' MB')
+        $('.replacer-' + index).html(TMPLS.replacer)
+        $('.replacer-total').html(TMPLS.replaceAll)
+    }
+
     function initDOM() {
-        appendCss(CSS);
+        ckcssNode = appendCss(CSS);
 
         $(TMPLS.container).appendTo('body');
 
@@ -273,8 +308,14 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
         $('.ckstyle-container').remove();
         $('.ckstyle-trigger').remove();
         $('.ckservice-loading').remove();
+        $('[ck-append-node]').remove();
+        $('[rel=stylesheet-bak]').attr('rel', 'stylesheet');
+
         initDOM();
         bindEvents();
+
+        guid = 0;
+
         handleCSSFiles();
     }
 
