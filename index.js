@@ -10,6 +10,7 @@ var cmdPath = function(file) {
 }
 
 function loadCommands() {
+  var commandNames = []
   fs.readdirSync(path.join(rootDir, 'cmds')).forEach(function(filename) {
     if (path.extname(filename) != '.js') {
       return
@@ -23,6 +24,7 @@ function loadCommands() {
       return
     }
     var cmd = commander.command(meta.name)
+    commandNames.push(meta.name)
     cmd.description(meta.description)
     if (meta.options) {
       meta.options.forEach(function(op) {
@@ -31,6 +33,7 @@ function loadCommands() {
     }
     cmd.action(handle)
   })
+  commander.usage(commandNames.join('/') + ' [options]')
 }
 
 exports.command = function(args) {
