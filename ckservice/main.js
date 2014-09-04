@@ -14,6 +14,8 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 
     var service = require('./ckservice');
 
+    var serverRoot;
+
     var container, content, loading, content, trigger, close, counter
 
     var TMPLS = {
@@ -24,7 +26,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 '        <a href="https://github.com/wangjeaf/ckstyle-node" target="_blank">',
 '            Github',
 '        </a>]',
-'        <span class="ckstyle-loading">正在加载和处理 <span class="ckstyle-file-count"></span> 个CSS文件，请稍候...</span>',
+'        <span class="ckstyle-loading">Loading & Parsing <span class="ckstyle-file-count"></span> CSS files, please wait...</span>',
 '    </h3>',
 '    <div class="ckstyle-content"></div>',
 '</div>',
@@ -36,13 +38,13 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 '    <thead>',
 '        <tr>',
 '            <th width="40%">URL</th>',
-'            <th>压缩前字符数</th>',
-'            <th>压缩后字符数</th>',
-'            <th>压缩字符数</th>',
-'            <th>压缩字节</th>',
-'            <th>压缩百分比</th>',
-'            <th>每万PV节省</th>',
-'            <th>操作</th>',
+'            <th>Chars Before</th>',
+'            <th>Chars After</th>',
+'            <th>Delta Chars</th>',
+'            <th>Delta Bytes</th>',
+'            <th>Delta %</th>',
+'            <th>Saved/1wPVs</th>',
+'            <th>Operations</th>',
 '        </tr>',
 '    </thead>',
 '    <tbody>',
@@ -55,26 +57,26 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 '            <td class="delta-byte delta-byte-{{id}}">-</td>',
 '            <td class="percent percent-{{id}}">-</td>',
 '            <td class="total total-{{id}}">-</td>',
-'            <td class="replacer replacer-{{id}}" data-index="{{id}}">处理中...</td>',
+'            <td class="replacer replacer-{{id}}" data-index="{{id}}">handling...</td>',
 '        <tr>',
 '        {{/cssfiles}}',
 '    </tbody>',
 '</table>'
 ].join(''),
 
-        replacer: '<a href="javascript:;" class="status-a">替换试试</a>'
+        replacer: '<a href="javascript:;" class="status-a ok">Replace CSS</a>'
     }
 
 
     var CSS = [
-'.ckstyle-container {text-align: left; color: #333; width:100%;background-color:#EEE;position:fixed;top:0;right:0;z-index:10000;border-bottom:1px solid #DDD;box-shadow: 1px 1px 12px #AAA;opacity:0.9;}',
+'.ckstyle-container {text-align: left; color: #333; width:100%;background-color:#EEE;position:fixed;top:0;right:0;z-index:2147483647;border-bottom:1px solid #DDD;box-shadow: 1px 1px 12px #AAA;opacity:0.9;}',
 '.ckstyle-container .ckstyle-close {color: #666; float:right;margin-right:10px;font-size:20px;margin-top:3px;cursor:pointer;}',
 '.ckstyle-container .ckstyle-header {padding:5px;margin:0;font-size:16px;line-height:22px;border-bottom:1px solid #DDD;}',
 '.ckstyle-container .ckstyle-loading {display: none; padding:5px;margin:0; font-weight: normal; margin-left: 100px;}',
 '.ckstyle-container .ckstyle-content {padding:5px;display:none;}',
-'.ckstyle-trigger {border:1px solid #DDD; border-right: none; border-top: none; color: #666; box-shadow:1px 1px 2px #666;display:none;top:0;right:0;position:fixed;z-index:10000;background-color:#EEE;padding:5px;cursor:pointer;}',
+'.ckstyle-trigger {border:1px solid #DDD; border-right: none; border-top: none; color: #666; box-shadow:1px 1px 2px #666;display:none;top:0;right:0;position:fixed;z-index:2147483647;background-color:#EEE;padding:5px;cursor:pointer;}',
 '.ckstyle-result-table {border-color: #AAA; width: 100%; text-align:left;font-size:14px; border-spacing: 0;border-collapse:collapse;}',
-'.ckstyle-result-table th, .ckstyle-result-table td {padding: 3px 5px;}'
+'.ckstyle-result-table th, .ckstyle-result-table td {padding: 3px 5px; font-size: 12px !important;}'
     ].join('');
 
     
@@ -148,9 +150,9 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
             if (getUrl(url).indexOf('http') != 0) {
                 return;
             }
-            if (getOrigin(url) != window.location.origin) {
-                return;
-            }
+            // if (getOrigin(url) != window.location.origin) {
+            //     return;
+            // }
             links.push({
                 url: getUrl(url),
                 id: guid++,
@@ -170,10 +172,10 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
             container.show('slow');
         });
 
-        container.delegate('.replacer a', 'click', function() {
+        container.delegate('.replacer a.ok', 'click', function() {
             var me = $(this);
             var statusA = me.hasClass('status-a');
-            me.html(statusA ? '替换回来' : '替换试试')
+            me.html(statusA ? 'Recover CSS' : 'Replace CSS')
                 .toggleClass('status-a').toggleClass('status-b');
             var index = me.parent().data('index');
             var node = cssfiles[index].node;
@@ -198,10 +200,20 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 
     function loadLink(record) {
         var index = record.id;
-        jQuery.get(record.url, function(content) {
-            var before = content.length;
+        $.ajax({
+            url: serverRoot + '/cssfile/' + encodeURIComponent(record.url), 
+            type: 'GET',
+            data: {
+                index: record.id
+            }, 
+            dataType: 'jsonp'
+        }).done(function(content) {
+            var index = content.index;
+            var code = content.code;
+
+            var before = code.length;
             $('.before-' + index).html(before);
-            var compressed = service.doCompress(content);
+            var compressed = service.doCompress(code);
             var after = compressed.length;
             record.compressed = compressed;
 
@@ -219,7 +231,9 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
                 loading.hide();
                 loaderCounter = 0;
             }
-        })
+        }).error(function(content) {
+            $('.replacer-' + index).html(TMPLS.replacerError)
+        });
     }
 
     function initDOM() {
@@ -235,10 +249,10 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
         counter = $('.ckstyle-file-count');
     }
 
-    window.cssfiles;
+    window.__cssfiles = cssfiles = null;
 
     function handleCSSFiles() {
-        cssfiles = getTargetCSSFiles();
+        window.__cssfiles = cssfiles = getTargetCSSFiles();
         //window.urls = urls;
         buildCssFileTable(cssfiles);
         counter.html(cssfiles.length);
@@ -246,7 +260,10 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
         loadCss(cssfiles);
     }
 
-    function init() {
+    function init(root) {
+        if (root) {
+            serverRoot = root;
+        }
         $('.ckstyle-container').remove();
         $('.ckstyle-trigger').remove();
         $('.ckservice-loading').remove();
@@ -259,5 +276,5 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 })
 
 seajs.use('ckstyle/run-ckservice', function(runner) {
-    runner.go();
+    runner.go('http://localhost:3000');
 })
