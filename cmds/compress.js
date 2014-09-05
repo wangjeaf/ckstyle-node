@@ -13,7 +13,8 @@ exports.meta = {
     o.ignores, 
     o.safe, 
     o.combine, 
-    o.browsers
+    o.browsers,
+    o.nobak
   ],
   description: '压缩CSS文件'
 }

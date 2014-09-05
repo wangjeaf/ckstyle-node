@@ -11,7 +11,8 @@ exports.meta = {
     o.exclude, 
     o.ignores, 
     o.safe, 
-    o.fixextension
+    o.fixextension,
+    o.nobak
   ],
   description: '自动修复和美化CSS'
 }

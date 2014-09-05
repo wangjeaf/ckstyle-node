@@ -78,5 +78,10 @@ module.exports = {
         flags: '--tabs [tabs]',
         description: '一个tab占用的空格个数配置 [4]',
         defaultValue: 4
+    },
+    nobak: {
+        flags: '--nobak',
+        description: '修复和压缩时，内容直接替换，不备份源文件',
+        defaultValue: false
     }
 }

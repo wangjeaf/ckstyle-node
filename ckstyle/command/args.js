@@ -16,7 +16,7 @@ var CommandArgs = new Class(function() {
         self.ignoreRuleSets = ['@unit-test-expecteds']
         self.fixedExtension = '.fixed.css'
         self.fixToSingleLine = false
-        self.compressConfig = CompressArgs()
+        self.compressConfig = new CompressArgs()
         self.safeMode = false
         self.noBak = false
 
@@ -27,6 +27,10 @@ var CommandArgs = new Class(function() {
         // [plugin]
         // pluginA = 1
         self.pluginConfig = {}
+    }
+
+    this.extend = function(self, config) {
+        console.log(config);
     }
 
     this.toString = function(self) {
