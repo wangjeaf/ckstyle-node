@@ -13,6 +13,10 @@ module.exports = function(grunt) {
       separator = footer + '\n\n' + banner;
   var plugins = [];
 
+  require('load-grunt-tasks')(grunt, {
+    pattern: 'grunt-contrib-*'
+  });
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
@@ -97,14 +101,16 @@ module.exports = function(grunt) {
   });
 
   // Load the plugin that provides the "uglify" task.
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
+  // grunt.loadNpmTasks('grunt-contrib-copy');
+  // grunt.loadNpmTasks('grunt-contrib-watch');
+  // grunt.loadNpmTasks('grunt-contrib-concat');
+  // grunt.loadNpmTasks('grunt-contrib-clean');
+  // grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  grunt.registerTask('default', ['clean:all', 
+  grunt.registerTask('default', [
+    'clean:all', 
     'copy', 'concat:ckstyle', 'clean:dir', 'uglify:ckstyle', 
-    'concat:ckservice', 'uglify:ckservice']);
+    'concat:ckservice', 'uglify:ckservice'
+  ]);
   grunt.registerTask('dev', ['watch']);
 };
