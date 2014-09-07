@@ -4,7 +4,8 @@
   "version": "0.1.2",
   "author": "wangjeaf <wangjeaf@gmail.com>",
   "homepage": "http://ckstyle.github.io",
-  "contributors": [],
+  "contributors": [
+  ],
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-clean": "~0.5.0",
@@ -38,6 +39,7 @@
     "ckstyle": "./bin/ckstyle"
   },
   "scripts": {
+    "test": "mocha"
   },
   "engines": {
     "node": ">= 0.8.0"
