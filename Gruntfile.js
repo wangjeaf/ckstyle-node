@@ -77,6 +77,8 @@ module.exports = function(grunt) {
           'ckservice/libs/jquery.js', 
           'ckservice/libs/mustache.js', 
           'ckservice/libs/sea.js', 
+          'ckservice/libs/difflib/difflib.js', 
+          'ckservice/libs/difflib/diffview.js', 
           '<%= concat.ckstyle.dest %>',
           'ckservice/main.js'
         ],
