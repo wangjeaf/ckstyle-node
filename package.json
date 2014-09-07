@@ -1,15 +1,11 @@
 {
   "name": "ckstyle",
   "description": "Parse & Check & Format & Comb & Compress CSS, and more ...",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "wangjeaf <wangjeaf@gmail.com>",
   "homepage": "http://ckstyle.github.io",
   "contributors": [],
-  "dependencies": {},
   "devDependencies": {
-    "colors": "^0.6.2",
-    "commander": "^2.3.0",
-    "express": "~3.3.5",
     "grunt": "~0.4.1",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-concat": "~0.3.0",
@@ -17,8 +13,13 @@
     "grunt-contrib-uglify": "~0.2.2",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-markdown": "~0.4.0",
+    "load-grunt-tasks": "^0.6.0"
+  },
+  "dependencies": {
+    "colors": "^0.6.2",
+    "commander": "^2.3.0",
+    "express": "~3.3.5",
     "ini": "^1.2.1",
-    "load-grunt-tasks": "^0.6.0",
     "path-extra": "^0.2.1",
     "request": "^2.40.0",
     "underscore": "~1.5.1"
@@ -36,7 +37,6 @@
     "ckstyle": "./bin/ckstyle"
   },
   "scripts": {
-    "test": "mocha"
   },
   "engines": {
     "node": ">= 0.8.0"
