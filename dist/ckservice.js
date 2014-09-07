@@ -15954,7 +15954,7 @@ define('ckstyle/ckservice', function(require, exports, module) {
     exports.doFormat = function(css) {
         var checker = new CssChecker(css)
         checker.prepare();
-        return checker.doFormater()
+        return checker.doFormat()
     }
 })
 
@@ -16361,7 +16361,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
             record.before = before;
             record.after = after;
 
-            $('.code-diff-' + index).html('<pre>' + differ.diff(serfice.doFormat(code), service.doFix(code)) + '</pre>');
+            $('.code-diff-' + index).html('<pre>' + differ.diff(service.doFormat(code), service.doFix(code)) + '</pre>');
 
             loaderCounter++;
 
