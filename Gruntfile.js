@@ -26,7 +26,7 @@ module.exports = function(grunt) {
     },
     copy: {
       ckservice: {
-        src: ['dist/ckservice.min.js'],
+        src: ['dist/ckservice.min.js', 'dist/ckservice.js'],
         dest:'../ckstyle.github.io/js/'
       },
       ckstyle: {
