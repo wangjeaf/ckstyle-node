@@ -10218,13 +10218,16 @@ var isFunction = base.isFunction
 var isObject = base.isObject
 var findInArray = base.findInArray
 
+var args = require('./command/args');
+var defaultConfig = new args.CommandArgs()
+
 var CssChecker = new Class(function() {
     this.__init__ = function(self, parser, config) {
         if (typeof parser == 'string') {
             parser = new CSSParser(parser, config && config.fileName ? config.fileName : 'TMP');
         }
         self.parser = parser
-        self.config = config || {}
+        self.config = config || defaultConfig
 
         // 错误记录，log是2级，warn是1级，error是0级
         self.logMsgs = []
