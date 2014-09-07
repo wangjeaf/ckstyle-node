@@ -15939,12 +15939,170 @@ define('ckstyle/ckservice', function(require, exports, module) {
         var checker = new CssChecker(css);
         checker.prepare()
         return checker.doCompress();
+    },
+
+    exports.doFix = function(css) {
+        var checker = new CssChecker(css)
+        checker.prepare();
+        return checker.doFix()
     }
+})
+
+define('ckstyle/differ', function(require, exports) {
+    /*
+     * Javascript Diff Algorithm
+     *  By John Resig (http://ejohn.org/)
+     *  Modified by Chu Alan "sprite"
+     *
+     * Released under the MIT license.
+     *
+     * More Info:
+     *  http://ejohn.org/projects/javascript-diff-algorithm/
+     *
+     * Usage: QUnit.diff(expected, actual)
+     *
+     * QUnit.diff( "the quick brown fox jumped over", "the quick fox jumps over" ) == "the  quick <del>brown </del> fox <del>jumped </del><ins>jumps </ins> over"
+     */
+    // borrow from QUnit.
+    var diff = (function() {
+        var hasOwn = Object.prototype.hasOwnProperty;
+
+        /*jshint eqeqeq:false, eqnull:true */
+        function diff( o, n ) {
+            var i,
+                ns = {},
+                os = {};
+
+            for ( i = 0; i < n.length; i++ ) {
+                if ( !hasOwn.call( ns, n[ i ] ) ) {
+                    ns[ n[ i ] ] = {
+                        rows: [],
+                        o: null
+                    };
+                }
+                ns[ n[ i ] ].rows.push( i );
+            }
+
+            for ( i = 0; i < o.length; i++ ) {
+                if ( !hasOwn.call( os, o[ i ] ) ) {
+                    os[ o[ i ] ] = {
+                        rows: [],
+                        n: null
+                    };
+                }
+                os[ o[ i ] ].rows.push( i );
+            }
+
+            for ( i in ns ) {
+                if ( hasOwn.call( ns, i ) ) {
+                    if ( ns[ i ].rows.length === 1 && hasOwn.call( os, i ) && os[ i ].rows.length === 1 ) {
+                        n[ ns[ i ].rows[ 0 ] ] = {
+                            text: n[ ns[ i ].rows[ 0 ] ],
+                            row: os[ i ].rows[ 0 ]
+                        };
+                        o[ os[ i ].rows[ 0 ] ] = {
+                            text: o[ os[ i ].rows[ 0 ] ],
+                            row: ns[ i ].rows[ 0 ]
+                        };
+                    }
+                }
+            }
+
+            for ( i = 0; i < n.length - 1; i++ ) {
+                if ( n[ i ].text != null && n[ i + 1 ].text == null && n[ i ].row + 1 < o.length && o[ n[ i ].row + 1 ].text == null &&
+                    n[ i + 1 ] == o[ n[ i ].row + 1 ] ) {
+
+                    n[ i + 1 ] = {
+                        text: n[ i + 1 ],
+                        row: n[ i ].row + 1
+                    };
+                    o[ n[ i ].row + 1 ] = {
+                        text: o[ n[ i ].row + 1 ],
+                        row: i + 1
+                    };
+                }
+            }
+
+            for ( i = n.length - 1; i > 0; i-- ) {
+                if ( n[ i ].text != null && n[ i - 1 ].text == null && n[ i ].row > 0 && o[ n[ i ].row - 1 ].text == null &&
+                    n[ i - 1 ] == o[ n[ i ].row - 1 ] ) {
+
+                    n[ i - 1 ] = {
+                        text: n[ i - 1 ],
+                        row: n[ i ].row - 1
+                    };
+                    o[ n[ i ].row - 1 ] = {
+                        text: o[ n[ i ].row - 1 ],
+                        row: i - 1
+                    };
+                }
+            }
+
+            return {
+                o: o,
+                n: n
+            };
+        }
+
+        return function( o, n ) {
+            o = o.replace( /\s+$/, "" );
+            n = n.replace( /\s+$/, "" );
+
+            var i, pre,
+                str = "",
+                out = diff( o === "" ? [] : o.split( /\s+/ ), n === "" ? [] : n.split( /\s+/ ) ),
+                oSpace = o.match( /\s+/g ),
+                nSpace = n.match( /\s+/g );
+
+            if ( oSpace == null ) {
+                oSpace = [ " " ];
+            } else {
+                oSpace.push( " " );
+            }
+
+            if ( nSpace == null ) {
+                nSpace = [ " " ];
+            } else {
+                nSpace.push( " " );
+            }
+
+            if ( out.n.length === 0 ) {
+                for ( i = 0; i < out.o.length; i++ ) {
+                    str += "<del>" + out.o[ i ] + oSpace[ i ] + "</del>";
+                }
+            } else {
+                if ( out.n[ 0 ].text == null ) {
+                    for ( n = 0; n < out.o.length && out.o[ n ].text == null; n++ ) {
+                        str += "<del>" + out.o[ n ] + oSpace[ n ] + "</del>";
+                    }
+                }
+
+                for ( i = 0; i < out.n.length; i++ ) {
+                    if ( out.n[ i ].text == null ) {
+                        str += "<ins>" + out.n[ i ] + nSpace[ i ] + "</ins>";
+                    } else {
+
+                        // `pre` initialized at top of scope
+                        pre = "";
+
+                        for ( n = out.n[ i ].row + 1; n < out.o.length && out.o[ n ].text == null; n++ ) {
+                            pre += "<del>" + out.o[ n ] + oSpace[ n ] + "</del>";
+                        }
+                        str += " " + out.n[ i ].text + nSpace[ i ] + pre;
+                    }
+                }
+            }
+
+            return str;
+        };
+    }());
+    exports.diff = diff;
 })
 
 define('ckstyle/run-ckservice', function(require, exports, module) {
 
     var service = require('./ckservice');
+    var differ = require('./differ');
 
     var serverRoot;
 
@@ -15977,7 +16135,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 '            <th>Delta Bytes</th>',
 '            <th>Delta %</th>',
 '            <th>Saved/1wPVs</th>',
-'            <th>Replace origin CSS!</th>',
+'            <th>Operations</th>',
 '        </tr>',
 '    </thead>',
 '    <tbody>',
@@ -15991,6 +16149,9 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 '            <td class="percent percent-{{id}}">-</td>',
 '            <td class="total total-{{id}}">-</td>',
 '            <td class="replacer replacer-{{id}}" data-index="{{id}}">handling...</td>',
+'        <tr>',
+'        <tr>',
+'            <td class="code-diff code-diff-{{id}}" colspan="8"></td>',
 '        <tr>',
 '        {{/cssfiles}}',
 '        <tr class="total">',
@@ -16007,7 +16168,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 '</table>'
 ].join(''),
 
-        replacer: '<a href="javascript:;" class="status-a ok">Replace ==></a>',
+        replacer: '<a href="javascript:;" class="status-a ok">Replace ==></a> | <a href="javascript:;" class="code-diff-trigger">Diff</a>',
         replaceAll: ''
     }
 
@@ -16020,7 +16181,11 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 '.ckstyle-trigger {border:1px solid #DDD; border-right: none; border-top: none; color: #666; box-shadow:1px 1px 2px #666;display:none;top:0;right:0;position:fixed;z-index:2147483647;background-color:#EEE;padding:5px;cursor:pointer;}',
 '.ckstyle-result-table {border-color: #AAA; width: 100%; text-align:left;font-size:14px; border-spacing: 0;border-collapse:collapse;}',
 '.ckstyle-result-table th, .ckstyle-result-table td {padding: 5px; font-size: 12px !important;}',
-'.ckstyle-result-table .header td, .ckstyle-result-table .total td {font-weight: bold}'
+'.ckstyle-result-table .header td, .ckstyle-result-table .total td {font-weight: bold}',
+'.ckstyle-container pre {margin: 0; white-space: pre-wrap; word-wrap: break-word; overflow: auto; height: ' + ($(window).height() / 3 * 2) + 'px;}',
+'.ckstyle-container .code-diff {display: none;}',
+'.ckstyle-container ins {background-color: #E0F2BE; color: #500;}',
+'.ckstyle-container del {background-color: #FFCACA; color: #374E0C;}'
     ].join('');
 
     
@@ -16130,6 +16295,17 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
                 $(cssfiles[index].style).remove();
                 delete cssfiles[index].style;
             }
+        }).delegate('.code-diff-trigger', 'click', function() {
+            var me = $(this);
+            var index = me.parent().data('index');
+            var target = $('.code-diff-' + index);
+            var flag = target.is(':hidden');
+            $('.code-diff').hide();
+            if (flag) {
+                target.show();
+            } else {
+                target.hide();
+            }
         })
     }
 
@@ -16174,6 +16350,8 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
             record.compressed = compressed;
             record.before = before;
             record.after = after;
+
+            $('.code-diff-' + index).html('<pre>' + differ.diff(code, service.doFix(code)) + '</pre>');
 
             loaderCounter++;
 
