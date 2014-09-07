@@ -16182,7 +16182,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 '.ckstyle-result-table {border-color: #AAA; width: 100%; text-align:left;font-size:14px; border-spacing: 0;border-collapse:collapse;}',
 '.ckstyle-result-table th, .ckstyle-result-table td {padding: 5px; font-size: 12px !important;}',
 '.ckstyle-result-table .header td, .ckstyle-result-table .total td {font-weight: bold}',
-'.ckstyle-container pre {margin: 0; white-space: pre-wrap; word-wrap: break-word; overflow: auto; height: ' + ($(window).height() / 3 * 2) + 'px;}',
+'.ckstyle-container pre {margin: 0; white-space: pre-wrap; word-wrap: break-word; max-width: ' + ($(window).width() - 180) + 'px; overflow: auto; max-height: ' + ($(window).height() / 3 * 2) + 'px;}',
 '.ckstyle-container .code-diff {display: none;}',
 '.ckstyle-container ins {background-color: #E0F2BE; color: #500;}',
 '.ckstyle-container del {background-color: #FFCACA; color: #374E0C;}'
