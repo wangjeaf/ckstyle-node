@@ -25,7 +25,11 @@ module.exports = function(grunt) {
         tasks: ['copy']
     },
     copy: {
-      main: {
+      ckservice: {
+        src: ['dist/ckservice.min.js'],
+        dest:'../ckstyle.github.io/js/'
+      },
+      ckstyle: {
         src: [
           'ckstyle/entity/**/*.js',
           'ckstyle/parser/**/*.js',
@@ -110,8 +114,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', [
     'clean:all', 
-    'copy', 'concat:ckstyle', 'clean:dir', 'uglify:ckstyle', 
+    'copy:ckstyle', 'concat:ckstyle', 'clean:dir', 'uglify:ckstyle', 
     'concat:ckservice', 'uglify:ckservice'
   ]);
   grunt.registerTask('dev', ['watch']);
+  grunt.registerTask('dist', ['copy:ckservice'])
 };
