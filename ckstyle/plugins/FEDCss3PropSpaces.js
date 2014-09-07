@@ -38,6 +38,7 @@ module.exports = global.FEDCss3PropSpaces = new Class(RuleChecker, function () {
         if (!rule.getRuleSet().singleLineFlag) {
             // 12 = 4 + 8, 4 spaces, 8 for align
             if (helper.len(roughName.split(name)[0]) != 12) {
+                console.log(roughName.split(name)[0])
                 self.errorMsg = self.errorMsg_multi
                 return false
             }

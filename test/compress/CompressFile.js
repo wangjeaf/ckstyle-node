@@ -2,6 +2,7 @@ var doCssFileCompress = require('./helper').doCssFileCompress
 
 exports.doTest = function() {
     _basic()
+    _doc_demo()
     _one_line_file()
     _with_extra()
     _compress_with_hack_chars()
@@ -12,6 +13,11 @@ exports.doTest = function() {
 function _basic() {
     msg = doCssFileCompress('_file.css')
     equal(msg, ".test{width:100px;height:200px;_z-index:111}@keyframes 'name'{10%{width:100px}}.another{*width:100px;background-color:#ABC;color:#DDD}", 'file compressed')
+}
+
+function _doc_demo() {
+    msg = doCssFileCompress('_doc_demo.css')
+    equal(msg, ".test1,.test2,.test3,.test4,.test5{*display:none;_display:inline-block;width:100px;height:200px;margin:20px 10px 10px;border:1px solid #FFF}", 'file compressed')
 }
 
 function _one_line_file() {

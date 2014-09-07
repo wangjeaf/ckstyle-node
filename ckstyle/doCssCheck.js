@@ -49,9 +49,9 @@ function checkFile(filePath, config) {
         return false
     } else {
         if (config.json)
-            logger.log('{"status":"ok","result":"' + filePath + ' is ok"}')
+            logger.ok('{"status":"ok","result":"' + filePath + ' is ok"}')
         else
-            logger.log('[check] ' + filePath + ' is ok\n')
+            logger.ok('[check] ' + filePath + ' is ok\n')
         if (fs.existsSync(path)) {
             fs.unlinkSync(path)
         }
