@@ -16659,7 +16659,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 'table.diff tbody th {font-family:verdana,arial,"Bitstream Vera Sans",helvetica,sans-serif; background:#EED; font-size:11px; font-weight:normal; border:1px solid #BBC; color:#886; padding:.3em .5em .1em 0; text-align:right; vertical-align:top }',
 'table.diff thead {border-bottom:1px solid #BBC; background:#EFEFEF; font-family:Verdana }',
 'table.diff thead th.texttitle {text-align:left }',
-'table.diff tbody td {padding:0px .4em; padding-top:.4em; max-width: ' + ($(window).width() / 2 - 20) + 'px; vertical-align:top; }',
+'table.diff tbody td {padding:0px .4em; padding-top:.4em; max-width: ' + ($(window).width() / 2 - 120) + 'px; vertical-align:top; }',
 'table.diff .empty {background-color:#DDD; }',
 'table.diff .replace {background-color:#FD8 }',
 'table.diff .delete {background-color:#E99; }',
