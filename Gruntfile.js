@@ -88,15 +88,18 @@ module.exports = function(grunt) {
       dir: ["dist/ckstyle"]
     },
     uglify: {
-      options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
-      },
       ckstyle: {
+        options: {
+          banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+        },
         files: {
           'dist/<%= pkg.name %>.min.js': ['<%= concat.ckstyle.dest %>']  
         }
       },
       ckservice: {
+        options: {
+          banner: '/*! ckservice <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+        },
         files: {
           'dist/ckservice.min.js': ['<%= concat.ckservice.dest %>']  
         }
