@@ -83,5 +83,10 @@ module.exports = {
         flags: '--nobak',
         description: '修复和压缩时，内容直接替换，不备份源文件',
         defaultValue: false
+    },
+    port: {
+        flags: "-p, --port [port]",
+        description: '启动服务的端口号',
+        defaultValue: false
     }
 }

@@ -2,13 +2,28 @@ var colors = require('colors')
 var express = require('express')
 var http = require('http')
 var path = require('path')
-
+var o = require('./helper/options')
 var router = require('./helper/router')
 
-var app = express();
-var server = http.createServer(app);
+exports.meta = {
+    name: 'serve',
+    options: [
+        o.port
+    ],
+    description: '启动ckservice服务器，用于接收ckservice的请求'
+}
+
+exports.handle = function() {
+    startServer(arguments[0].port);
+}
 
 function startServer(port) {
+    var app = express();
+    var server = http.createServer(app);
+
+    if (port === true || port === false) {
+        port = null;
+    }
     port = port || 3000;
     app.set('port', port);
     app.set('views', path.join(__dirname + '../views'))
@@ -32,18 +47,4 @@ function startServer(port) {
     http.createServer(app).listen(port, function(){
         console.log('[ckstyle log] Express server listening on port '.green + (''+port).red + (' in ' + app.get('env') + ' mode.').green);
     });
-}
-
-exports.meta = {
-    name: 'serve',
-    options: [{
-        flags: "-p, --port",
-        description: '端口号',
-        defaultValue: false
-    }],
-    description: '启动ckservice服务器，用于接收ckservice的请求（先开发，未来拆出去）'
-}
-
-exports.handle = function() {
-    startServer(arguments[0]);
 }
