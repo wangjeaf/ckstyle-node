@@ -1,0 +1,17 @@
+compatible/
+dist/
+doc/
+node_modules/
+public/
+snippets/
+test/
+tools/
+Gruntfile.js
+*.ico
+*.html
+*.txt
+*.xml
+*.yml
+*.iml
+.*
+*~
