@@ -7,12 +7,18 @@ define('ckstyle/ckservice', function(require, exports, module) {
         var checker = new CssChecker(css);
         checker.prepare()
         return checker.doCompress();
-    },
+    }
 
     exports.doFix = function(css) {
         var checker = new CssChecker(css)
         checker.prepare();
         return checker.doFix()
+    }
+
+    exports.doFormat = function(css) {
+        var checker = new CssChecker(css)
+        checker.prepare();
+        return checker.doFormater()
     }
 })
 
@@ -419,7 +425,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
             record.before = before;
             record.after = after;
 
-            $('.code-diff-' + index).html('<pre>' + differ.diff(code, service.doFix(code)) + '</pre>');
+            $('.code-diff-' + index).html('<pre>' + differ.diff(serfice.doFormat(code), service.doFix(code)) + '</pre>');
 
             loaderCounter++;
 

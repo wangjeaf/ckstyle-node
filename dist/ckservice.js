@@ -10468,6 +10468,11 @@ var CssChecker = new Class(function() {
         return self.getStyleSheet().compress(browser).trim()
     }
 
+    this.doFormat = function(self) {
+        self.resetStyleSheet()
+        return self.getStyleSheet().fixed()
+    }
+
     this.doFix = function(self, browser) {
         browser = browser || ALL;
         self.resetStyleSheet()
@@ -12659,7 +12664,6 @@ module.exports = global.FEDCss3PropSpaces = new Class(RuleChecker, function () {
         if (!rule.getRuleSet().singleLineFlag) {
             // 12 = 4 + 8, 4 spaces, 8 for align
             if (helper.len(roughName.split(name)[0]) != 12) {
-                console.log(roughName.split(name)[0])
                 self.errorMsg = self.errorMsg_multi
                 return false
             }
@@ -15939,12 +15943,18 @@ define('ckstyle/ckservice', function(require, exports, module) {
         var checker = new CssChecker(css);
         checker.prepare()
         return checker.doCompress();
-    },
+    }
 
     exports.doFix = function(css) {
         var checker = new CssChecker(css)
         checker.prepare();
         return checker.doFix()
+    }
+
+    exports.doFormat = function(css) {
+        var checker = new CssChecker(css)
+        checker.prepare();
+        return checker.doFormater()
     }
 })
 
@@ -16351,7 +16361,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
             record.before = before;
             record.after = after;
 
-            $('.code-diff-' + index).html('<pre>' + differ.diff(code, service.doFix(code)) + '</pre>');
+            $('.code-diff-' + index).html('<pre>' + differ.diff(serfice.doFormat(code), service.doFix(code)) + '</pre>');
 
             loaderCounter++;
 

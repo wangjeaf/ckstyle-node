@@ -259,6 +259,11 @@ var CssChecker = new Class(function() {
         return self.getStyleSheet().compress(browser).trim()
     }
 
+    this.doFormat = function(self) {
+        self.resetStyleSheet()
+        return self.getStyleSheet().fixed()
+    }
+
     this.doFix = function(self, browser) {
         browser = browser || ALL;
         self.resetStyleSheet()
