@@ -25,11 +25,12 @@
     "underscore": "~1.5.1"
   },
   "keywords": [
-    "CSS",
-    "code style",
+    "css",
+    "codestyle",
     "checker",
     "fixer",
-    "compressor"
+    "compressor",
+    "browsers"
   ],
   "repository": "git://github.com/wangjeaf/ckstyle-node",
   "main": "./index.js",
