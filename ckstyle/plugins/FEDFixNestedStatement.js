@@ -34,7 +34,7 @@ module.exports = global.FEDFixNestedStatement = new Class(ExtraChecker, function
             var prepare = require(modulePath).prepare
             var checker = prepare(statement, '', config)
             // 嵌套的CSS，如果是压缩，也需要精简
-            var msg = checker.doCompress(config._curBrowser)
+            var msg = checker.doCompress(config._inner.curBrowser)
             ruleSet.fixedStatement = msg
         } else {
             var doFix = require(modulePath).doFix

@@ -3,7 +3,7 @@ var path = require('path')
 var extrapath = require('path-extra')
 var ini = require('ini')
 var colors = require('colors')
-
+var logger = require('../../ckstyle/logger/index')
 var CommandArgs = require('../../ckstyle/command/args').CommandArgs
 
 var FILE_NAMES = 'ckstyle.json ckstyle-config.js ckstyle.ini .ckstyle.json .ckstyle-config.js .ckstyle.ini'.split(' ')
@@ -17,15 +17,15 @@ var EXTS = '.json .js .ini'.split(' ')
 // 2. parse it
 // 3. replace some config of originConfig
 
-exports.loadFileConfig = function(file, originConfig) {
-    originConfig = originConfig || new CommandArgs
+exports.loadFileConfig = function(operation, file) {
+    var originConfig = new CommandArgs(operation)
 
     var configFile = file
 
     if (file) {
         var ext = path.extname(file)
         if (EXTS.indexOf(ext) == -1) {
-            console.log('[CKStyle] Config file should end with ' + EXTS.join('/').red)
+            logger.error('Config file should end with ' + EXTS.join('/'))
             return originConfig
         }
         if (fs.existsSync(file)) {
@@ -33,7 +33,7 @@ exports.loadFileConfig = function(file, originConfig) {
         } else {
             var tmp = path.join(process.cwd(), file)
             if (!fs.existsSync(tmp)) {
-                console.log('[CKStyle] Can not find the config file: ' + file.red)
+                logger.error('Can not find the config file: ' + file)
                 return originConfig
             } else {
                 configFile = tmp
@@ -50,6 +50,7 @@ exports.loadFileConfig = function(file, originConfig) {
 
     var data
     var ext = path.extname(configFile)
+    logger.ok('loading config from ' + configFile)
     if (ext == '.ini') {
         data = ini.parse(fs.readFileSync(configFile, 'utf-8'))
     } else {
@@ -66,7 +67,7 @@ exports.loadFileConfig = function(file, originConfig) {
             } 
         }
         if (!data) {
-            console.log('[CKStyle] Can not load config data from: ' + configFile)
+            logger.error('Can not load config data from: ' + configFile)
         }
     }
 
@@ -96,5 +97,5 @@ function getConfigFilePath() {
 
 // if (!module.parent) {
 //     var config = exports.loadFileConfig()
-//     console.log(config)
+//     logger.log(config)
 // }

@@ -2,61 +2,74 @@ var base = require('../base')
 var ERROR_LEVEL = base.ERROR_LEVEL
 var Class = base.Class
 
+var analyse = require('../browsers/Analyser').analyse
+
+var EXTS = {
+    check: '.ckstyle.txt',
+    fix: '.fixed.css',
+    compress: '.min.css'
+}
+
 var CommandArgs = new Class(function() {
-    this.__init__ = function(self) {
-        self.operation = null
+
+    this.__init__ = function(self, operation) {
+
+        self.operation = operation || 'check'
+
         self.errorLevel = 2
         self.recursive = false
-        self.printFlag = false
-        self.extension = '.ckstyle.txt'
+        self.print = false
         self.include = 'all'
         self.exclude = 'none'
+        self.config = ''
+
+        self.extension = EXTS[self.operation] || '.ckstyle.txt'
+
         self.standard = ''
-        self.exportJson = false
-        self.ignoreRuleSets = ['@unit-test-expecteds']
-        self.fixedExtension = '.fixed.css'
-        self.fixToSingleLine = false
-        self.compressConfig = new CompressArgs()
-        self.safeMode = false
+        self.json = false
+        self.ignoreRulesets = ['@unit-test-expecteds']
+        self.singleLine = false
+        self.safe = false
+
+        self.combine = true
+        self.browsers = null
         self.noBak = false
 
-        self._curBrowser = null
+        // for CKStyle inner use
+        self._inner = {
+            curBrowser: null
+        }
 
         // plugin config for developers, add plugin section in ckstyle.ini
         // 
         // [plugin]
         // pluginA = 1
-        self.pluginConfig = {}
+        self._pluginConfigs = {}
     }
 
     this.extend = function(self, config) {
-        console.log(config);
+        // load configs i need.
+        for(var prop in self) {
+            if (prop == 'parent') {
+                continue
+            }
+            if (config.hasOwnProperty(prop)) {
+                if (prop == 'browsers') {
+                    self[prop] = analyse(config[prop])
+                    continue
+                }
+                self[prop] = config[prop]
+            }
+        }
     }
 
     this.toString = function(self) {
-        return 'errorLevel: ' + self.errorLevel + 
-            '\n recursive: ' + self.recursive + 
-            '\n printFlag: ' + self.printFlag + 
-            '\n extension: ' + self.extension + 
-            '\n include: ' + self.include +
-            '\n exclude: ' + self.exclude
+        var collector = []
+        for(var prop in self) {
+            collector.push(prop + ': ' + self[prop])
+        }
+        return collector.join(', ')
     }
 });
 
-var CompressArgs = new Class(function() {
-    this.__init__ = function(self) {
-        self.extension = '.min.css'
-        self.combineFile = true
-        self.browsers = null
-        self.noBak = false
-    }
-
-    this.toString = function(self) {
-        return 'extension: ' + self.extension + 
-            ', combineFile: ' + self.combineFile + 
-            ', browsers: ' + self.browsers
-    }
-})
-
 exports.CommandArgs = CommandArgs
-exports.CompressArgs = CompressArgs

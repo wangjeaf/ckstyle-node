@@ -1,6 +1,7 @@
 var fs = require('fs');
 var pathm = require('path');
 
+var logger = require('./logger/index')
 var CssParser = require('./parser/index').CSSParser
 var CssChecker = require('./ckstyler').CssChecker
 var args = require('./command/args');
@@ -32,37 +33,43 @@ function doCompress(fileContent, fileName, config) {
 
 function compressFile(filePath, config) {
     config = config || defaultConfig
-    extension = config.compressConfig.extension
+    if (!filePath || !fs.existsSync(filePath)) {
+        logger.error('[compress] file not exist: ' + filePath)
+        return;
+    }
+
+    var extension = config.extension
     if (extension.toLowerCase() == 'none')
         extension = null
     if (extension && endswith(filePath, extension))
         return
-    fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
-    if (!config.printFlag)
-        console.log('[compress] compressing ' + filePath)
-    path = filePath
-    basic = filePath.split('.css')[0]
-    if (!extension)
-        if (config.compressConfig.noBak === false)
+    var fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
+    if (!config.print)
+        logger.ok('[compress] compressing ' + filePath)
+    var path = filePath
+    var basic = filePath.split('.css')[0]
+    if (!extension) {
+        if (config.noBak === false)
             fs.writeFileSync(path + '.bak', fileContent)
-    else
+    } else {
         path = filePath.split('.css')[0] + extension
-        
-    if (!config.compressConfig.browsers) {
+    }
+
+    if (!config.browsers) {
         var result = doCompress(fileContent, filePath, config)
         checker = result[0]
         message = result[1]
-        if (config.printFlag) {
+        if (config.print) {
             if (extension && fs.existsSync(path)) {
                 fs.unlinkSync(path)
             }
-            console.log(message)
+            logger.log(message)
         } else {
             fs.writeFileSync(path, message)
-            console.show('[compress] compressed ==> ' + path)
+            logger.ok('[compress] compressed ==> ' + path)
         }
     } else {
-        items = config.compressConfig.browsers
+        items = config.browsers
         onlyOne = Object.keys(items).length == 1
         for (var key in items) {
             var value = items[key];
@@ -70,20 +77,35 @@ function compressFile(filePath, config) {
             // 尤其是合并过的CSS规则集
             checker = prepare(fileContent, filePath, config)
             message = checker.doCompress(value)
-            path = os.path.realpath(filePath.split('.css')[0] + '.' + key + '.min.css')
-            if (config.printFlag) {
+            path = filePath.split('.css')[0] + '.' + key + '.min.css'
+            if (config.print) {
                 if (extension && fs.existsSync(path)) {
                     fs.unlinkSync(path)
                 }
-                console.log((onlyOne ? '' : (key + ' : ')) + message)
+                logger.log((onlyOne ? '' : (key + ' : ')) + message)
             } else {
                 fs.writeFileSync(path, message)
-                console.show('[compress] compressed ==> ' + path)
+                logger.ok('[compress] compressed ==> ' + path)
             }
         }
     }
 }
 
+function compress(file, config) {
+    if (!file || !fs.existsSync(file)) {
+        logger.error('[compress] file not exist: ' + file)
+        return;
+    }
+    if (fs.statSync(file).isDirectory()){
+        if (config.recursive) {
+            compressDirRecursively(file, config)
+        } else {
+            compressDirSubFiles(file, config)
+        }
+    } else {
+        compressFile(file, config)
+    }
+}
 
 function compressDir(directory, config) {
     config = config || defaultConfig
@@ -119,5 +141,4 @@ function compressDirRecursively(directory, config) {
 exports.prepare = prepare
 
 exports.doCompress = doCompress;
-exports.compressDirSubFiles = compressDirSubFiles
-exports.compressDirRecursively = compressDirRecursively
+exports.compress = compress;

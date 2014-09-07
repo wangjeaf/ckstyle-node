@@ -80,7 +80,7 @@ module.exports = global.FEDCss3PropSpaces = new Class(RuleChecker, function () {
                 return
             }
         }
-        rule.fixedName = (config.fixToSingleLine ? '' : helper.times(' ', 8 - helper.len(prefix))) + fixedName
+        rule.fixedName = (config.singleLine ? '' : helper.times(' ', 8 - helper.len(prefix))) + fixedName
     }
 
     this.__doc__ = {

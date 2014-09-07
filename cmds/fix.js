@@ -1,5 +1,9 @@
 var colors = require('colors')
 var o = require('./helper/options')
+var slice = Array.prototype.slice
+var loadFileConfig = require('./helper/ConfigFileParser').loadFileConfig
+var fixer = require('../ckstyle/doCssFix')
+var fs = require('fs')
 
 exports.meta = {
   name: 'fix',
@@ -18,13 +22,12 @@ exports.meta = {
 }
 
 exports.handle = function() {
-  var CssChecker = require('../').CssChecker;
-  var checker = new CssChecker('.a {width: 100px}');
-  checker.prepare();
-  var fixed = checker.doFix();
-  console.log(fixed);
+  var args = slice.call(arguments, -1)[0]
+  var config = loadFileConfig(exports.meta.name, args.config)
+  config.extend(args)
 
-  var detector = require('../').Detector;
-  var res = detector.doRuleDetect('*width', '100px');
-  console.log(res.toString(2));
+  var files = slice.call(arguments, 0, -1)
+  files.forEach(function(f) {
+    fixer.fix(f, config)
+  })
 }

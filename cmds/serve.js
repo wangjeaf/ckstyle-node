@@ -4,6 +4,7 @@ var http = require('http')
 var path = require('path')
 var o = require('./helper/options')
 var router = require('./helper/router')
+var logger = require('../ckstyle/logger/index')
 
 exports.meta = {
     name: 'serve',
@@ -45,6 +46,6 @@ function startServer(port) {
     router.route(app);
 
     http.createServer(app).listen(port, function(){
-        console.log('[ckstyle log] Express server listening on port '.green + (''+port).red + (' in ' + app.get('env') + ' mode.').green);
+        logger.ok('Express server listening on port ' + port + ' in ' + app.get('env') + ' mode.');
     });
 }

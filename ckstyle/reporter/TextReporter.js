@@ -14,7 +14,6 @@ var TextReporter = new Class(function() {
     this.doReport = function(self) {
         checker = self.checker
         counter = 0
-        formatter = '%s %s. %s'
 
         var result = checker.errors()
         logs = result[0]

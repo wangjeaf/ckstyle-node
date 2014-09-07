@@ -1,6 +1,7 @@
 var fs = require('fs');
 var pathm = require('path');
 
+var logger = require('./logger/index')
 var CssParser = require('./parser/index').CSSParser
 var CssChecker = require('./ckstyler').CssChecker
 var args = require('./command/args');
@@ -28,16 +29,22 @@ function doFix(fileContent, fileName, config) {
 }
 
 function fixFile(filePath, config) {
+    if (!filePath || !fs.existsSync(filePath)) {
+        logger.error('[fix] file not exist: ' + filePath)
+        return;
+    }
+
     config = config || defaultConfig
 
-    extension = config.fixedExtension
+    extension = config.extension
+
     if (extension.toLowerCase() == 'none')
         extension = null
     if (extension != null && endswith(filePath, extension))
         return
     fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
-    if (!config.printFlag)
-        console.log('[fixstyle] fixing ' + filePath)
+    if (!config.print)
+        logger.ok('[fix] fixing ' + filePath)
 
     var result = doFix(fileContent, filePath, config)
     checker = result[0]
@@ -51,16 +58,32 @@ function fixFile(filePath, config) {
         path = filePath.split('.css')[0] + extension
     }
 
-    if (config.printFlag) {
+    if (config.print) {
         if (extension && fs.existsSync(path)) {
             fs.unlinkSync(path)
         }
-        console.log(msg)
+        logger.log(msg)
     } else {
         fs.writeFileSync(path, msg)
-        console.log('[fixstyle] fixed ==> ' + path)
+        logger.ok('[fix] fixed ==> ' + path)
     }
 } 
+
+function fix(file, config) {
+    if (!file || !fs.existsSync(file)) {
+        logger.error('[fix] file not exist: ' + file)
+        return;
+    }
+    if (fs.statSync(file).isDirectory()){
+        if (config.recursive) {
+            fixDirRecursively(file, config)
+        } else {
+            fixDirSubFiles(file, config)
+        }
+    } else {
+        fixFile(file, config)
+    }
+}
 
 function fixDir(directory, config) {
     config = config || defaultConfig
@@ -94,5 +117,4 @@ function fixDirRecursively(directory, config) {
 }
 
 exports.doFix = doFix
-exports.fixDirSubFiles = fixDirSubFiles
-exports.fixDirRecursively = fixDirRecursively
+exports.fix = fix

@@ -8,11 +8,11 @@ exports.doTest = function() {
 }
 
 function _singleLine() {
-    defaultConfig.safeMode = true
+    defaultConfig.safe = true
     var result = doFix('.test {width:"100px";color:#DDDDDD;margin:0 auto 0 auto;} .test2 {width:"100px";color:#DDDDDD;margin-top:0;margin-left:auto;margin-right:auto;margin-bottom:0;}', '', defaultConfig)
     var fixer = result[0]
     var msg = result[1]
-    defaultConfig.safeMode = false
+    defaultConfig.safe = false
     equal(msg, 
 ".test {\n\
     width: '100px';\n\
@@ -37,5 +37,5 @@ function _multiLine() {
     width: '100px';\n\
     margin: 0 auto;\n\
     color: #DDD;\n\
-}", 'default safeMode is false, fix is ok')
+}", 'default safe is false, fix is ok')
 }

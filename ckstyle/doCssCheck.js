@@ -1,6 +1,6 @@
 var fs = require('fs');
 var pathm = require('path');
-
+var logger = require('./logger/index')
 var CssParser = require('./parser/index').CSSParser
 var CssChecker = require('./ckstyler').CssChecker
 var args = require('./command/args');
@@ -26,34 +26,57 @@ function doCheck(fileContent, fileName, config) {
 
 function checkFile(filePath, config) {
     config = config || defaultConfig
-    fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
-    console.log('[ckstyle] checking ' + filePath)
-    checker = doCheck(fileContent, filePath, config)
-    path = pathm.realpath(filePath + config.extension)
+    if (!filePath || !fs.existsSync(filePath)) {
+        logger.error('[check] file not exist: ' + filePath)
+        return;
+    }
+    var fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
+    logger.log('[check] checking ' + filePath)
+    var checker = doCheck(fileContent, filePath, config)
+    var path = filePath + config.extension
     if (checker.hasError()) {
-        reporter = ReporterUtil.getReporter(config.exportJson ? 'json' : 'text', checker)
+        var reporter = ReporterUtil.getReporter(config.json ? 'json' : 'text', checker)
         reporter.doReport()
-        if (config.printFlag) {
+        if (config.print) {
             if (fs.existsSync(path)) {
                 fs.unlinkSync(path)
             }
-            console.log(reporter.export() + '\n')
+            logger.log(reporter.export() + '\n')
         } else {
             fs.writeFileSync(path, reporter.export())
-            console.log('[ckstyle] @see %s\n' % path)
+            logger.log('[check] @see ' + path)
         }
         return false
     } else {
-        if (config.exportJson)
-            console.log('{"status":"ok","result":"' + filePath + ' is ok"}')
+        if (config.json)
+            logger.log('{"status":"ok","result":"' + filePath + ' is ok"}')
         else
-            console.log('[ckstyle] ' + filePath + ' is ok\n')
+            logger.log('[check] ' + filePath + ' is ok\n')
         if (fs.existsSync(path)) {
             fs.unlinkSync(path)
         }
         return true
     }
 } 
+
+
+
+function check(file, config) {
+    if (!file || !fs.existsSync(file)) {
+        logger.error('[check] file not exist: ' + file)
+        return;
+    }
+    if (fs.statSync(file).isDirectory()){
+        if (config.recursive) {
+            checkDirRecursively(file, config)
+        } else {
+            checkDirSubFiles(file, config)
+        }
+    } else {
+        checkFile(file, config)
+    }
+}
+
 
 function checkDir(directory, config) {
     config = config || defaultConfig
@@ -91,12 +114,11 @@ function checkDirRecursively(directory, config) {
 }
 
 function checkCssText(text) {
-    checker = doCheck(text)
-    reporter = ReporterUtil.getReporter('text', checker)
+    var checker = doCheck(text)
+    var reporter = ReporterUtil.getReporter('text', checker)
     reporter.doReport()
-    console.log(reporter.export())
+    logger.log(reporter.export())
 }
 
 exports.doCheck = doCheck;
-exports.checkDirSubFiles = checkDirSubFiles
-exports.checkDirRecursively = checkDirRecursively
+exports.check = check;

@@ -23,6 +23,8 @@ module.exports = global.FEDMustContainAuthorInfo = new Class(StyleSheetChecker, 
 
         if (styleSheet.getFile() != '' 
             && first.comment.indexOf('@author') == -1 
+            && first.comment.indexOf('@alibaba') == -1 
+            && first.comment.indexOf('@taobao') == -1 
             && first.comment.indexOf('@renren-inc.com') == -1) {
             self.errorMsg = self.errorMsg_author
             return false

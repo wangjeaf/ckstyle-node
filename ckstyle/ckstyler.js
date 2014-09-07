@@ -1,6 +1,6 @@
 var fs = require('fs');
 var CSSParser = require('./parser/index').CSSParser;
-
+var logger = require('./logger/index')
 var base = require('./base');
 var ERROR_LEVEL = base.ERROR_LEVEL;
 var Class = base.Class;
@@ -96,7 +96,7 @@ var CssChecker = new Class(function() {
             try {
                 plugin = require(fullpath)
             } catch (e) {
-                console.log(e);
+                logger.error(e);
                 plugin = null;
             }
             if (plugin) {
@@ -108,7 +108,7 @@ var CssChecker = new Class(function() {
     this.registerPluginClass = function(self, pluginClass) {
         var include = self.config.include || 'all'
         var exclude = self.config.exclude || []
-        var safeMode = self.config.safeMode || false
+        var safe = self.config.safe
         var safeModeExcludes = 'combine-same-rulesets'
         var instance = null;
 
@@ -119,14 +119,13 @@ var CssChecker = new Class(function() {
             instance = pluginClass
         }
         
-
         // 如果是always，则说明不论是否选择都需要的规则
         if (!instance.always) {
             if (include != 'all' && include.indexOf(instance.id) == -1) {
                 return
             } else if (exclude != 'none' && exclude.indexOf(instance.id) != -1) {
                 return
-            } else if (safeMode && safeModeExcludes.indexOf(instance.id) != -1) {
+            } else if (safe && safeModeExcludes.indexOf(instance.id) != -1) {
                 return
             }
         }
@@ -175,7 +174,7 @@ var CssChecker = new Class(function() {
         } else if (errorLevel == ERROR_LEVEL.ERROR) {
             self.errorMsgs.push(errorMsg)
         } else {
-            console.error('[TOOL] wrong ErrorLevel for ' + errorMsg)
+            logger.error('[DEV] wrong ErrorLevel for ' + errorMsg)
         }
     }
 
@@ -188,7 +187,7 @@ var CssChecker = new Class(function() {
         errors.forEach(function(errorMsg) {
             obj = {}
             if (!errorMsg)
-                console.error('[TOOL] no errorMsg in your plugin, please check it')
+                logger.error('[DEV] no errorMsg in your plugin, please check it')
 
             if (errorMsg.indexOf('${file}') == -1) {
                 errorMsg = errorMsg + ' (from "' + styleSheet.getFile() + '")'
@@ -211,7 +210,7 @@ var CssChecker = new Class(function() {
         errors.forEach(function(errorMsg) {
             obj = {}
             if (!errorMsg) {
-                console.error('[TOOL] no errorMsg in your plugin, please check it')
+                logger.error('[DEV] no errorMsg in your plugin, please check it')
                 return;
             }
             if (errorMsg.indexOf('${selector}') == -1) {
@@ -252,7 +251,7 @@ var CssChecker = new Class(function() {
 
     this.doCompress = function(self, browser) {
         browser = browser || ALL;
-        self.config._curBrowser = browser
+        self.config._inner.curBrowser = browser
         self.doFix(browser)
         return self.getStyleSheet().compress(browser).trim()
     }
@@ -261,7 +260,7 @@ var CssChecker = new Class(function() {
         browser = browser || ALL;
         self.resetStyleSheet()
         // 忽略的规则集（目前只忽略单元测试的selector）
-        ignoreRuleSets = self.config.ignoreRuleSets
+        ignoreRulesets = self.config.ignoreRulesets
 
         // fix规则集
         function fixRuleSet(ruleSet) {
@@ -318,7 +317,7 @@ var CssChecker = new Class(function() {
                 return
             }
             // 判断此规则是否忽略
-            if (findInArray(ignoreRuleSets, ruleSet.selector)) {
+            if (findInArray(ignoreRulesets, ruleSet.selector)) {
                 return
             }
             // 先fix rule
@@ -338,7 +337,7 @@ var CssChecker = new Class(function() {
 
     this.doCheck = function(self) {
         // 忽略的规则集（目前只忽略单元测试的selector）
-        ignoreRuleSets = self.config.ignoreRuleSets
+        ignoreRulesets = self.config.ignoreRulesets
 
         function isBoolean(value) {
             return value === true || value === false;
@@ -362,7 +361,7 @@ var CssChecker = new Class(function() {
                 } else if (isList(result) && len(result) != 0) {
                     self.logRuleSetMessage(checker, ruleSet, result)
                 } else {
-                    console.error('check should be boolean/list, ' + checker.id + ' is not.')
+                    logger.error('check should be boolean/list, ' + checker.id + ' is not.')
                 }
             });
         }
@@ -382,7 +381,7 @@ var CssChecker = new Class(function() {
                     } else if (isList(result) && len(result) != 0) {
                         self.logRuleMessage(checker, rule, result)
                     } else {
-                        console.error('check should be boolean/list, ' + checker.id + ' is not.')
+                        logger.error('check should be boolean/list, ' + checker.id + ' is not.')
                     }
                 });
             });
@@ -402,7 +401,7 @@ var CssChecker = new Class(function() {
                 } else if (isList(result) && len(result) != 0) {
                     self.logRuleSetMessage(checker, ruleSet, result)
                 } else {
-                    console.error('check should be boolean/list, ' + checker.id + ' is not.')
+                    logger.error('check should be boolean/list, ' + checker.id + ' is not.')
                 }
             });
         }
@@ -421,7 +420,7 @@ var CssChecker = new Class(function() {
             } else if (isList(result) && result.length != 0) {
                 self.logStyleSheetMessage(checker, styleSheet, result)
             } else {
-                console.error('check should be boolean/list, ' + checker.id + ' is not.')
+                logger.error('check should be boolean/list, ' + checker.id + ' is not.')
             }
         });
 
@@ -431,7 +430,7 @@ var CssChecker = new Class(function() {
                 return;
             }
             // 判断此规则是否忽略
-            if (findInArray(ignoreRuleSets, ruleSet.selector)) {
+            if (findInArray(ignoreRulesets, ruleSet.selector)) {
                 return;
             }
             checkRuleSet(ruleSet)

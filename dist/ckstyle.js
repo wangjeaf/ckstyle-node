@@ -158,6 +158,10 @@ function whatIs(code) {
     return result.join(',')
 }
 
+
+exports.analyse = analyse
+exports.whatIs = whatIs
+
 // if (!module.parent) {
 //     console.log(analyse('ie6,std'))
 //     console.log(whatIs(B.FIREFOX))
@@ -611,7 +615,7 @@ exports.Analyser = require('./Analyser')
 
 var fs = require('fs');
 var CSSParser = require('./parser/index').CSSParser;
-
+var logger = require('./logger/index')
 var base = require('./base');
 var ERROR_LEVEL = base.ERROR_LEVEL;
 var Class = base.Class;
@@ -707,7 +711,7 @@ var CssChecker = new Class(function() {
             try {
                 plugin = require(fullpath)
             } catch (e) {
-                console.log(e);
+                logger.error(e);
                 plugin = null;
             }
             if (plugin) {
@@ -719,7 +723,7 @@ var CssChecker = new Class(function() {
     this.registerPluginClass = function(self, pluginClass) {
         var include = self.config.include || 'all'
         var exclude = self.config.exclude || []
-        var safeMode = self.config.safeMode || false
+        var safe = self.config.safe
         var safeModeExcludes = 'combine-same-rulesets'
         var instance = null;
 
@@ -730,14 +734,13 @@ var CssChecker = new Class(function() {
             instance = pluginClass
         }
         
-
         // 如果是always，则说明不论是否选择都需要的规则
         if (!instance.always) {
             if (include != 'all' && include.indexOf(instance.id) == -1) {
                 return
             } else if (exclude != 'none' && exclude.indexOf(instance.id) != -1) {
                 return
-            } else if (safeMode && safeModeExcludes.indexOf(instance.id) != -1) {
+            } else if (safe && safeModeExcludes.indexOf(instance.id) != -1) {
                 return
             }
         }
@@ -786,7 +789,7 @@ var CssChecker = new Class(function() {
         } else if (errorLevel == ERROR_LEVEL.ERROR) {
             self.errorMsgs.push(errorMsg)
         } else {
-            console.error('[TOOL] wrong ErrorLevel for ' + errorMsg)
+            logger.error('[DEV] wrong ErrorLevel for ' + errorMsg)
         }
     }
 
@@ -799,7 +802,7 @@ var CssChecker = new Class(function() {
         errors.forEach(function(errorMsg) {
             obj = {}
             if (!errorMsg)
-                console.error('[TOOL] no errorMsg in your plugin, please check it')
+                logger.error('[DEV] no errorMsg in your plugin, please check it')
 
             if (errorMsg.indexOf('${file}') == -1) {
                 errorMsg = errorMsg + ' (from "' + styleSheet.getFile() + '")'
@@ -822,7 +825,7 @@ var CssChecker = new Class(function() {
         errors.forEach(function(errorMsg) {
             obj = {}
             if (!errorMsg) {
-                console.error('[TOOL] no errorMsg in your plugin, please check it')
+                logger.error('[DEV] no errorMsg in your plugin, please check it')
                 return;
             }
             if (errorMsg.indexOf('${selector}') == -1) {
@@ -863,7 +866,7 @@ var CssChecker = new Class(function() {
 
     this.doCompress = function(self, browser) {
         browser = browser || ALL;
-        self.config._curBrowser = browser
+        self.config._inner.curBrowser = browser
         self.doFix(browser)
         return self.getStyleSheet().compress(browser).trim()
     }
@@ -872,7 +875,7 @@ var CssChecker = new Class(function() {
         browser = browser || ALL;
         self.resetStyleSheet()
         // 忽略的规则集（目前只忽略单元测试的selector）
-        ignoreRuleSets = self.config.ignoreRuleSets
+        ignoreRulesets = self.config.ignoreRulesets
 
         // fix规则集
         function fixRuleSet(ruleSet) {
@@ -929,7 +932,7 @@ var CssChecker = new Class(function() {
                 return
             }
             // 判断此规则是否忽略
-            if (findInArray(ignoreRuleSets, ruleSet.selector)) {
+            if (findInArray(ignoreRulesets, ruleSet.selector)) {
                 return
             }
             // 先fix rule
@@ -949,7 +952,7 @@ var CssChecker = new Class(function() {
 
     this.doCheck = function(self) {
         // 忽略的规则集（目前只忽略单元测试的selector）
-        ignoreRuleSets = self.config.ignoreRuleSets
+        ignoreRulesets = self.config.ignoreRulesets
 
         function isBoolean(value) {
             return value === true || value === false;
@@ -973,7 +976,7 @@ var CssChecker = new Class(function() {
                 } else if (isList(result) && len(result) != 0) {
                     self.logRuleSetMessage(checker, ruleSet, result)
                 } else {
-                    console.error('check should be boolean/list, ' + checker.id + ' is not.')
+                    logger.error('check should be boolean/list, ' + checker.id + ' is not.')
                 }
             });
         }
@@ -993,7 +996,7 @@ var CssChecker = new Class(function() {
                     } else if (isList(result) && len(result) != 0) {
                         self.logRuleMessage(checker, rule, result)
                     } else {
-                        console.error('check should be boolean/list, ' + checker.id + ' is not.')
+                        logger.error('check should be boolean/list, ' + checker.id + ' is not.')
                     }
                 });
             });
@@ -1013,7 +1016,7 @@ var CssChecker = new Class(function() {
                 } else if (isList(result) && len(result) != 0) {
                     self.logRuleSetMessage(checker, ruleSet, result)
                 } else {
-                    console.error('check should be boolean/list, ' + checker.id + ' is not.')
+                    logger.error('check should be boolean/list, ' + checker.id + ' is not.')
                 }
             });
         }
@@ -1032,7 +1035,7 @@ var CssChecker = new Class(function() {
             } else if (isList(result) && result.length != 0) {
                 self.logStyleSheetMessage(checker, styleSheet, result)
             } else {
-                console.error('check should be boolean/list, ' + checker.id + ' is not.')
+                logger.error('check should be boolean/list, ' + checker.id + ' is not.')
             }
         });
 
@@ -1042,7 +1045,7 @@ var CssChecker = new Class(function() {
                 return;
             }
             // 判断此规则是否忽略
-            if (findInArray(ignoreRuleSets, ruleSet.selector)) {
+            if (findInArray(ignoreRulesets, ruleSet.selector)) {
                 return;
             }
             checkRuleSet(ruleSet)
@@ -1061,64 +1064,77 @@ var base = require('../base')
 var ERROR_LEVEL = base.ERROR_LEVEL
 var Class = base.Class
 
+var analyse = require('../browsers/Analyser').analyse
+
+var EXTS = {
+    check: '.ckstyle.txt',
+    fix: '.fixed.css',
+    compress: '.min.css'
+}
+
 var CommandArgs = new Class(function() {
-    this.__init__ = function(self) {
-        self.operation = null
+
+    this.__init__ = function(self, operation) {
+
+        self.operation = operation || 'check'
+
         self.errorLevel = 2
         self.recursive = false
-        self.printFlag = false
-        self.extension = '.ckstyle.txt'
+        self.print = false
         self.include = 'all'
         self.exclude = 'none'
+        self.config = ''
+
+        self.extension = EXTS[self.operation] || '.ckstyle.txt'
+
         self.standard = ''
-        self.exportJson = false
-        self.ignoreRuleSets = ['@unit-test-expecteds']
-        self.fixedExtension = '.fixed.css'
-        self.fixToSingleLine = false
-        self.compressConfig = new CompressArgs()
-        self.safeMode = false
+        self.json = false
+        self.ignoreRulesets = ['@unit-test-expecteds']
+        self.singleLine = false
+        self.safe = false
+
+        self.combine = true
+        self.browsers = null
         self.noBak = false
 
-        self._curBrowser = null
+        // for CKStyle inner use
+        self._inner = {
+            curBrowser: null
+        }
 
         // plugin config for developers, add plugin section in ckstyle.ini
         // 
         // [plugin]
         // pluginA = 1
-        self.pluginConfig = {}
+        self._pluginConfigs = {}
     }
 
     this.extend = function(self, config) {
-        console.log(config);
+        // load configs i need.
+        for(var prop in self) {
+            if (prop == 'parent') {
+                continue
+            }
+            if (config.hasOwnProperty(prop)) {
+                if (prop == 'browsers') {
+                    self[prop] = analyse(config[prop])
+                    continue
+                }
+                self[prop] = config[prop]
+            }
+        }
     }
 
     this.toString = function(self) {
-        return 'errorLevel: ' + self.errorLevel + 
-            '\n recursive: ' + self.recursive + 
-            '\n printFlag: ' + self.printFlag + 
-            '\n extension: ' + self.extension + 
-            '\n include: ' + self.include +
-            '\n exclude: ' + self.exclude
+        var collector = []
+        for(var prop in self) {
+            collector.push(prop + ': ' + self[prop])
+        }
+        return collector.join(', ')
     }
 });
 
-var CompressArgs = new Class(function() {
-    this.__init__ = function(self) {
-        self.extension = '.min.css'
-        self.combineFile = true
-        self.browsers = null
-        self.noBak = false
-    }
-
-    this.toString = function(self) {
-        return 'extension: ' + self.extension + 
-            ', combineFile: ' + self.combineFile + 
-            ', browsers: ' + self.browsers
-    }
-})
-
 exports.CommandArgs = CommandArgs
-exports.CompressArgs = CompressArgs
 
 })
 // auto generated by concat 
@@ -1132,7 +1148,7 @@ exports.CompressArgs = CompressArgs
 
 var fs = require('fs');
 var pathm = require('path');
-
+var logger = require('./logger/index')
 var CssParser = require('./parser/index').CSSParser
 var CssChecker = require('./ckstyler').CssChecker
 var args = require('./command/args');
@@ -1158,34 +1174,57 @@ function doCheck(fileContent, fileName, config) {
 
 function checkFile(filePath, config) {
     config = config || defaultConfig
-    fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
-    console.log('[ckstyle] checking ' + filePath)
-    checker = doCheck(fileContent, filePath, config)
-    path = pathm.realpath(filePath + config.extension)
+    if (!filePath || !fs.existsSync(filePath)) {
+        logger.error('[check] file not exist: ' + filePath)
+        return;
+    }
+    var fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
+    logger.log('[check] checking ' + filePath)
+    var checker = doCheck(fileContent, filePath, config)
+    var path = filePath + config.extension
     if (checker.hasError()) {
-        reporter = ReporterUtil.getReporter(config.exportJson ? 'json' : 'text', checker)
+        var reporter = ReporterUtil.getReporter(config.json ? 'json' : 'text', checker)
         reporter.doReport()
-        if (config.printFlag) {
+        if (config.print) {
             if (fs.existsSync(path)) {
                 fs.unlinkSync(path)
             }
-            console.log(reporter.export() + '\n')
+            logger.log(reporter.export() + '\n')
         } else {
             fs.writeFileSync(path, reporter.export())
-            console.log('[ckstyle] @see %s\n' % path)
+            logger.log('[check] @see ' + path)
         }
         return false
     } else {
-        if (config.exportJson)
-            console.log('{"status":"ok","result":"' + filePath + ' is ok"}')
+        if (config.json)
+            logger.log('{"status":"ok","result":"' + filePath + ' is ok"}')
         else
-            console.log('[ckstyle] ' + filePath + ' is ok\n')
+            logger.log('[check] ' + filePath + ' is ok\n')
         if (fs.existsSync(path)) {
             fs.unlinkSync(path)
         }
         return true
     }
 } 
+
+
+
+function check(file, config) {
+    if (!file || !fs.existsSync(file)) {
+        logger.error('[check] file not exist: ' + file)
+        return;
+    }
+    if (fs.statSync(file).isDirectory()){
+        if (config.recursive) {
+            checkDirRecursively(file, config)
+        } else {
+            checkDirSubFiles(file, config)
+        }
+    } else {
+        checkFile(file, config)
+    }
+}
+
 
 function checkDir(directory, config) {
     config = config || defaultConfig
@@ -1223,15 +1262,14 @@ function checkDirRecursively(directory, config) {
 }
 
 function checkCssText(text) {
-    checker = doCheck(text)
-    reporter = ReporterUtil.getReporter('text', checker)
+    var checker = doCheck(text)
+    var reporter = ReporterUtil.getReporter('text', checker)
     reporter.doReport()
-    console.log(reporter.export())
+    logger.log(reporter.export())
 }
 
 exports.doCheck = doCheck;
-exports.checkDirSubFiles = checkDirSubFiles
-exports.checkDirRecursively = checkDirRecursively
+exports.check = check;
 
 })
 // auto generated by concat 
@@ -1240,6 +1278,7 @@ exports.checkDirRecursively = checkDirRecursively
 var fs = require('fs');
 var pathm = require('path');
 
+var logger = require('./logger/index')
 var CssParser = require('./parser/index').CSSParser
 var CssChecker = require('./ckstyler').CssChecker
 var args = require('./command/args');
@@ -1271,37 +1310,43 @@ function doCompress(fileContent, fileName, config) {
 
 function compressFile(filePath, config) {
     config = config || defaultConfig
-    extension = config.compressConfig.extension
+    if (!filePath || !fs.existsSync(filePath)) {
+        logger.error('[compress] file not exist: ' + filePath)
+        return;
+    }
+
+    var extension = config.extension
     if (extension.toLowerCase() == 'none')
         extension = null
     if (extension && endswith(filePath, extension))
         return
-    fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
-    if (!config.printFlag)
-        console.log('[compress] compressing ' + filePath)
-    path = filePath
-    basic = filePath.split('.css')[0]
-    if (!extension)
-        if (config.compressConfig.noBak === false)
+    var fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
+    if (!config.print)
+        logger.ok('[compress] compressing ' + filePath)
+    var path = filePath
+    var basic = filePath.split('.css')[0]
+    if (!extension) {
+        if (config.noBak === false)
             fs.writeFileSync(path + '.bak', fileContent)
-    else
+    } else {
         path = filePath.split('.css')[0] + extension
-        
-    if (!config.compressConfig.browsers) {
+    }
+
+    if (!config.browsers) {
         var result = doCompress(fileContent, filePath, config)
         checker = result[0]
         message = result[1]
-        if (config.printFlag) {
+        if (config.print) {
             if (extension && fs.existsSync(path)) {
                 fs.unlinkSync(path)
             }
-            console.log(message)
+            logger.log(message)
         } else {
             fs.writeFileSync(path, message)
-            console.show('[compress] compressed ==> ' + path)
+            logger.ok('[compress] compressed ==> ' + path)
         }
     } else {
-        items = config.compressConfig.browsers
+        items = config.browsers
         onlyOne = Object.keys(items).length == 1
         for (var key in items) {
             var value = items[key];
@@ -1309,20 +1354,35 @@ function compressFile(filePath, config) {
             // 尤其是合并过的CSS规则集
             checker = prepare(fileContent, filePath, config)
             message = checker.doCompress(value)
-            path = os.path.realpath(filePath.split('.css')[0] + '.' + key + '.min.css')
-            if (config.printFlag) {
+            path = filePath.split('.css')[0] + '.' + key + '.min.css'
+            if (config.print) {
                 if (extension && fs.existsSync(path)) {
                     fs.unlinkSync(path)
                 }
-                console.log((onlyOne ? '' : (key + ' : ')) + message)
+                logger.log((onlyOne ? '' : (key + ' : ')) + message)
             } else {
                 fs.writeFileSync(path, message)
-                console.show('[compress] compressed ==> ' + path)
+                logger.ok('[compress] compressed ==> ' + path)
             }
         }
     }
 }
 
+function compress(file, config) {
+    if (!file || !fs.existsSync(file)) {
+        logger.error('[compress] file not exist: ' + file)
+        return;
+    }
+    if (fs.statSync(file).isDirectory()){
+        if (config.recursive) {
+            compressDirRecursively(file, config)
+        } else {
+            compressDirSubFiles(file, config)
+        }
+    } else {
+        compressFile(file, config)
+    }
+}
 
 function compressDir(directory, config) {
     config = config || defaultConfig
@@ -1358,8 +1418,7 @@ function compressDirRecursively(directory, config) {
 exports.prepare = prepare
 
 exports.doCompress = doCompress;
-exports.compressDirSubFiles = compressDirSubFiles
-exports.compressDirRecursively = compressDirRecursively
+exports.compress = compress;
 
 })
 // auto generated by concat 
@@ -1368,6 +1427,7 @@ exports.compressDirRecursively = compressDirRecursively
 var fs = require('fs');
 var pathm = require('path');
 
+var logger = require('./logger/index')
 var CssParser = require('./parser/index').CSSParser
 var CssChecker = require('./ckstyler').CssChecker
 var args = require('./command/args');
@@ -1395,16 +1455,22 @@ function doFix(fileContent, fileName, config) {
 }
 
 function fixFile(filePath, config) {
+    if (!filePath || !fs.existsSync(filePath)) {
+        logger.error('[fix] file not exist: ' + filePath)
+        return;
+    }
+
     config = config || defaultConfig
 
-    extension = config.fixedExtension
+    extension = config.extension
+
     if (extension.toLowerCase() == 'none')
         extension = null
     if (extension != null && endswith(filePath, extension))
         return
     fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
-    if (!config.printFlag)
-        console.log('[fixstyle] fixing ' + filePath)
+    if (!config.print)
+        logger.ok('[fix] fixing ' + filePath)
 
     var result = doFix(fileContent, filePath, config)
     checker = result[0]
@@ -1418,16 +1484,32 @@ function fixFile(filePath, config) {
         path = filePath.split('.css')[0] + extension
     }
 
-    if (config.printFlag) {
+    if (config.print) {
         if (extension && fs.existsSync(path)) {
             fs.unlinkSync(path)
         }
-        console.log(msg)
+        logger.log(msg)
     } else {
         fs.writeFileSync(path, msg)
-        console.log('[fixstyle] fixed ==> ' + path)
+        logger.ok('[fix] fixed ==> ' + path)
     }
 } 
+
+function fix(file, config) {
+    if (!file || !fs.existsSync(file)) {
+        logger.error('[fix] file not exist: ' + file)
+        return;
+    }
+    if (fs.statSync(file).isDirectory()){
+        if (config.recursive) {
+            fixDirRecursively(file, config)
+        } else {
+            fixDirSubFiles(file, config)
+        }
+    } else {
+        fixFile(file, config)
+    }
+}
 
 function fixDir(directory, config) {
     config = config || defaultConfig
@@ -1461,8 +1543,7 @@ function fixDirRecursively(directory, config) {
 }
 
 exports.doFix = doFix
-exports.fixDirSubFiles = fixDirSubFiles
-exports.fixDirRecursively = fixDirRecursively
+exports.fix = fix
 
 })
 // auto generated by concat 
@@ -1873,7 +1954,7 @@ RuleSet.prototype.fixedRules = function(config) {
     var collector = []
     var spaces = '    '
     var seperator = '\n'
-    if (config && config.fixToSingleLine) {
+    if (config && config.singleLine) {
         spaces = ''
         seperator = ' '
     }
@@ -1900,7 +1981,7 @@ RuleSet.prototype.fixed = function(config) {
         selector = selectors.join(',\n')
     }
     var seperator = '\n'
-    if (config && config.fixToSingleLine) {
+    if (config && config.singleLine) {
         seperator = ' '
     }
     var result = selector + ' {' + seperator + self.fixedRules(config) + seperator + '}'
@@ -2698,7 +2779,7 @@ module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, fu
     }
 
     this.fix = function(self, styleSheet, config) {
-        var browser = config._curBrowser ? config._curBrowser : ALL
+        var browser = config._inner.curBrowser ? config._inner.curBrowser : ALL
         var ruleSets = styleSheet.getRuleSets()
         var mapping = self._gen_hash(ruleSets, browser)
 
@@ -2752,7 +2833,7 @@ module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, fu
                 // class="a c" => width 0
                 // class="b d" => width 0(本来为1)
                 // 这是无法解决的问题，因为我不能在没有分析DOM的情况下，确定两个selector指向同一个dom
-                // 为此，安全模式 --safeMode 诞生。
+                // 为此，安全模式 --safe 诞生。
                 for(var k = 0; k < splitedSelectors[j].length; k++) {
                     var x = splitedSelectors[j][k];
                     if (selectorHistory.indexOf(x) != -1) {
@@ -3023,7 +3104,7 @@ module.exports = global.FEDCss3PropSpaces = new Class(RuleChecker, function () {
                 return
             }
         }
-        rule.fixedName = (config.fixToSingleLine ? '' : helper.times(' ', 8 - helper.len(prefix))) + fixedName
+        rule.fixedName = (config.singleLine ? '' : helper.times(' ', 8 - helper.len(prefix))) + fixedName
     }
 
     this.__doc__ = {
@@ -3317,7 +3398,7 @@ module.exports = global.FEDFixNestedStatement = new Class(ExtraChecker, function
             var prepare = require(modulePath).prepare
             var checker = prepare(statement, '', config)
             // 嵌套的CSS，如果是压缩，也需要精简
-            var msg = checker.doCompress(config._curBrowser)
+            var msg = checker.doCompress(config._inner.curBrowser)
             ruleSet.fixedStatement = msg
         } else {
             var doFix = require(modulePath).doFix
@@ -4035,6 +4116,8 @@ module.exports = global.FEDMustContainAuthorInfo = new Class(StyleSheetChecker, 
 
         if (styleSheet.getFile() != '' 
             && first.comment.indexOf('@author') == -1 
+            && first.comment.indexOf('@alibaba') == -1 
+            && first.comment.indexOf('@taobao') == -1 
             && first.comment.indexOf('@renren-inc.com') == -1) {
             self.errorMsg = self.errorMsg_author
             return false
@@ -5981,7 +6064,81 @@ exports.FEDZIndexShouldInRange = require('./FEDZIndexShouldInRange');
 // auto generated by concat 
 ;define('ckstyle/reporter/JsonReporter', function(require, exports, module) {
 
+var fill = require('./helper').fill;
+var Class = require('../base').Class;
 
+function len(arr) {
+    return arr.length;
+}
+
+var TextReporter = new Class(function() {
+    this.__init__ = function(self, checker) {
+        self.checker = checker
+        self.msgs = []
+        self.logs = []
+        self.errors = []
+        self.warnings = []
+    }
+
+    this.doReport = function(self) {
+        checker = self.checker
+        counter = 0
+
+        var result = checker.errors()
+        logs = result[0]
+        warns = result[1]
+        errors = result[2]
+
+        if (len(logs) == 0 && len(warns) == 0 && len(errors) == 0) {
+            self.appendMsg('msg', {
+                code: 200,
+                msg: 'aha, no problem'
+            })
+            return
+        }
+
+        errors.forEach(function(error) {
+            counter = counter + 1
+            self.appendMsg('error', fill(error))
+        })
+
+        warns.forEach(function(warn) {
+            counter = counter + 1
+            self.appendMsg('warning', fill(warn))
+        })
+
+        logs.forEach(function(log) {
+            counter = counter + 1
+            self.appendMsg('log', fill(log))
+        })
+    }
+
+    this.appendMsg = function(self, type, msg) {
+        if (type == 'msg') {
+            self.msgs.push(msg)
+        }
+        if (type == 'log') {
+            self.logs.push(msg)
+        }
+        if (type == 'error') {
+            self.errors.push(msg)
+        }
+        if (type == 'warning') {
+            self.warnings.push(msg)
+        }
+    }
+
+    this.export = function(self) {
+        return JSON.stringify({
+            msgs: self.msgs,
+            warnings: self.warnings,
+            logs: self.logs,
+            errors: self.errors
+        })
+    }
+});
+
+module.exports = TextReporter;
 
 })
 // auto generated by concat 
@@ -6003,7 +6160,6 @@ var TextReporter = new Class(function() {
     this.doReport = function(self) {
         checker = self.checker
         counter = 0
-        formatter = '%s %s. %s'
 
         var result = checker.errors()
         logs = result[0]

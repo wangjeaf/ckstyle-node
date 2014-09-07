@@ -8,13 +8,12 @@ exports.doTest = function() {
     _multiLine()
 }
 
-
 function _singleLine() {
-    defaultConfig.fixToSingleLine = true
+    defaultConfig.singleLine = true
     var result = doFix('.test {width:"100px";color:#DDDDDD;} .test2 {width:"100px";color:#DDDDDD;}', '', defaultConfig)
     var fixer = result[0]
     var msg = result[1]
-    defaultConfig.fixToSingleLine = false
+    defaultConfig.singleLine = false
     equal(msg, ".test,\n\
 .test2 { width: '100px'; color: #DDD; }", 'fix to single line is ok')
 }

@@ -51,7 +51,7 @@ module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, fu
     }
 
     this.fix = function(self, styleSheet, config) {
-        var browser = config._curBrowser ? config._curBrowser : ALL
+        var browser = config._inner.curBrowser ? config._inner.curBrowser : ALL
         var ruleSets = styleSheet.getRuleSets()
         var mapping = self._gen_hash(ruleSets, browser)
 
@@ -105,7 +105,7 @@ module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, fu
                 // class="a c" => width 0
                 // class="b d" => width 0(本来为1)
                 // 这是无法解决的问题，因为我不能在没有分析DOM的情况下，确定两个selector指向同一个dom
-                // 为此，安全模式 --safeMode 诞生。
+                // 为此，安全模式 --safe 诞生。
                 for(var k = 0; k < splitedSelectors[j].length; k++) {
                     var x = splitedSelectors[j][k];
                     if (selectorHistory.indexOf(x) != -1) {

@@ -27,7 +27,7 @@ module.exports = {
     error: {
         flags: '-e, --error-level [level]',
         description: '检查的异常级别 [0]',
-        defaultValue: 0
+        defaultValue: 2
     },
     ckextension: {
         flags: '--extension [extension]',
@@ -50,7 +50,7 @@ module.exports = {
         defaultValue: '.fixed.css'
     },
     singleline: {
-        flags: '--fix-to-single-line',
+        flags: '--single-line',
         description: '是否自动修复成单行模式（所有selector在一行） [false]',
         defaultValue: false
     },
@@ -81,12 +81,17 @@ module.exports = {
     },
     nobak: {
         flags: '--nobak',
-        description: '修复和压缩时，内容直接替换，不备份源文件',
+        description: '修复和压缩时，内容直接替换，不备份源文件 [false]',
         defaultValue: false
     },
     port: {
         flags: "-p, --port [port]",
-        description: '启动服务的端口号',
+        description: '启动服务的端口号 [3000]',
+        defaultValue: 3000
+    },
+    json: {
+        flags: '--json',
+        description: '用JSON格式导出检查结果 [false]',
         defaultValue: false
     }
 }

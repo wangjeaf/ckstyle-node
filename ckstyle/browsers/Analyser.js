@@ -59,6 +59,10 @@ function whatIs(code) {
     return result.join(',')
 }
 
+
+exports.analyse = analyse
+exports.whatIs = whatIs
+
 // if (!module.parent) {
 //     console.log(analyse('ie6,std'))
 //     console.log(whatIs(B.FIREFOX))

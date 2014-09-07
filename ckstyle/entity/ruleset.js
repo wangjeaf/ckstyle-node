@@ -119,7 +119,7 @@ RuleSet.prototype.fixedRules = function(config) {
     var collector = []
     var spaces = '    '
     var seperator = '\n'
-    if (config && config.fixToSingleLine) {
+    if (config && config.singleLine) {
         spaces = ''
         seperator = ' '
     }
@@ -146,7 +146,7 @@ RuleSet.prototype.fixed = function(config) {
         selector = selectors.join(',\n')
     }
     var seperator = '\n'
-    if (config && config.fixToSingleLine) {
+    if (config && config.singleLine) {
         seperator = ' '
     }
     var result = selector + ' {' + seperator + self.fixedRules(config) + seperator + '}'
