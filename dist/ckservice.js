@@ -11409,14 +11409,14 @@ Rule.prototype.compress = function(browser) {
     }
     var name = self.fixedName ? (self.fixedName + '').trim() : self.name
     var value = self.fixedValue ? (self.fixedValue + '').trim() : self.value
-    return name + ':' + Cleaner.clean(value) + ';'
+    return name + ':' + Cleaner.clearValue(Cleaner.clean(value)) + ';'
 }
 
 Rule.prototype.fixed = function() {
     var self = this;
     var name = (self.fixedName || self.strippedName) + ''
     var value = (self.fixedValue || self.strippedValue) + ''
-    return name + ': ' + Cleaner.clean(value) + ';'
+    return name + ': ' + Cleaner.clearValue(Cleaner.clean(value)) + ';'
 }
 
 Rule.prototype.getRuleSet = function() {
