@@ -12717,6 +12717,14 @@ CSSParser.prototype.doParseRules = function(ruleSet) {
                 continue
             }
             value = collector + char
+            // no value yet
+            if (value.trim().length == 0) {
+                continue;
+            }
+            // not over yet
+            if (value.trim().slice(-1) == ',') {
+                continue;
+            }
             ruleSet.addRuleByStr(selector, attr, value)
             attr = ''
             value = ''
