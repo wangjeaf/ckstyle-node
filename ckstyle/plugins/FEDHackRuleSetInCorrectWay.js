@@ -12,13 +12,13 @@ module.exports = global.FEDHackRuleSetInCorrectWay = new Class(ExtraChecker, fun
         self.errorMsg = 'not correct hacking way in "${selector}"'
     }
 
-    this.check = function(self, rule, config) {
+    this.check = function(self, ruleSet, config) {
         if (!ruleSet.nested)
             return true
 
         var selector = ruleSet.selector.trim()
         if (selector.indexOf('@-moz-document') != -1) {
-            if (selector != '@-moz-document url-prefix()') {
+            if (selector.replace(/\s\s+/g, ' ') != '@-moz-document url-prefix()') {
                 return false
             }
         }

@@ -47,7 +47,6 @@ Cleaner.clearValues = function(values) {
 }
 
 Cleaner.clearSelector = function(selector) {
-    selector = Cleaner.clean(selector)
     return selector.split('\n').join(' ').trim()
 }
 

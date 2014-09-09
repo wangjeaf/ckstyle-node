@@ -23,14 +23,16 @@ module.exports = global.FEDCss3PropSpaces = new Class(RuleChecker, function () {
         if (!helper.isCss3PrefixProp(name))
             return true
         
-        if (!helper.doNotNeedPrefixNow(name)) {
-            // if exists prefix, then should keep spaces
-            if (!rule.getRuleSet().existRoughNames('-webkit-' + name + 
-                ',-moz-' + name + 
-                ',-ms-' + name + 
-                ',-o-' + name)) {
-                return true
-            }
+        if (helper.doNotNeedPrefixNow(name)) {
+            return true
+        }
+        
+        // if exists prefix, then should keep spaces
+        if (!rule.getRuleSet().existRoughNames('-webkit-' + name + 
+            ',-moz-' + name + 
+            ',-ms-' + name + 
+            ',-o-' + name)) {
+            return true
         }
 
         var roughName = rule.roughName

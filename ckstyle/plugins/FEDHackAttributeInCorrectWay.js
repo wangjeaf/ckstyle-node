@@ -25,7 +25,7 @@ module.exports = global.FEDHackAttributeInCorrectWay = new Class(RuleChecker, fu
 
         if (!helper.startswith(stripped, '_') && 
             !helper.startswith(stripped, '*') && 
-            helper.startswith(stripped, '+'))
+            !helper.startswith(stripped, '+'))
             return false
 
         return true

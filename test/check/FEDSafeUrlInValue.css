@@ -3,6 +3,7 @@
  */
 @unit-test-expecteds {
     0: unsafe "background-image" value in ".background-url-unsafe"
+    0: unsafe "cursor" value in ".cursor-unsafe"
 }
 
 .background-url-unsafe {
@@ -10,5 +11,5 @@
 }
 
 .cursor-unsafe {
-    cursor: http://a.com/b.js;
+    cursor: http://acdd.com/b.js;
 }

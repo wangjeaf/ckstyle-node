@@ -5,7 +5,7 @@ var RuleChecker = base.RuleChecker
 var helper = require('./helper');
 
 module.exports = global.FEDSafeUrlInValue = new Class(RuleChecker, function() {
-    
+
     this.__init__ = function(self) {
         self.id = 'safe-url-in-value'
         self.errorLevel = ERROR_LEVEL.ERROR

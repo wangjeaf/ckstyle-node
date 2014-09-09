@@ -1,20 +1,17 @@
 var base = require('../base')
 var ERROR_LEVEL = base.ERROR_LEVEL
 var Class = base.Class
-var StyleSheetChecker = base.StyleSheetChecker
+var RuleSetChecker = base.RuleSetChecker
+var helper = require('./helper')
 
-module.exports = global.FEDCommentLengthLessThan80 = new Class(StyleSheetChecker, function () {
+module.exports = global.FEDCommentLengthLessThan80 = new Class(RuleSetChecker, function () {
     this.__init__ = function (self) {
         self.id = 'comment-length';
         self.errorLevel = ERROR_LEVEL.LOG;
         self.errorMsg = 'comment for "${selector}" length should less than 80 per line';
     }
 
-    this.check = function (self, styleSheet, config) {
-        var ruleSet = styleSheet.getRuleSets()[0]
-        if (!ruleSet) {
-            return true;
-        }
+    this.check = function (self, ruleSet, config) {
         var comment = ruleSet.roughComment;
         if (comment.length == 0) {
             return true
@@ -22,7 +19,7 @@ module.exports = global.FEDCommentLengthLessThan80 = new Class(StyleSheetChecker
 
         var splittedComment = comment.split('\n');
         for (var i = 0, l = splittedComment.length; i < l; i++) {
-            if (splittedComment[i].trim().length > 80) {
+            if (helper.countStrLen(splittedComment[i].trim()) > 80) {
                 return false
             }
         }

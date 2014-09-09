@@ -124,6 +124,21 @@ function canBeCombined(prop) {
 }
 exports.canBeCombined = canBeCombined;
 
+
+function countStrLen(str) {
+    var chns = str.match(/[\u4e00-\u9fa5]+/g)
+    var total = 0;
+    chns && chns.forEach(function(chn) {
+        total += chn.length * 2
+    })
+    var engs = str.match(/[^\u4e00-\u9fa5]+/g)
+    engs && engs.forEach(function(eng) {
+        total += eng.length
+    })
+    return total
+}
+exports.countStrLen = countStrLen
+
 function containsChnChar(string) {
     return /[\u4e00-\u9fa5]+/.test(string)
 }
@@ -166,7 +181,7 @@ var maybeDoNotNeedPrefix = 'border-radius'.split(' ')
 
 function doNotNeedPrefixNow(attr) {
     attr = attr.trim()
-    if (attr.indexOf('border') == 0 && attr.indexOf('radius') == attr.length - 'radius'.length)
+    if (startswith(attr, 'border') && endswith(attr, 'radius'))
         return true
 
     for (var i = maybeDoNotNeedPrefix.length - 1; i >= 0; i--) {

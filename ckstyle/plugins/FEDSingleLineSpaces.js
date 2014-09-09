@@ -25,7 +25,7 @@ module.exports = global.FEDSingleLineSpaces = new Class(RuleChecker, function() 
             return false
         }
 
-        if (rule.roughName[rule.roughName.length - 1] != ' ') {
+        if (rule.roughName.slice(-1) == ' ') {
             self.errorMsg = self.errorMsg_spaceEnd
             return false
         }

@@ -345,7 +345,7 @@ var CssChecker = new Class(function() {
 
     this.doCheck = function(self) {
         // 忽略的规则集（目前只忽略单元测试的selector）
-        ignoreRulesets = self.config.ignoreRulesets
+        var ignoreRulesets = self.config.ignoreRulesets
 
         function isBoolean(value) {
             return value === true || value === false;

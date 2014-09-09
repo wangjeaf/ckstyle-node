@@ -12,10 +12,10 @@ exports.simpleRunTests = function(dirname) {
         if (css) {
             css = css.toString();
         }
-        var errorCounter = doCSSCheck(css, filename, true);
+        var errorCounter = doCSSCheck(css, filename, false);
         it('should OK', function(){
-            //equal(errorCounter, 0);
-            equal(0, 0)
+            equal(errorCounter, 0);
+            //equal(0, 0)
         })
       })
     }

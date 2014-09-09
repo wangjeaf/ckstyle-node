@@ -26,7 +26,7 @@ CSSParser.prototype.doParse = function(config) {
     var prevChar = null, inComment = false, length = self.totalLength,
         text = self.roughCss, selector = '', commentText = '', i = -1 , 
         comments = []
-        
+    var realComment;
     while (true) {
         if (i == length - 1) {
             break;
@@ -54,7 +54,7 @@ CSSParser.prototype.doParse = function(config) {
             var attrs = tmp[1];
             var operator = tmp[2];
             if (nextPos !== null) {
-                var realComment = ''
+                realComment = ''
                 if (comments.length != 0) {
                     realComment = comments.join('\n')
                     comments = []

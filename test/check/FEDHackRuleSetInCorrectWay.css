@@ -2,7 +2,6 @@
  * @author: zhifu.wang@renren-inc.com
  */
 @unit-test-expecteds {
-    0: not correct hacking way in "@-moz-document         url-prefix()"
     0: not correct hacking way in "@-moz-document prefix()"
     0: not correct hacking way in "@media screen and (-webkit-min-device-pixel-ratio:0) and other"
     0: not correct hacking way in "@media all and (-webkit-min-device-pixel-ratio:10), not all and (-webkit-min-device-pixel-ratio:0)"
@@ -12,7 +11,7 @@
     width: 100px;
 }
 
-@-moz-document         url-prefix() {
+@-moz-document url-prefix() {
     width: 100px;
 }
 
