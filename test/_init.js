@@ -42,7 +42,7 @@ function checkUnitTestResult(expecteds, reals, level, fileName) {
     reals.forEach(function(real) {
         real = fill(real)
         real = real.split('(from "')[0].trim()
-        if (expecteds[real]) {
+        if (real in expecteds) {
             okCounter = okCounter + 1
             expecteds[real] = 0
         } else {
@@ -53,6 +53,8 @@ function checkUnitTestResult(expecteds, reals, level, fileName) {
     for (var key in expecteds) {
         var value = expecteds[key]
         if (value == 1) {
+            // console.log(key, fileName)
+            // throw new Error(1)
             errorCounter = errorCounter + 1
             !globalSilent && console.log('[UnitTest] [expect but has not] level ' + level + '( ' + key + ' )' + ' in ' + fileName)
         }
@@ -60,9 +62,13 @@ function checkUnitTestResult(expecteds, reals, level, fileName) {
 }
 
 global.doCSSCheck = function(css, filename, silent) {
+    okCounter = 0
+    errorCounter = 0
+
     globalSilent = !!silent;
     var checker = new ckstyle.CssChecker(css, {
-        ignoreRuleSets: ['@unit-test-expecteds']
+        ignoreRulesets: ['@unit-test-expecteds'],
+        fileName: filename
     });
     checker.prepare();
     checker.doCheck();

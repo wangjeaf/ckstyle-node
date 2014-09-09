@@ -205,6 +205,12 @@ for(var key in cssAttrOrdersMap) {
     })
 }
 
+var canContainUrlProps = 'background behavior cursor'.split(' ')
+exports.canContainUrl = function canContainUrl(prop) {
+    prop = prop.split('-')[0];
+    return containsInArray(canContainUrlProps, prop)
+}
+
 var canBeCombinedProps = 'border margin padding background font'.split(' ')
 
 // execute in http://www.w3schools.com/cssref/css_websafe_fonts.asp

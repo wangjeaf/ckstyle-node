@@ -1,0 +1,14 @@
+/*
+ * @author: zhifu.wang@renren-inc.com
+ */
+@unit-test-expecteds {
+    0: unsafe "background-image" value in ".background-url-unsafe"
+}
+
+.background-url-unsafe {
+    background-image: http://a.com/b.js;
+}
+
+.cursor-unsafe {
+    cursor: http://a.com/b.js;
+}
