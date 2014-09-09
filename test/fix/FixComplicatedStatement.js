@@ -27,11 +27,11 @@ function _handle_complicated_statement() {
     border: 1px solid #333;\n\
     background-image: -webkit-gradient(linear,left top,left bottom,from(#3C3C3C),to(#111));\n\
     background-image: -webkit-linear-gradient(#3C3C3C,#111);\n\
-    background-image: -moz-linear-gradient(#3C3C3C,#111);\n\
-    background-image: -ms-linear-gradient(#3C3C3C,#111);\n\
-    background-image: -o-linear-gradient(#3C3C3C,#111);\n\
+    background-image:    -moz-linear-gradient(#3C3C3C,#111);\n\
+    background-image:     -ms-linear-gradient(#3C3C3C,#111);\n\
+    background-image:      -o-linear-gradient(#3C3C3C,#111);\n\
     background: #111;\n\
-    background-image: linear-gradient(#3C3C3C,#111);\n\
+    background-image:         linear-gradient(#3C3C3C,#111);\n\
     color: #FFF;\n\
     font-weight: bold;\n\
     text-shadow: 0 -1px 1px #000;\n\

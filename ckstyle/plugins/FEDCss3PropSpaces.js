@@ -51,6 +51,38 @@ module.exports = global.FEDCss3PropSpaces = new Class(RuleChecker, function () {
     }
 
     this.fix = function(self, rule, config) {
+        this._handleName(rule, config);
+        this._handleValue(rule, config);
+    }
+
+    this._handleValue = function(self, rule, config) {
+        var value = rule.fixedValue
+        var fixedValue
+        var reg = /\s*-(webkit|moz|ms|khtml|o)-/
+        if (value.indexOf('-') == 0) {
+            var matched = value.match(reg);
+            if (!matched) {
+                return
+            }
+            var prefix = matched[0]
+            rule.fixedPrefix = helper.times(' ', 8 - helper.len(prefix))
+        } else {
+            var valueName = value.split('(')[0];
+            if (!valueName) {
+                return
+            }
+            valueName = valueName.replace(reg, '')
+            if (!rule.getRuleSet().existValueStarts('-webkit-' + valueName + 
+                ',-moz-' + valueName + 
+                ',-ms-' + valueName + 
+                ',-o-' + valueName)) {
+                return
+            }
+            rule.fixedPrefix = helper.times(' ', 8)
+        }
+    }
+
+    this._handleName = function(self, rule, config) {
         var name = rule.name
         // only for css3 props
         if (!helper.isCss3Prop(name))
@@ -80,6 +112,7 @@ module.exports = global.FEDCss3PropSpaces = new Class(RuleChecker, function () {
                 return
             }
         }
+
         rule.fixedName = (config.singleLine ? '' : helper.times(' ', 8 - helper.len(prefix))) + fixedName
     }
 

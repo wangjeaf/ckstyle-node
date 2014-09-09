@@ -1716,9 +1716,10 @@ function NestedStatement(selector, statement, comments, styleSheet) {
     var self = this;
     self.extra = true
     self.nested = true
-    self.selector = selector.trim()
+    self.selector = Cleaner.clearSelector(selector)
     self.statement = statement.trim()
     self.roughStatement = statement
+    self.roughSelector = selector
     self.comments = comments.trim()
     self.styleSheet = styleSheet
 
@@ -1727,6 +1728,8 @@ function NestedStatement(selector, statement, comments, styleSheet) {
 
     self.browser = doExtraDetect(self.selector)
     self.toBeUsed = {}
+
+    self.innerStyleSheet = null
 }
 
 NestedStatement.prototype.rebase = function() {
@@ -1740,16 +1743,25 @@ NestedStatement.prototype.compress = function(browser) {
     var self = this;
     if (!(self.browser & browser))
         return ''
-    return self.fixedSelector + self._compressedStatement()
+    return self.fixedSelector + self._compressedStatement(browser)
 }
 
 NestedStatement.prototype.fixed = function(config) {
     var self = this;
+    self.fixedSelector = self.fixedSelector || self.selector
+    self.fixedStatement = self.fixedStatement || self.statement
+    // if (self.innerStyleSheet) {
+    //     self.fixedStatement = self.innerStyleSheet.fixed(config)
+    // }
     return self.fixedSelector + ' {\n    ' + self.fixedStatement.split('\n').join('\n    ') + '\n}'
 }
-NestedStatement.prototype._compressedStatement = function() {
+NestedStatement.prototype._compressedStatement = function(browser) {
     var self = this;
-    return '{' + Cleaner.clean(self.fixedStatement) + '}'
+    var stmt = Cleaner.clean(self.fixedStatement);
+    if (self.innerStyleSheet) {
+        stmt = self.innerStyleSheet.compress(browser)
+    }
+    return '{' + stmt + '}'
 }
 NestedStatement.prototype.toString = function () {
     var self = this;
@@ -1784,7 +1796,7 @@ function Rule(selector, name, value, ruleSet) {
 
     self.fixedName = ''
     self.fixedValue = ''
-
+    self.fixedPrefix = ''
     self.ruleSet = ruleSet
 
     self.browser = doRuleDetect(self.roughName, self.roughValue)
@@ -1822,7 +1834,7 @@ Rule.prototype.fixed = function() {
     var self = this;
     var name = (self.fixedName || self.strippedName) + ''
     var value = (self.fixedValue || self.strippedValue) + ''
-    return name + ': ' + Cleaner.clearValue(Cleaner.clean(value)) + ';'
+    return name + ': ' + self.fixedPrefix + Cleaner.clearValue(Cleaner.clean(value)) + ';'
 }
 
 Rule.prototype.getRuleSet = function() {
@@ -2082,6 +2094,27 @@ RuleSet.prototype.existRoughNames = function(name) {
     }
     return false
 }
+
+RuleSet.prototype.existValueStarts = function(prefix) {
+    var self = this, prefixes;
+    if (prefix.indexOf(',') != -1) {
+        prefixes = prefix.split(',')
+    } else {
+        prefixes = [prefix]
+    }
+    for(var i = 0; i < prefixes.length; i++) {
+        var prefix = prefixes[i];
+        prefix = prefix.trim()
+        for(var j = 0; j < self._rules.length; j++) {
+            var rule = self._rules[j]
+            if (rule.strippedValue.indexOf(prefix) == 0) {
+                return true;
+            }
+        }
+    }
+    return false
+}
+
 RuleSet.prototype.getRuleByStrippedName = function(name) {
     var self = this;
     for(var i = 0; i < self._rules.length; i++) {
@@ -2152,7 +2185,9 @@ StyleSheet.prototype.addExtraStatement = function(operator, statement, comment) 
 };
 
 StyleSheet.prototype.addNestedRuleSet = function(selector, attrs, comment) {
-    this._ruleSets.push(new NestedStatement(selector, attrs, comment, this))
+    var stmt = new NestedStatement(selector, attrs, comment, this)
+    this._ruleSets.push(stmt)
+    return stmt
 };
 
 StyleSheet.prototype.setFile = function(fileName) {
@@ -2312,6 +2347,10 @@ function findCharFrom(text, i, length, left, right) {
     var counter = 1
     var collector = ''
     for(var j = i + 1; j < length; j++) {
+        if (text[j] == ',') {
+            collector = collector + text[j]
+            continue;
+        }
         if (right == null) {
             if (text[j] == left || left.indexOf(text[j]) != -1) {
                 break;
@@ -2395,7 +2434,7 @@ CSSParser.prototype.doParse = function(config) {
             break;
         }
         i = i + 1
-        char = text[i]
+        var char = text[i]
         if (!inComment && isCommentStart(char, text, i)) {
             commentText = ''
             inComment = true
@@ -2413,11 +2452,11 @@ CSSParser.prototype.doParse = function(config) {
         }
         if (isSpecialStart(char)) {
             var tmp = handleSpecialStatement(text, i, length, char);
-            nextPos = tmp[0];
-            attrs = tmp[1];
-            operator = tmp[2];
+            var nextPos = tmp[0];
+            var attrs = tmp[1];
+            var operator = tmp[2];
             if (nextPos !== null) {
-                realComment = ''
+                var realComment = ''
                 if (comments.length != 0) {
                     realComment = comments.join('\n')
                     comments = []
@@ -2433,16 +2472,18 @@ CSSParser.prototype.doParse = function(config) {
 
         if (char == '{') {
             var tmp = findCharFrom(text, i, length, '{', '}');
-            nextBracePos = tmp[0];
-            attributes = tmp[1];
+            var nextBracePos = tmp[0];
+            var attributes = tmp[1];
             // do not need the last brace
-            realComment = ''
+            var realComment = ''
             if (comments.length != 0) {
                 realComment = comments.join('\n')
                 comments = []
             }
             if (isNestedStatement(selector)) {
-                self.styleSheet.addNestedRuleSet(selector, attributes.slice(0, -1), realComment)
+                var nestedCss = attributes.slice(0, -1)
+                var stmt = self.styleSheet.addNestedRuleSet(selector, nestedCss, realComment)
+                parseNestedStatment(stmt, nestedCss, this.fileName, this.config)
             } else {
                 self.styleSheet.addRuleSetByStr(selector, attributes.slice(0, -1), realComment)
             }
@@ -2455,9 +2496,15 @@ CSSParser.prototype.doParse = function(config) {
             selector = selector + char
         }
     }
-    
+        
+    function parseNestedStatment(stmt, nestedCss, fileName, config) {
+        var innerParser = new CSSParser(nestedCss, fileName, config)
+        innerParser.doParse(config)
+        stmt.innerStyleSheet = innerParser.styleSheet
+    }
+
     self.styleSheet.getRuleSets().forEach(function(ruleSet) {
-        errors = self.doParseRules(ruleSet)
+        var errors = self.doParseRules(ruleSet)
         self._parseErrors = self._parseErrors.concat(errors);
     })
 };
@@ -2467,20 +2514,20 @@ CSSParser.prototype.getParseErrors = function () {
 };
 
 CSSParser.prototype.doParseRules = function(ruleSet) {
-    errors = []
+    var errors = []
     if (ruleSet.extra) {
         return errors
     }
-    text = ruleSet.roughValue
-    singleLine = text.split('\n').length == 1
-    selector = ruleSet.selector.trim()
-    i = -1
-    length = text.length
-    inComment = false
-    collector = ''
-    attr = ''
-    value = ''
-    valueStarted = false
+    var text = ruleSet.roughValue
+    var singleLine = text.split('\n').length == 1
+    var selector = ruleSet.selector.trim()
+    var i = -1
+    var length = text.length
+    var inComment = false
+    var collector = ''
+    var attr = ''
+    var value = ''
+    var valueStarted = false
     while (true) {
         if (i == length - 1)
             break;
@@ -3091,6 +3138,38 @@ module.exports = global.FEDCss3PropSpaces = new Class(RuleChecker, function () {
     }
 
     this.fix = function(self, rule, config) {
+        this._handleName(rule, config);
+        this._handleValue(rule, config);
+    }
+
+    this._handleValue = function(self, rule, config) {
+        var value = rule.fixedValue
+        var fixedValue
+        var reg = /\s*-(webkit|moz|ms|khtml|o)-/
+        if (value.indexOf('-') == 0) {
+            var matched = value.match(reg);
+            if (!matched) {
+                return
+            }
+            var prefix = matched[0]
+            rule.fixedPrefix = helper.times(' ', 8 - helper.len(prefix))
+        } else {
+            var valueName = value.split('(')[0];
+            if (!valueName) {
+                return
+            }
+            valueName = valueName.replace(reg, '')
+            if (!rule.getRuleSet().existValueStarts('-webkit-' + valueName + 
+                ',-moz-' + valueName + 
+                ',-ms-' + valueName + 
+                ',-o-' + valueName)) {
+                return
+            }
+            rule.fixedPrefix = helper.times(' ', 8)
+        }
+    }
+
+    this._handleName = function(self, rule, config) {
         var name = rule.name
         // only for css3 props
         if (!helper.isCss3Prop(name))
@@ -3120,6 +3199,7 @@ module.exports = global.FEDCss3PropSpaces = new Class(RuleChecker, function () {
                 return
             }
         }
+
         rule.fixedName = (config.singleLine ? '' : helper.times(' ', 8 - helper.len(prefix))) + fixedName
     }
 

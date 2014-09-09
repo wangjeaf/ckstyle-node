@@ -32,7 +32,7 @@ CSSParser.prototype.doParse = function(config) {
             break;
         }
         i = i + 1
-        char = text[i]
+        var char = text[i]
         if (!inComment && isCommentStart(char, text, i)) {
             commentText = ''
             inComment = true
@@ -50,11 +50,11 @@ CSSParser.prototype.doParse = function(config) {
         }
         if (isSpecialStart(char)) {
             var tmp = handleSpecialStatement(text, i, length, char);
-            nextPos = tmp[0];
-            attrs = tmp[1];
-            operator = tmp[2];
+            var nextPos = tmp[0];
+            var attrs = tmp[1];
+            var operator = tmp[2];
             if (nextPos !== null) {
-                realComment = ''
+                var realComment = ''
                 if (comments.length != 0) {
                     realComment = comments.join('\n')
                     comments = []
@@ -70,16 +70,18 @@ CSSParser.prototype.doParse = function(config) {
 
         if (char == '{') {
             var tmp = findCharFrom(text, i, length, '{', '}');
-            nextBracePos = tmp[0];
-            attributes = tmp[1];
+            var nextBracePos = tmp[0];
+            var attributes = tmp[1];
             // do not need the last brace
-            realComment = ''
+            var realComment = ''
             if (comments.length != 0) {
                 realComment = comments.join('\n')
                 comments = []
             }
             if (isNestedStatement(selector)) {
-                self.styleSheet.addNestedRuleSet(selector, attributes.slice(0, -1), realComment)
+                var nestedCss = attributes.slice(0, -1)
+                var stmt = self.styleSheet.addNestedRuleSet(selector, nestedCss, realComment)
+                parseNestedStatment(stmt, nestedCss, this.fileName, this.config)
             } else {
                 self.styleSheet.addRuleSetByStr(selector, attributes.slice(0, -1), realComment)
             }
@@ -92,9 +94,15 @@ CSSParser.prototype.doParse = function(config) {
             selector = selector + char
         }
     }
-    
+        
+    function parseNestedStatment(stmt, nestedCss, fileName, config) {
+        var innerParser = new CSSParser(nestedCss, fileName, config)
+        innerParser.doParse(config)
+        stmt.innerStyleSheet = innerParser.styleSheet
+    }
+
     self.styleSheet.getRuleSets().forEach(function(ruleSet) {
-        errors = self.doParseRules(ruleSet)
+        var errors = self.doParseRules(ruleSet)
         self._parseErrors = self._parseErrors.concat(errors);
     })
 };
@@ -104,20 +112,20 @@ CSSParser.prototype.getParseErrors = function () {
 };
 
 CSSParser.prototype.doParseRules = function(ruleSet) {
-    errors = []
+    var errors = []
     if (ruleSet.extra) {
         return errors
     }
-    text = ruleSet.roughValue
-    singleLine = text.split('\n').length == 1
-    selector = ruleSet.selector.trim()
-    i = -1
-    length = text.length
-    inComment = false
-    collector = ''
-    attr = ''
-    value = ''
-    valueStarted = false
+    var text = ruleSet.roughValue
+    var singleLine = text.split('\n').length == 1
+    var selector = ruleSet.selector.trim()
+    var i = -1
+    var length = text.length
+    var inComment = false
+    var collector = ''
+    var attr = ''
+    var value = ''
+    var valueStarted = false
     while (true) {
         if (i == length - 1)
             break;

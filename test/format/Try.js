@@ -6,6 +6,19 @@ exports.doTest = function() {
     _fixbug_from_apple()
 }
 
+function _nested_stmt() {
+    var css = '@media only screen and (-webkit-min-device-pixel-ratio:1.5) and (orientation:portrait) and (max-device-width:768px),\n\
+       only screen and         (min-device-pixel-ratio:1.5) and (orientation:portrait) and (max-device-width:768px) {\n\
+    #globalheader { background:url(/global/nav/images/globalheader.png) repeat-x !important; }\n\
+}'
+    var expected = '@media only screen and (-webkit-min-device-pixel-ratio:1.5) and (orientation:portrait) and (max-device-width:768px),only screen and (min-device-pixel-ratio:1.5) and (orientation:portrait) and (max-device-width:768px) {\n\
+    #globalheader {\n\
+        background: url(/global/nav/images/globalheader.png) repeat-x !important;\n\
+    }\n\
+}'
+    var res = helper.doFormat(css);
+    equal(res.trim(), expected, 'nested ok')
+}
 
 function _simple() {
     var css = '.a {width: 100px; height: 200px;}'

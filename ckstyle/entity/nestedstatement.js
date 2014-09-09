@@ -7,9 +7,10 @@ function NestedStatement(selector, statement, comments, styleSheet) {
     var self = this;
     self.extra = true
     self.nested = true
-    self.selector = selector.trim()
+    self.selector = Cleaner.clearSelector(selector)
     self.statement = statement.trim()
     self.roughStatement = statement
+    self.roughSelector = selector
     self.comments = comments.trim()
     self.styleSheet = styleSheet
 
@@ -18,6 +19,8 @@ function NestedStatement(selector, statement, comments, styleSheet) {
 
     self.browser = doExtraDetect(self.selector)
     self.toBeUsed = {}
+
+    self.innerStyleSheet = null
 }
 
 NestedStatement.prototype.rebase = function() {
@@ -31,16 +34,25 @@ NestedStatement.prototype.compress = function(browser) {
     var self = this;
     if (!(self.browser & browser))
         return ''
-    return self.fixedSelector + self._compressedStatement()
+    return self.fixedSelector + self._compressedStatement(browser)
 }
 
 NestedStatement.prototype.fixed = function(config) {
     var self = this;
+    self.fixedSelector = self.fixedSelector || self.selector
+    self.fixedStatement = self.fixedStatement || self.statement
+    // if (self.innerStyleSheet) {
+    //     self.fixedStatement = self.innerStyleSheet.fixed(config)
+    // }
     return self.fixedSelector + ' {\n    ' + self.fixedStatement.split('\n').join('\n    ') + '\n}'
 }
-NestedStatement.prototype._compressedStatement = function() {
+NestedStatement.prototype._compressedStatement = function(browser) {
     var self = this;
-    return '{' + Cleaner.clean(self.fixedStatement) + '}'
+    var stmt = Cleaner.clean(self.fixedStatement);
+    if (self.innerStyleSheet) {
+        stmt = self.innerStyleSheet.compress(browser)
+    }
+    return '{' + stmt + '}'
 }
 NestedStatement.prototype.toString = function () {
     var self = this;

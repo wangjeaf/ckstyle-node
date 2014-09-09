@@ -239,6 +239,27 @@ RuleSet.prototype.existRoughNames = function(name) {
     }
     return false
 }
+
+RuleSet.prototype.existValueStarts = function(prefix) {
+    var self = this, prefixes;
+    if (prefix.indexOf(',') != -1) {
+        prefixes = prefix.split(',')
+    } else {
+        prefixes = [prefix]
+    }
+    for(var i = 0; i < prefixes.length; i++) {
+        var prefix = prefixes[i];
+        prefix = prefix.trim()
+        for(var j = 0; j < self._rules.length; j++) {
+            var rule = self._rules[j]
+            if (rule.strippedValue.indexOf(prefix) == 0) {
+                return true;
+            }
+        }
+    }
+    return false
+}
+
 RuleSet.prototype.getRuleByStrippedName = function(name) {
     var self = this;
     for(var i = 0; i < self._rules.length; i++) {

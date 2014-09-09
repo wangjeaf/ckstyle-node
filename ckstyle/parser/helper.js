@@ -57,6 +57,10 @@ function findCharFrom(text, i, length, left, right) {
     var counter = 1
     var collector = ''
     for(var j = i + 1; j < length; j++) {
+        if (text[j] == ',') {
+            collector = collector + text[j]
+            continue;
+        }
         if (right == null) {
             if (text[j] == left || left.indexOf(text[j]) != -1) {
                 break;

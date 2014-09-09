@@ -20,7 +20,7 @@ function Rule(selector, name, value, ruleSet) {
 
     self.fixedName = ''
     self.fixedValue = ''
-
+    self.fixedPrefix = ''
     self.ruleSet = ruleSet
 
     self.browser = doRuleDetect(self.roughName, self.roughValue)
@@ -58,7 +58,7 @@ Rule.prototype.fixed = function() {
     var self = this;
     var name = (self.fixedName || self.strippedName) + ''
     var value = (self.fixedValue || self.strippedValue) + ''
-    return name + ': ' + Cleaner.clearValue(Cleaner.clean(value)) + ';'
+    return name + ': ' + self.fixedPrefix + Cleaner.clearValue(Cleaner.clean(value)) + ';'
 }
 
 Rule.prototype.getRuleSet = function() {

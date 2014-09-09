@@ -19,7 +19,9 @@ StyleSheet.prototype.addExtraStatement = function(operator, statement, comment) 
 };
 
 StyleSheet.prototype.addNestedRuleSet = function(selector, attrs, comment) {
-    this._ruleSets.push(new NestedStatement(selector, attrs, comment, this))
+    var stmt = new NestedStatement(selector, attrs, comment, this)
+    this._ruleSets.push(stmt)
+    return stmt
 };
 
 StyleSheet.prototype.setFile = function(fileName) {
