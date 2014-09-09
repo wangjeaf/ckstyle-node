@@ -17,7 +17,7 @@ module.exports = global.FEDNoStarInSelector = new Class(RuleSetChecker, function
         if (selector.indexOf('*') == -1)
             return true;
 
-        var replaced = selector.replace(' ', '');
+        var replaced = selector.replace(/\s/g, '');
         if (helper.startswith(replaced, '*html') || helper.startswith(replaced, '*+html'))
             return true;
 

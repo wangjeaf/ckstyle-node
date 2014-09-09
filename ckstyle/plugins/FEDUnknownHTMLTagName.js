@@ -56,7 +56,7 @@ module.exports = global.FEDUnknownHTMLTagName = new Class(RuleSetChecker, functi
                 // *html
                 else if (tag.indexOf('*') == 0)
                     tag = tag.slice(1)
-
+                
                 if (!helper.isHTMLTag(tag)) {
                     self.errorMsg = self.errorMsg_rough.replace('%s', tag)
                     return false

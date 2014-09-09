@@ -33,7 +33,7 @@ module.exports = global.FEDSingleLineBraces = new Class(RuleSetChecker, function
             self.errorMsg = self.errorMsg_openingBraceEnd
             return false
         }
-        if (value.slice(-1) != ' ' || value.slice(0, 2) == '  ') {
+        if (value.slice(-1) != ' ' || value.slice(-2) == '  ') {
             self.errorMsg = self.errorMsg_closingBraceEnd
             return false
         }
