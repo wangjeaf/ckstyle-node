@@ -17104,5 +17104,9 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 })
 
 seajs.use('ckstyle/run-ckservice', function(runner) {
-    runner.go('http://localhost:3000');
+    var host = 'http://localhost:3000'
+    if (window.localStorage && window.localStorage.getItem('ckstyle-host')) {
+        host = window.localStorage.getItem('ckstyle-host')
+    }
+    runner.go(host);
 })
