@@ -421,9 +421,12 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 })
 
 seajs.use('ckstyle/run-ckservice', function(runner) {
-    var host = 'http://localhost:3000'
-    if (window.localStorage && window.localStorage.getItem('ckstyle-host')) {
+    var host = window.CK_HOST
+    if (!host && window.localStorage && window.localStorage.getItem('ckstyle-host')) {
         host = window.localStorage.getItem('ckstyle-host')
+    }
+    if (!host) {
+        host = 'http://localhost:3000'
     }
     runner.go(host);
 })
