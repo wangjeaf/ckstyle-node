@@ -16756,7 +16756,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 '            <td class="replacer replacer-{{id}}" data-index="{{id}}">handling...</td>',
 '        <tr>',
 '        <tr>',
-'            <td class="code-diff code-diff-{{id}}" colspan="8"><div class="differ"></div></td>',
+'            <td class="code-diff code-diff-{{id}}" colspan="8"><div class="differ">Generating Diff...</div></td>',
 '        <tr>',
 '        {{/cssfiles}}',
 '        <tr class="total">',
@@ -16900,19 +16900,27 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 
         container.delegate('.replacer a.ok', 'click', function() {
             var me = $(this);
+            if (me.data('handling')) {
+                return;
+            }
+            me.data('handling', 1)
             var statusA = me.hasClass('status-a');
             me.html(statusA ? 'Recover' : 'Replace')
                 .toggleClass('status-a').toggleClass('status-b');
             var index = me.parent().data('index');
             var node = cssfiles[index].node;
             $(node).attr('rel', statusA ? 'stylesheet-bak' : 'stylesheet');
-            if (statusA) {
-                cssfiles[index].style = appendCss(cssfiles[index].compressed, node);
-                me.parent().find('.disable-trigger').data('replaced', 0).html('Disable')
-            } else {
-                $(cssfiles[index].style).remove();
-                delete cssfiles[index].style;
-            }
+            setTimeout(function() {
+                me.data('handling', 0);
+                if (statusA) {
+                    cssfiles[index].style = appendCss(cssfiles[index].compressed, node);
+                    me.parent().find('.disable-trigger').data('replaced', 0).html('Disable')
+                } else {
+                    $(cssfiles[index].style).remove();
+                    delete cssfiles[index].style;
+                }
+            }, 500)
+           
         }).delegate('.code-diff-trigger', 'click', function() {
             var me = $(this);
             var index = me.parent().data('index');
@@ -16923,6 +16931,13 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
                 target.show();
             } else {
                 target.hide();
+            }
+            if (!me.data('diffed')) {
+                me.data('diffed', 1)
+                var code = cssfiles[index].code 
+                setTimeout(function() {
+                    diffUsingJS(index, service.doFormat(code), service.doFix(code), 'Before(Simply Formatted)')
+                }, 0)
             }
         }).delegate('.disable-trigger', 'click', function() {
             var me = $(this);
@@ -16978,35 +16993,10 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
             $('.total-' + index).html(getSavedTotalGB(delta) + ' MB')
             $('.replacer-' + index).html(TMPLS.replacer)
 
+            record.code = code;
             record.compressed = compressed;
             record.before = before;
             record.after = after;
-
-            function diffUsingJS(index, base, newtxt, beforeText, afterText) {
-                base = difflib.stringAsLines(base)
-                newtxt = difflib.stringAsLines(newtxt)
-                var sm = new difflib.SequenceMatcher(base, newtxt),
-                    opcodes = sm.get_opcodes(),
-                    diffoutputdiv = $(".code-diff-" + index + ' .differ')[0];
-
-                diffoutputdiv.innerHTML = "";
-
-                diffoutputdiv.appendChild(diffview.buildView({
-                    baseTextLines: base,
-                    newTextLines: newtxt,
-                    opcodes: opcodes,
-                    baseTextName: beforeText || "Before(Raw)",
-                    newTextName: afterText || "After(Fixed)",
-                    contextSize: 200,
-                    viewType: 0
-                }));
-            }
-
-            if (code.indexOf('\n') != -1) {
-                diffUsingJS(index, code, service.doFix(code))
-            } else {
-                diffUsingJS(index, service.doFormat(code), service.doFix(code), 'Before(Formatted)')
-            }
 
             loaderCounter++;
 
@@ -17019,6 +17009,32 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
         }).error(function(content) {
             $('.replacer-' + index).html(TMPLS.replacerError)
         });
+    }
+
+    function diffUsingJS(index, base, newtxt, beforeText, afterText) {
+        base = difflib.stringAsLines(base)
+        newtxt = difflib.stringAsLines(newtxt)
+        var sm = new difflib.SequenceMatcher(base, newtxt),
+            opcodes = sm.get_opcodes(),
+            diffoutputdiv = $(".code-diff-" + index + ' .differ')[0];
+
+        diffoutputdiv.innerHTML = "";
+
+        diffoutputdiv.appendChild(diffview.buildView({
+            baseTextLines: base,
+            newTextLines: newtxt,
+            opcodes: opcodes,
+            baseTextName: beforeText || "Before(Raw)",
+            newTextName: afterText || "After(Precisely Fixed)",
+            contextSize: 200,
+            viewType: 0
+        }));
+
+    // if (code.indexOf('\n') != -1) {
+    //     diffUsingJS(index, code, service.doFix(code))
+    // } else {
+        //diffUsingJS(index, service.doFormat(code), service.doFix(code), 'Before(Simply Formatted)')
+    // }
     }
 
     function countAll() {
