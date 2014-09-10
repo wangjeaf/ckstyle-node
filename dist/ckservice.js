@@ -16778,7 +16778,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
     }
 
     var CSS = [
-'.ckstyle-container {text-align: left; color: #333; width:100%;background-color:#EEE;position:fixed;top:0;right:0;z-index:2147483647;border-bottom:1px solid #DDD;box-shadow: 1px 1px 12px #AAA;opacity:1;}',
+'.ckstyle-container {text-align: left; color: #333; width:100%;background-color:rgba(255,255,255,.8);position:fixed;top:0;right:0;z-index:2147483647;border-bottom:1px solid #DDD;box-shadow: 1px 1px 12px #AAA;;}',
 '.ckstyle-container .ckstyle-close {color: #666; float:right;margin-right:10px;font-size:20px;margin-top:3px;cursor:pointer;}',
 '.ckstyle-container .ckstyle-header {padding:5px;margin:0;font-size:16px;line-height:22px;border-bottom:1px solid #DDD;}',
 '.ckstyle-container .ckstyle-loading, .ckstyle-container .ckstyle-errormsg {display: none; padding:5px;margin:0; font-weight: normal; margin-left: 100px;}',
@@ -16787,7 +16787,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 '.ckstyle-result-table {border-color: #AAA; width: 100%; text-align:left;font-size:14px; border-spacing: 0;border-collapse:collapse;}',
 '.ckstyle-result-table th, .ckstyle-result-table td {padding: 5px; font-size: 12px !important;}',
 '.ckstyle-result-table .header td, .ckstyle-result-table .total td {font-weight: bold}',
-'.ckstyle-container .differ {margin: 0; white-space: pre-wrap; word-wrap: break-word; max-width: ' + ($(window).width() - 20) + 'px; overflow: auto; max-height: ' + ($(window).height() / 3 * 2) + 'px;}',
+'.ckstyle-container .differ {background-color: #FFF;margin: 0; white-space: pre-wrap; word-wrap: break-word; max-width: ' + ($(window).width() - 20) + 'px; overflow: auto; max-height: ' + ($(window).height() / 3 * 2) + 'px;}',
 '.ckstyle-container .code-diff {display: none;}',
 '.ckstyle-container ins {background-color: #E0F2BE; color: #500;}',
 '.ckstyle-container del {background-color: #FFCACA; color: #374E0C;}',
