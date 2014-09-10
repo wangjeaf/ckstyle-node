@@ -16708,7 +16708,6 @@ define('ckstyle/ckservice', function(require, exports, module) {
 define('ckstyle/run-ckservice', function(require, exports, module) {
 
     var service = require('./ckservice');
-    var differ = require('./differ');
 
     var serverRoot;
 
@@ -17008,7 +17007,6 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
             } else {
                 diffUsingJS(index, service.doFormat(code), service.doFix(code), 'Before(Formatted)')
             }
-            //$('.code-diff-' + index).html('<pre>' + differ.diff(service.doFormat(code), service.doFix(code)) + '</pre>');
 
             loaderCounter++;
 
