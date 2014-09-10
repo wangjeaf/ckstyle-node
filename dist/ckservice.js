@@ -16719,9 +16719,9 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 '<div class="ckstyle-container">',
 '    <span class="ckstyle-close">&times;</span>',
 '    <h3 class="ckstyle-header">CKStyle Service [',
-'        <a href="https://github.com/wangjeaf/ckstyle-node" target="_blank">',
-'            Github',
-'        </a>]',
+'        <a href="http://ckstyle.github.io" target="_blank">Home</a> | ',
+'        <a href="https://github.com/wangjeaf/ckstyle-node" target="_blank">Github</a> | ',
+'        <a href="https://www.npmjs.org/package/ckstyle" target="_blank">NpmJS</a>]',
 '        <span class="ckstyle-loading">Loading & Parsing <span class="ckstyle-file-count"></span> CSS files, please wait...</span>',
 '        <span class="ckstyle-errormsg"></span>',
 '    </h3>',
@@ -16774,7 +16774,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 '</table>'
 ].join(''),
 
-        replacer: '<a href="javascript:;" class="status-a ok">Replace ==></a> | <a href="javascript:;" class="code-diff-trigger">Diff</a>',
+        replacer: '<a href="javascript:;" class="status-a ok">Replace</a> | <a href="javascript:;" class="code-diff-trigger">Diff</a> | <a href="javascript:;" class="disable-trigger">Disable</a>',
         replaceAll: ''
     }
 
@@ -16902,13 +16902,14 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
         container.delegate('.replacer a.ok', 'click', function() {
             var me = $(this);
             var statusA = me.hasClass('status-a');
-            me.html(statusA ? 'Recover <==' : 'Replace ==>')
+            me.html(statusA ? 'Recover' : 'Replace')
                 .toggleClass('status-a').toggleClass('status-b');
             var index = me.parent().data('index');
             var node = cssfiles[index].node;
             $(node).attr('rel', statusA ? 'stylesheet-bak' : 'stylesheet');
             if (statusA) {
                 cssfiles[index].style = appendCss(cssfiles[index].compressed, node);
+                me.parent().find('.disable-trigger').data('replaced', 0).html('Disable')
             } else {
                 $(cssfiles[index].style).remove();
                 delete cssfiles[index].style;
@@ -16923,6 +16924,19 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
                 target.show();
             } else {
                 target.hide();
+            }
+        }).delegate('.disable-trigger', 'click', function() {
+            var me = $(this);
+            var index = me.parent().data('index');
+            var node = cssfiles[index].node;
+            if (me.data('replaced')) {
+                me.html('Disable')
+                $(node).attr('rel', 'stylesheet');
+                me.data('replaced', 0)
+            } else {
+                me.data('replaced', 1)
+                me.html('Enable')
+                $(node).attr('rel', 'stylesheet-bak');
             }
         })
     }
@@ -16969,7 +16983,7 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
             record.before = before;
             record.after = after;
 
-            function diffUsingJS(index, base, newtxt) {
+            function diffUsingJS(index, base, newtxt, beforeText, afterText) {
                 base = difflib.stringAsLines(base)
                 newtxt = difflib.stringAsLines(newtxt)
                 var sm = new difflib.SequenceMatcher(base, newtxt),
@@ -16982,14 +16996,18 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
                     baseTextLines: base,
                     newTextLines: newtxt,
                     opcodes: opcodes,
-                    baseTextName: "Before",
-                    newTextName: "After",
+                    baseTextName: beforeText || "Before(Raw)",
+                    newTextName: afterText || "After(Fixed)",
                     contextSize: 200,
                     viewType: 0
                 }));
             }
 
-            diffUsingJS(index, service.doFormat(code), service.doFix(code))
+            if (code.indexOf('\n') != -1) {
+                diffUsingJS(index, code, service.doFix(code))
+            } else {
+                diffUsingJS(index, service.doFormat(code), service.doFix(code), 'Before(Formatted)')
+            }
             //$('.code-diff-' + index).html('<pre>' + differ.diff(service.doFormat(code), service.doFix(code)) + '</pre>');
 
             loaderCounter++;
