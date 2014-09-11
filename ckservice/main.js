@@ -139,6 +139,12 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
         return a.href;
     }
 
+    function getHostname(src) {
+        var a = document.createElement('a');
+        a.href = src;
+        return a.hostname;
+    }
+
     function getOrigin(src) {
         var a = document.createElement('a');
         a.href = src;
@@ -196,10 +202,18 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
             // if (getOrigin(url) != window.location.origin) {
             //     return;
             // }
+            var hostname = getHostname(url)
+            // handle localhost files by xhr, remote server can not fetch them.
+            var local = hostname == 'localhost' || hostname == '127.0.0.1';
+            if (local) {
+                url = getUrl(url);
+                url = url.replace(getOrigin(url), window.location.origin)
+            }
             links.push({
                 url: getUrl(url),
                 id: guid++,
-                node: link
+                node: link,
+                local: local
             });
         });
         return links;
@@ -286,16 +300,23 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
     var loaderCounter = 0;
 
     function loadLink(record) {
+        var ajaxUrl = '';
+        var index = record.id;
+        if (record.local) {
+            ajaxUrl = record.url
+        } else {
+            ajaxUrl = serverRoot + '/cssfile/' + encodeURIComponent(record.url)
+        }
         $.ajax({
-            url: serverRoot + '/cssfile/' + encodeURIComponent(record.url), 
+            url: ajaxUrl, 
             type: 'GET',
             data: {
                 index: record.id
             }, 
-            dataType: 'jsonp'
+            dataType: record.local ? 'text' : 'jsonp'
         }).done(function(content) {
-            var index = content.index;
-            var code = content.code;
+            index = content.index || index;
+            var code = content.code || content;
 
             var before = code.length;
             var compressed = service.doCompress(code);

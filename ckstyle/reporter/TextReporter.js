@@ -21,7 +21,7 @@ var TextReporter = new Class(function() {
         errors = result[2]
 
         if (len(logs) == 0 && len(warns) == 0 && len(errors) == 0) {
-            self.appendMsg('aha, no problem')
+            // self.appendMsg('aha, no problem')
             return
         }
 

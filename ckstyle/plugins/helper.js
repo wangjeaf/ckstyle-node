@@ -112,18 +112,50 @@ function isCss3Prop(prop) {
 }
 exports.isCss3Prop = isCss3Prop;
 
+var canBeCombinedProps = {
+    border: [
+        'border-width', 
+        'border-style', 
+        'border-color'
+    ],
+    margin: [
+        'margin-top', 
+        'margin-right', 
+        'margin-bottom', 
+        'margin-left'
+    ],
+    padding: [
+        'padding-top', 
+        'padding-right', 
+        'padding-bottom', 
+        'padding-left'
+    ],
+    background: [
+        'background-color', 
+        'background-image', 
+        'background-repeat', 
+        'background-attachment', 
+        'background-position'
+    ],
+    font: [
+        'font-style', 
+        'font-weight', 
+        'font-size', 
+        'line-height', 
+        'font-family'
+    ]
+}
+
 function canBeCombined(prop) {
     prop = prop.trim()
-    for(var i = 0; i < canBeCombinedProps.length; i++) {
-        var x = canBeCombinedProps[i]
-        if (prop.indexOf(x) == 0) {
+    for(var x in canBeCombinedProps) {
+        if (prop.indexOf(x) == 0 || canBeCombinedProps[x].indexOf(prop) != -1) {
             return x;
         }
     }
     return null;
 }
 exports.canBeCombined = canBeCombined;
-
 
 function countStrLen(str) {
     var chns = str.match(/[\u4e00-\u9fa5]+/g)
@@ -225,8 +257,6 @@ exports.canContainUrl = function canContainUrl(prop) {
     prop = prop.split('-')[0];
     return containsInArray(canContainUrlProps, prop)
 }
-
-var canBeCombinedProps = 'border margin padding background font'.split(' ')
 
 // execute in http://www.w3schools.com/cssref/css_websafe_fonts.asp
 //

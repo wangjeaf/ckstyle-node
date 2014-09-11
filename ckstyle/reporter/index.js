@@ -3,7 +3,7 @@ var ReporterUtil = {}
 var mapper = {
     text: './TextReporter',
     json: './JsonReporter',
-    xml: './XMLReporter',
+    html: './HtmlReporter'
 }
 
 ReporterUtil.getReporter = function(reporterType, checker) {

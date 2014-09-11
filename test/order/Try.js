@@ -1,8 +1,10 @@
-from helper import *
+var doFix = require('./helper').doFix;
 
-def doTest():
-    fixer, msg = doFix('.test {width:100px; display:none;}', '')
-
+exports.doTest = function() {
+    var result = doFix('.test {width:100px; display:none;}', '')
+    var fixer = result[0]
+    var msg = result[1]
+    
     styleSheet = fixer.getStyleSheet()
     equal(len(styleSheet.getRuleSets()), 1, 'one ruleset')
     ruleSet = styleSheet.getRuleSets()[0]
@@ -14,3 +16,4 @@ def doTest():
 
     equal(rules[0].value, 'none', 'first element value is ok')
     equal(rules[1].value, '100px', 'second element value is ok')
+}

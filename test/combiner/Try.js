@@ -1,6 +1,6 @@
-from helper import *
+var doCssFileCompress = require('./helper').doCssFileCompress
 
-def doTest():
+exports.doTest = function() {
     msg = doCssFileCompress('_test.css')
     equal(msg, '@import (url-here);.test,.test2,.test3,.test4,.test5{_width:100px;*height:100px}.test6{display:none;_width:100px;*height:100px}', 'totally compressed')
 
@@ -18,3 +18,4 @@ def doTest():
 
     msg = doCssFileCompress('_just_padding.css')
     equal(msg, '.test,.test2,.test3,.test4{padding:20px 10px 10px}', 'just padding compress ok')
+}

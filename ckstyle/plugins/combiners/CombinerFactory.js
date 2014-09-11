@@ -4,7 +4,10 @@ var helper = require('./helper')
 
 var combiners = {
     margin: require('./MarginCombiner'),
-    padding: require('./PaddingCombiner')
+    padding: require('./PaddingCombiner'),
+    background: require('./BackgroundCombiner'),
+    border: require('./BorderCombiner'),
+    font: require('./FontCombiner')
 }
 
 function doCombine(name, props) {

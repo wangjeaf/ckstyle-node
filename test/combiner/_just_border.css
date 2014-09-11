@@ -1,0 +1,23 @@
+.border-1 {
+    border: medium double red;
+}
+
+.border-2 {
+    border-width: medium;
+    border-color: red;
+    border-style: double;
+}
+
+.border-3 {
+    border: 1px solid red;
+    border-width: medium;
+    border-color: red;
+    border-style: double;
+}
+
+.border-4 {
+    border-color: red;
+    border: medium double red;
+    border-width: medium;
+    border-style: double;
+}
