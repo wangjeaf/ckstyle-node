@@ -21,3 +21,15 @@
     border-width: medium;
     border-style: double;
 }
+
+.border-5 {
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, .1);
+}
+
+.border-6 {
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-width: 1px;
+    border-color: red;
+}

@@ -18,15 +18,16 @@ var BorderCombiner = new Class(Combiner, function() {
     }
 
     this._seperate = function(self, value) {
+        value = value.replace(/\s*,\s*/g, ',')
         var splited = value.split(' ')
         var length = helper.len(splited)
         if (length == 1) {
-            this.fill('size', value)
+            this.fill('width', value)
         } else if (length == 2) {
-            this.fill('size', splited[0])
+            this.fill('width', splited[0])
             this.fill('style', splited[1])
         } else if (length == 3) {
-            this.fill('size', splited[0])
+            this.fill('width', splited[0])
             this.fill('style', splited[1])
             this.fill('color', splited[2])
         }
@@ -52,13 +53,33 @@ var BorderCombiner = new Class(Combiner, function() {
     }
 
     this.join = function(self) {
-        console.log(self.collector)
+        var collector = [];
+        var hasWidth, hasStyle, hasColor;
+        if (self.collector['border-width']) {
+            hasWidth = 1
+            collector.push(self.collector['border-width'])
+        }
+        if (self.collector['border-style']) {
+            hasStyle = 1
+            collector.push(self.collector['border-style'])
+        }
+        if (self.collector['border-color']) {
+            hasColor = 1
+            collector.push(self.collector['border-color'])
+        }
+        if (hasWidth) {
+            self.combined = collector.join(' ')
+        } else {
+            self.combined = ''
+            self.deleted = []
+            self.hasFather = false
+        }
     }
 
     this.combine = function(self) {
         self.collect()
         self.join()
-        return [null, [], false]
+        return [self.combined, self.deleted, self.hasFather]
     }
 
 })

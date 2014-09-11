@@ -1,0 +1,36 @@
+.a {
+    border-width: 1px;
+    border-style: solid;
+    border-color: red;
+}
+
+.b {
+    border-width: 1px;
+    border-color: red;
+}
+
+.c {
+    border-style: solid;
+    border-width: 1px;
+}
+
+.d {
+    border-style: solid;
+    border-width: 1px;
+}
+
+/* 没有width，放上去影响样式，不合并 */
+.e {
+    border-style: solid;
+    border-color: red;
+}
+
+.f {
+    border-color: red;
+}
+
+.g {
+    border-width: 1px;
+    border-style: solid;
+    *border-color: red;
+}
