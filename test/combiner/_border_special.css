@@ -34,3 +34,12 @@
     border-style: solid;
     *border-color: red;
 }
+
+.h {
+    border: 1px;
+    border-width: 2px;
+}
+
+.i {
+    border-width: 11px;
+}

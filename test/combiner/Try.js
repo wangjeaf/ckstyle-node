@@ -30,5 +30,5 @@ function _do_border() {
     equal(msg, '.border-1,.border-2,.border-3,.border-4{border:medium double red}.border-5{border:1px solid rgba(255,255,255,.1)}.border-6{border:1px solid red}', 'just border compress ok')
 
     msg = doCssFileCompress('_border_special.css')
-    equal(msg, '.a{border:1px solid red}.b{border:1px red}.c,.d{border:1px solid}.e{border-style:solid;border-color:red}.f{border-color:red}.g{border:1px solid;*border-color:red}', 'just border compress ok')
+    equal(msg, '.a{border:1px solid red}.b{border:1px red}.c,.d{border:1px solid}.e{border-style:solid;border-color:red}.f{border-color:red}.g{border:1px solid;*border-color:red}.h{border:2px}.i{border:11px}', 'just border compress ok')
 }
