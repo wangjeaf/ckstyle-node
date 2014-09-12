@@ -30,11 +30,13 @@ exports.route = function(app) {
     });
 
     app.get('/ck_detect', function(req, res) {
-        res.json({
-            ok: true
-        })
+        var cb = req.query.callback;
+        res.writeHead(200, {'Content-Type': 'text/javascript'});
+        res.end(cb + '(' + JSON.stringify({
+            code: 200
+        })+ ')');
     })
-    
+
     app.get('/help|/h', function(req, res) {
         res.json({
             '-----': '本服务器的主要功能介绍',
