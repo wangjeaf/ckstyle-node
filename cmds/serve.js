@@ -25,7 +25,7 @@ function startServer(port) {
     if (port === true || port === false) {
         port = null;
     }
-    port = port || 3000;
+    port = port || 4567;
     app.set('port', port);
     app.set('views', path.join(__dirname + '../views'))
     app.set('view engine', 'jade');

@@ -442,12 +442,31 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
 })
 
 seajs.use('ckstyle/run-ckservice', function(runner) {
-    var host = window.CK_HOST
-    if (!host && window.localStorage && window.localStorage.getItem('CK_HOST')) {
-        host = window.localStorage.getItem('CK_HOST')
+    var host = window.CK_CONFIG && window.CK_CONFIG.host || 'http://localhost:4567'
+    var wrapper = '<div class="ck-detect-error-wrapper" style="position:fixed;left:0;top:0;right:0;bottom:0;background-color:rgba(0,0,0,.3)">\
+        <div style="width: 600px; margin: 0 auto; background-color: #F2F2F2; margin-top: 140px; color: #666; text-align: left; padding: 10px;border-radius: 4px;">\
+            <h2>感谢您使用CKService</h2>\
+            <p>我们检测到服务主机： <a href="' + host + '" target="_blank">' + host + '</a> 上的服务并没有启动。</p>\
+            <p>您通过以下简单2步，即可让CKService在你的机器上运行起来。</p>\
+            <ol>\
+                <li style="padding: 6px;"> npm install ckstyle</li>\
+                <li style="padding: 6px;"> ckstyle serve</li>\
+            </ol>\
+            <p>您也可以指定 window.CK_CONFIG.host 属性，指定CKService服务主机</p>\
+        </div>\
+        <div onclick="$(this).parent().remove()" style="position: absolute; right: 0; top: 0; font-size: 44px; color: #FFF; cursor: pointer;">&times;</div>\
+    </div>'
+
+    function detect(callback) {
+        $.get(host + '/ck_detect')
+         .done(callback)
+         .error(function() {
+            $('.ck-detect-error-wrapper').remove();
+            $(wrapper).appendTo('body')
+        })
     }
-    if (!host) {
-        host = 'http://localhost:3000'
-    }
-    runner.go(host);
+
+    detect(function() {
+        runner.go(host);
+    })
 })

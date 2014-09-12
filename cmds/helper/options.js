@@ -86,8 +86,8 @@ module.exports = {
     },
     port: {
         flags: "-p, --port [port]",
-        description: '启动服务的端口号 [3000]',
-        defaultValue: 3000
+        description: '启动服务的端口号 [4567]',
+        defaultValue: 4567
     },
     json: {
         flags: '--json',

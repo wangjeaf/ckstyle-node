@@ -29,6 +29,12 @@ exports.route = function(app) {
         })
     });
 
+    app.get('/ck_detect', function(req, res) {
+        res.json({
+            ok: true
+        })
+    })
+    
     app.get('/help|/h', function(req, res) {
         res.json({
             '-----': '本服务器的主要功能介绍',
