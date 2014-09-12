@@ -17406,7 +17406,7 @@ seajs.use('ckstyle/run-ckservice', function(runner) {
             </ol>\
             <p style="font-size: 14px; line-height: 30px;">您也可以指定 window.CK_CONFIG.host 属性，指定CKService服务主机</p>\
         </div>\
-        <div onclick="$(this).parent().fadeIn()" style="z-index: 2147483647;position: absolute; right: 5px; top: 5px; font-size: 44px; color: #FFF; cursor: pointer;">&times;</div>\
+        <div onclick="$(this).parent().fadeOut()" style="z-index: 2147483647;position: absolute; right: 5px; top: 5px; font-size: 44px; color: #FFF; cursor: pointer;">&times;</div>\
     </div>'
 
     function detect(callback) {
