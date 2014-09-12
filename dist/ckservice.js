@@ -17401,7 +17401,7 @@ seajs.use('ckstyle/run-ckservice', function(runner) {
             <p>我们检测到服务主机： <a href="' + host + '" target="_blank">' + host + '</a> 上的服务并没有启动。</p>\
             <p>您通过以下简单2步，即可让CKService在你的机器上运行起来。</p>\
             <ol>\
-                <li style="padding: 6px;"> npm install ckstyle</li>\
+                <li style="padding: 6px;"> [sudo] npm install -g ckstyle</li>\
                 <li style="padding: 6px;"> ckstyle serve</li>\
             </ol>\
             <p>您也可以指定 window.CK_CONFIG.host 属性，指定CKService服务主机</p>\
