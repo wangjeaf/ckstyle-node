@@ -17413,16 +17413,15 @@ seajs.use('ckstyle/run-ckservice', function(runner) {
         $.ajax({
             type: 'get',
             url: host + '/ck_detect',
-            dataType: 'jsonp'
-        })
-         .done(function(res) {
-            callback();
-         })
-         .error(function(e) {
-            console.log(e)
-            $('.ckservice-loading').remove();
-            $('.ck-detect-error-wrapper').remove();
-            $(wrapper).appendTo('body')
+            dataType: 'jsonp',
+            timeout: 3000,
+            success: callback,
+            error: function(e) {
+                console.log(e)
+                $('.ckservice-loading').remove();
+                $('.ck-detect-error-wrapper').remove();
+                $(wrapper).appendTo('body')
+            }
         })
     }
 
