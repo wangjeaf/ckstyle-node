@@ -5290,7 +5290,7 @@ module.exports = global.FEDUnknownHTMLTagName = new Class(RuleSetChecker, functi
 
     this.__doc__ = {
         "summary":"错误的HTML Tag",
-        "desc":"如果您输入了错误的HTML Tag，本工具也会给出响应的提示"
+        "desc":"如果您输入了错误的HTML Tag，本工具也会给出相应的提示"
     }
 })
 
