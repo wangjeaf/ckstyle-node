@@ -12661,6 +12661,9 @@ CSSParser.prototype.reset = function(css, fileName, config) {
 CSSParser.prototype.doParse = function(config) {
     var self = this;
     config = config || {};
+    if (self.totalLength == 0) {
+        return;
+    }
     var prevChar = null, inComment = false, length = self.totalLength,
         text = self.roughCss, selector = '', commentText = '', i = -1 , 
         comments = []
@@ -17303,10 +17306,13 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
             dataType: record.local ? 'text' : 'jsonp'
         }).done(function(content) {
             index = content.index || index;
-            var code = content.code || content;
+            var code = typeof content.code != 'undefined' ? content.code : content;
 
             var before = code.length;
-            var compressed = service.doCompress(code);
+            var compressed = ''
+            if (code) {
+                compressed = service.doCompress(code);
+            }
             var after = compressed.length;
             var delta = before - after;
 

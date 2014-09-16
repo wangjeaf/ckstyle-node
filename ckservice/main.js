@@ -316,10 +316,13 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
             dataType: record.local ? 'text' : 'jsonp'
         }).done(function(content) {
             index = content.index || index;
-            var code = content.code || content;
+            var code = typeof content.code != 'undefined' ? content.code : content;
 
             var before = code.length;
-            var compressed = service.doCompress(code);
+            var compressed = ''
+            if (code) {
+                compressed = service.doCompress(code);
+            }
             var after = compressed.length;
             var delta = before - after;
 

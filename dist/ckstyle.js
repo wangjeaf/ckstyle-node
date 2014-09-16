@@ -2458,6 +2458,9 @@ CSSParser.prototype.reset = function(css, fileName, config) {
 CSSParser.prototype.doParse = function(config) {
     var self = this;
     config = config || {};
+    if (self.totalLength == 0) {
+        return;
+    }
     var prevChar = null, inComment = false, length = self.totalLength,
         text = self.roughCss, selector = '', commentText = '', i = -1 , 
         comments = []
