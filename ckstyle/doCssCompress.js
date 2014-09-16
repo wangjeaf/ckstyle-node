@@ -63,7 +63,7 @@ function compressFile(filePath, config) {
             if (extension && fs.existsSync(path)) {
                 fs.unlinkSync(path)
             }
-            logger.log(message)
+            logger.out(message)
         } else {
             fs.writeFileSync(path, message)
             logger.ok('[compress] compressed ==> ' + path)
@@ -82,7 +82,7 @@ function compressFile(filePath, config) {
                 if (extension && fs.existsSync(path)) {
                     fs.unlinkSync(path)
                 }
-                logger.log((onlyOne ? '' : (key + ' : ')) + message)
+                logger.out((onlyOne ? '' : (key + ' : ')) + message)
             } else {
                 fs.writeFileSync(path, message)
                 logger.ok('[compress] compressed ==> ' + path)

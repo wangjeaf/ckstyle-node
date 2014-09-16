@@ -62,7 +62,7 @@ function fixFile(filePath, config) {
         if (extension && fs.existsSync(path)) {
             fs.unlinkSync(path)
         }
-        logger.log(msg)
+        logger.out(msg)
     } else {
         fs.writeFileSync(path, msg)
         logger.ok('[fix] fixed ==> ' + path)

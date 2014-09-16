@@ -41,7 +41,7 @@ function checkFile(filePath, config) {
             if (fs.existsSync(path)) {
                 fs.unlinkSync(path)
             }
-            logger.log(reporter.export() + '\n')
+            logger.out(reporter.export() + '\n')
         } else {
             fs.writeFileSync(path, reporter.export())
             logger.log('[check] @see ' + path)

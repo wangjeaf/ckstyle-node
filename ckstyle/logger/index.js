@@ -2,6 +2,10 @@ var colors = require('colors')
 
 var prefix = '[CKStyle] '.cyan
 
+function out(msg) {
+    console.log(msg)
+}
+
 function log(msg) {
     console.log(prefix + msg)
 }
@@ -22,3 +26,4 @@ exports.log = log
 exports.warn = warn
 exports.error = error
 exports.ok = ok
+exports.out = out
