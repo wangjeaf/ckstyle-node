@@ -26,13 +26,14 @@ module.exports = function(grunt) {
     },
     copy: {
       ckservice: {
-        src: ['dist/ckservice.min.js', 'dist/ckservice.js'],
+        src: ['dist/ckservice.min.js', 'dist/ckservice.js', 'dist/ckstyle.min.js', 'dist/ckstyle.js'],
         dest:'../ckstyle.github.io/js/'
       },
       ckstyle: {
         src: [
           'ckstyle/entity/**/*.js',
           'ckstyle/parser/**/*.js',
+          'ckstyle/logger/**/*.js',
           'ckstyle/browsers/**/*.js', 
           'ckstyle/plugins/**/*.js',
           'ckstyle/reporter/**/*.js',

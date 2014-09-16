@@ -5,6 +5,7 @@
 
     define('fs', function(require, exports) {})
     define('path', function(require, exports) {})
+    define('colors', function(require, exports) {})
 
     if (!String.prototype.trim) {
         String.prototype.trim = function () {
