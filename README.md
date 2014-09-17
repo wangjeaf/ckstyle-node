@@ -32,7 +32,7 @@ safari  : .test{padding:20px 0 0;-webkit-transition:1s}
 ie      : .test{_width:10px;padding:20px 0 0;*color:#FFF}
 ```
 
-更多使用，请上官网 [http://ckstyle.github.io/#install](http://ckstyle.github.io/#install)
+更多使用，请上官网 [http://ckstyle.github.io/#startup](http://ckstyle.github.io/#startup)
 
 ## Service
 
