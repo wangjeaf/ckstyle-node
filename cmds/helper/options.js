@@ -55,7 +55,7 @@ module.exports = {
         defaultValue: false
     },
     safe: {
-        flags: '-s, --safe-mode',
+        flags: '-s, --safe',
         description: '是否尝试做某些“本工具不能完全保证正确”的修复，true为不尝试，false为尝试 [false]',
         defaultValue: false
     },
