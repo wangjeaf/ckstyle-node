@@ -1,3 +1,5 @@
+var colors = require('./colors')
+
 exports.heredoc = function(fn) {
     return fn.toString()
         .replace(/^[^\/]+\/\*!?/, "")
@@ -6,6 +8,27 @@ exports.heredoc = function(fn) {
         .replace(/[\s\xA0]+$/, "");
 };
 
+exports.replaceColors = function(value) {
+    for(var prop in colors) {
+        var a = prop.length;
+        var b = colors[prop].length;
+        if (a == b) {
+            continue;
+        }
+        if (a > b) {
+            if (value.indexOf(prop) != -1) {
+                value = value.replace(new RegExp(prop, 'gim'), colors[prop]);
+            }
+        } else {
+            if (value.indexOf(b) != -1) {
+                value = value.replace(new RegExp(colors[prop], 'gim'), prop);
+            }
+        }
+    }
+    return value;
+}
+
+exports.colors = colors;
 
 function len(arr) {
     return arr.length;
