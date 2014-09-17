@@ -17314,13 +17314,13 @@ define('ckstyle/run-ckservice', function(require, exports, module) {
                 compressed = service.doCompress(code);
             }
             var after = compressed.length;
-            var delta = before - after;
+            var delta = before == 0 ? 0 : (before - after);
 
             $('.before-' + index).html(before);
             $('.after-' + index).html(after);
             $('.delta-' + index).html(delta)
             $('.delta-byte-' + index).html(getBytes(delta) + 'KB')
-            $('.percent-' + index).html(((delta / before)*100).toFixed(2) + '%')
+            $('.percent-' + index).html(((delta / (before || 1))*100).toFixed(2) + '%')
             $('.total-' + index).html(getSavedTotalGB(delta) + ' MB')
             $('.replacer-' + index).html(TMPLS.replacer)
 
