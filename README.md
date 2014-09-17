@@ -38,7 +38,7 @@ ie      : .test{_width:10px;padding:20px 0 0;*color:#FFF}
 
 一次点击，分析任何网站的CSS。
 
-以淘宝网为例：
+以 `淘宝网` 为例：
 
 ![ckservice-taobao](http://ckstyle.github.io/img/ckservice-taobao.jpg)
 
