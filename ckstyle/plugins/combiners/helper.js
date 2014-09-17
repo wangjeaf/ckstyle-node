@@ -1,5 +1,5 @@
 function containsHack(name, strippedName, value) {
-    return name != strippedName || value.indexOf('\9') != -1
+    return name != strippedName || value.indexOf('\\9') != -1
 }
 
 function camelCase(name) {

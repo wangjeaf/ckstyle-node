@@ -16412,7 +16412,7 @@ module.exports = PaddingCombiner
 ;define('ckstyle/plugins/combiners/helper', function(require, exports, module) {
 
 function containsHack(name, strippedName, value) {
-    return name != strippedName || value.indexOf('\9') != -1
+    return name != strippedName || value.indexOf('\\9') != -1
 }
 
 function camelCase(name) {
@@ -16521,7 +16521,12 @@ function hasHackChars(text) {
 exports.hasHackChars = hasHackChars;
 
 function containsHack(rule) {
-    return rule.value.indexOf('\\0') != -1 || rule.value.indexOf('\\9') != -1
+    var text = rule.value;
+    if (!text) {
+        text = rule;
+    }
+    var flag = text.indexOf('\\0') != -1 || text.indexOf('\\9') != -1
+    return flag
 }
 exports.containsHack = containsHack;
 

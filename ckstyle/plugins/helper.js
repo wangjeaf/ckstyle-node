@@ -82,7 +82,12 @@ function hasHackChars(text) {
 exports.hasHackChars = hasHackChars;
 
 function containsHack(rule) {
-    return rule.value.indexOf('\\0') != -1 || rule.value.indexOf('\\9') != -1
+    var text = rule.value;
+    if (!text) {
+        text = rule;
+    }
+    var flag = text.indexOf('\\0') != -1 || text.indexOf('\\9') != -1
+    return flag
 }
 exports.containsHack = containsHack;
 
