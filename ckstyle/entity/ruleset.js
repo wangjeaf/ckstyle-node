@@ -96,7 +96,7 @@ RuleSet.prototype.compress = function(browser) {
     var result = '';
     var compressedComment = self.comment.replace(/\/\*\s*/, '/*').replace(/\s*\*\//, '*/');
     if (compressedComment.indexOf('/*!') == 0) {
-        result = compressedComment;
+        result = compressedComment.split('*/')[0] + '*/';
     }
     result = result + (self.fixedSelector || self.selector);
     if (result.indexOf(',') != -1) {

@@ -1947,7 +1947,12 @@ RuleSet.prototype.compress = function(browser) {
     }
     if (!(self.browser & browser))
         return ''
-    var result = self.fixedSelector || self.selector;
+    var result = '';
+    var compressedComment = self.comment.replace(/\/\*\s*/, '/*').replace(/\s*\*\//, '*/');
+    if (compressedComment.indexOf('/*!') == 0) {
+        result = compressedComment;
+    }
+    result = result + (self.fixedSelector || self.selector);
     if (result.indexOf(',') != -1) {
         // remove duplicated selectors
         var selectors = []

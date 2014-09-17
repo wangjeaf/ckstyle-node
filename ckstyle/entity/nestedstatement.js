@@ -17,6 +17,8 @@ function NestedStatement(selector, statement, comments, styleSheet) {
     self.fixedSelector = ''
     self.fixedStatement = ''
 
+    self.compressedStatement = ''
+
     self.browser = doExtraDetect(self.selector)
     self.toBeUsed = {}
 
@@ -48,10 +50,13 @@ NestedStatement.prototype.fixed = function(config) {
 }
 NestedStatement.prototype._compressedStatement = function(browser) {
     var self = this;
-    var stmt = Cleaner.clean(self.fixedStatement);
-    if (self.innerStyleSheet) {
-        stmt = self.innerStyleSheet.compress(browser)
-    }
+    var stmt = self.compressedStatement
+    if (!stmt) {
+        stmt = Cleaner.clean(self.fixedStatement);
+        if (self.innerStyleSheet) {
+            stmt = self.innerStyleSheet.compress(browser)
+        }
+    } 
     return '{' + stmt + '}'
 }
 NestedStatement.prototype.toString = function () {

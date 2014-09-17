@@ -265,6 +265,7 @@ var CssChecker = new Class(function() {
     }
 
     this.doFix = function(self, browser) {
+        self.config.operation = 'fix'
         browser = browser || ALL;
         self.resetStyleSheet()
         // 忽略的规则集（目前只忽略单元测试的selector）
