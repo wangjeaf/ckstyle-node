@@ -40,6 +40,8 @@ module.exports = global.FEDCombineInToOne = new Class(RuleSetChecker, function()
             var name = rule.name
             if (rule.name != rule.strippedName)
                 return
+            if (rule.fixedValue.indexOf('!important') != -1)
+                return
             // do not do any hack combine
             if (helper.containsHack(rule))
                 return
