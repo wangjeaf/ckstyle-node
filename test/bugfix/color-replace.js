@@ -3,6 +3,7 @@ var Checker = require('./helper').Checker
 
 exports.doTest = function() {
     _a()
+    _b()
 }
 
 function _a() {
@@ -12,3 +13,16 @@ function _a() {
     equal(res, '.a{color:#faebd7,#faebd7,brown}');
 }
 
+function _b() {
+    var checker = new Checker(".test {\n\
+          color: yellow;\n\
+          border-color: #c0c0c0;\n\
+          background: #ffffff;\n\
+          border-top-color: #f00;\n\
+          outline-color: rgb(0, 0, 0);\n\
+      }")
+
+    checker.prepare();
+    var res = checker.doCompress()
+    equal(res, '.test{border-color:silver;border-top-color:red;background:#FFF;color:#ff0;outline-color:rgb(0,0,0)}');
+}

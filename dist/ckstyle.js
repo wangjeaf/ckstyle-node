@@ -6251,12 +6251,13 @@ exports.replaceColors = function(value) {
         if (a == b) {
             continue;
         }
+        var lower = value.toLowerCase()
         if (a > b) {
-            if (value.indexOf(prop) != -1) {
+            if (lower.indexOf(prop) != -1) {
                 value = value.replace(new RegExp(prop, 'gim'), colors[prop]);
             }
         } else {
-            if (value.indexOf(b) != -1) {
+            if (lower.indexOf(colors[prop]) != -1) {
                 value = value.replace(new RegExp(colors[prop], 'gim'), prop);
             }
         }
