@@ -14795,7 +14795,7 @@ module.exports = global.FEDNoUnitAfterZero = new Class(RuleChecker, function() {
 
             for(var j = 0; j < matched.length; j++) {
                 var m = matched[j]
-                if (m != '0s') {
+                if (m != '0s' && m != '0ms') {
                     return false;
                 }
             }
@@ -14828,7 +14828,7 @@ module.exports = global.FEDNoUnitAfterZero = new Class(RuleChecker, function() {
             var finalV = v;
             for(var j = 0; j < matched.length; j++) {
                 var m = matched[j]
-                if (m != '0s') {
+                if (m != '0s' && m != '0ms') {
                     finalV = finalV.replace(m, '0')
                 }
             }
