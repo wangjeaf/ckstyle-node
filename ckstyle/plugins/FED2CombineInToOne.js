@@ -35,33 +35,41 @@ module.exports = global.FEDCombineInToOne = new Class(RuleSetChecker, function()
         ruleSet.setRules(rules)
     }
 
+    // TODO should use nested loop
     this._countCanBeCombined = function(self, rules, forFix) {
         var counter = {}
         rules.forEach(function(rule) {
             var name = rule.name
-            if (rule.name != rule.strippedName)
-                return
             if (rule.fixedValue.indexOf('!important') != -1)
                 return
             // do not do any hack combine
-            if (helper.containsHack(rule))
+            if (helper.containsHack(rule)) {
+                shouldStop = true;
                 return
-            if (helper.getCss3PrefixValue(rule.strippedName) != 0)
-                return
+            }
+            // if (helper.getCss3PrefixValue(rule.strippedName) != 0)
+            //     return
 
-            var bigger = combineHelper.canBeCombined(name)
+            var bigger;
+            var css3 = helper.getCss3PrefixValue(rule.strippedName)
+            if (css3 != 0) {
+                bigger = combineHelper.canBeCombined(rule.strippedName)
+            } else {
+                bigger = combineHelper.canBeCombined(name)
+            }
+            var finalName = css3 ? rule.fixedName : name;
             if (bigger) {
                 if (bigger in counter) {
                     if (forFix) {
-                        counter[bigger].push([name, rule.fixedName, rule.fixedValue])
+                        counter[bigger].push([finalName, rule.fixedName, rule.fixedValue])
                     } else {
-                        counter[bigger].push(name)
+                        counter[bigger].push(finalName)
                     }
                 } else {
                     if (forFix) {
-                        counter[bigger] = [[name, rule.fixedName, rule.fixedValue]]
+                        counter[bigger] = [[finalName, rule.fixedName, rule.fixedValue]]
                     } else {
-                        counter[bigger] = [name]
+                        counter[bigger] = [finalName]
                     }
                 }
             }

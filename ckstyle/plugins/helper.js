@@ -92,13 +92,21 @@ function hasHackChars(text) {
 exports.hasHackChars = hasHackChars;
 
 function containsHack(rule) {
-    var text = rule.value;
-    if (!text) {
+    if (!rule.value) {
         text = rule;
+        var flag = text.indexOf('\\0') != -1 || text.indexOf('\\9') != -1
+        return flag;
     }
-    var flag = text.indexOf('\\0') != -1 || text.indexOf('\\9') != -1
-    return flag
+    var text = rule.value;
+    if (text.indexOf('\\0') != -1 || text.indexOf('\\9') != -1) {
+        return true;
+    }
+    if (getCss3PrefixValue(rule.strippedName) == 0 && rule.name != rule.strippedName) {
+        return true;
+    }
+    return false
 }
+
 exports.containsHack = containsHack;
 
 function getAttrOrder(attr, strippedName) {

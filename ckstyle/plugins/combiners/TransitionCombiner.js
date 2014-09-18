@@ -3,10 +3,20 @@ var Class = base.Class
 var helper = require('./helper')
 var Combiner = require('./Combiner')
 
-var FontCombiner = new Class(Combiner, function() {
+/*
+// ==> transiton: padding .36s ease -1s;
+
+.transition {
+  transition-property: padding;
+  transition-duration: .36s;
+  transition-timing-function: ease;
+  transition-delay: -1s;
+}
+*/
+var TransitionCombiner = new Class(Combiner, function() {
 
     this.__init__ = function(self, name, attrs) {
-        self.name = name
+        self.name = name.trim()
         self.attrs = attrs
         self.combined = ''
         self.collector = {}
@@ -22,14 +32,19 @@ var FontCombiner = new Class(Combiner, function() {
         var splited = value.split(' ')
         var length = helper.len(splited)
         if (length == 1) {
-            this.fill('width', value)
+            this.fill('duration', value)
         } else if (length == 2) {
-            this.fill('width', splited[0])
-            this.fill('style', splited[1])
+            this.fill('property', splited[0])
+            this.fill('duration', splited[1])
         } else if (length == 3) {
-            this.fill('width', splited[0])
-            this.fill('style', splited[1])
-            this.fill('color', splited[2])
+            this.fill('property', splited[0])
+            this.fill('duration', splited[1])
+            this.fill('timing-function', splited[2])
+        } else if (length == 4) {
+            this.fill('property', splited[0])
+            this.fill('duration', splited[1])
+            this.fill('timing-function', splited[2])
+            this.fill('delay', splited[3])
         }
     }
 
@@ -39,7 +54,6 @@ var FontCombiner = new Class(Combiner, function() {
         attrs.forEach(function(prop) {
             if (helper.containsHack(prop[0], prop[1], prop[2]))
                 return
-
             if (prop[1] == name) {
                 self.hasFather = true
                 self._seperate(prop[2])
@@ -47,7 +61,7 @@ var FontCombiner = new Class(Combiner, function() {
                 if (!(prop[1] in self.deleted)) {
                     self.deleted.push(prop[1])
                 }
-                self.collector[prop[0]] = prop[2]
+                self.collector[prop[0].trim()] = prop[2]
             }
         })
     }
@@ -55,36 +69,27 @@ var FontCombiner = new Class(Combiner, function() {
     this.join = function(self) {
         var collector = [];
         var counter = 0;
-        if (self.collector['font-style']) {
+        // console.log(self.collector)
+        if (self.collector[self.name + '-property']) {
             counter++
-            collector.push(self.collector['font-style'])
+            collector.push(self.collector[self.name + '-property'])
         }
-        if (self.collector['font-variant']) {
+        if (self.collector[self.name + '-duration']) {
             counter++
-            collector.push(self.collector['font-variant'])
+            collector.push(self.collector[self.name + '-duration'])
         }
-        if (self.collector['font-weight']) {
+        if (self.collector[self.name + '-timing-function']) {
             counter++
-            collector.push(self.collector['font-weight'])
+            collector.push(self.collector[self.name + '-timing-function'])
         }
-        var sizeHeight = '';
-        if (self.collector['font-size']) {
-            sizeHeight = self.collector['font-size']
-            if (self.collector['line-height']) {
-                sizeHeight += '/' + self.collector['line-height']
-            }
-            collector.push(sizeHeight)
-            counter ++
-        }
-        if (self.collector['font-family']) {
+        if (self.collector[self.name + '-delay']) {
             counter++
-            collector.push(self.collector['font-family'])
+            collector.push(self.collector[self.name + '-delay'])
         }
-        if (counter < 4) {
+        if (counter != 2 && counter != 4) {
             self.combined = ''
             self.deleted = []
             self.hasFather = false
-            return
         }
         self.combined = collector.join(' ')
     }
@@ -97,4 +102,4 @@ var FontCombiner = new Class(Combiner, function() {
 
 })
 
-module.exports = FontCombiner
+module.exports = TransitionCombiner

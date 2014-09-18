@@ -14,6 +14,10 @@ var combiners = {
     'border-right': require('./BorderCombiner'),
     font: require('./FontCombiner'),
     'border-radius': require('./BorderRadiusCombiner'),
+    'transition': require('./TransitionCombiner'),
+    '-webkit-transition': require('./TransitionCombiner'),
+    '-moz-transition': require('./TransitionCombiner'),
+    '-o-transition': require('./TransitionCombiner'),
     'list-style': require('./ListStyleCombiner')
 }
 

@@ -3,27 +3,38 @@ var Checker = require('./helper').Checker
 exports.doTest = function() {
     _a()
     _b()
-    _c()
 }
 
+
 function _a() {
-    var checker = new Checker(".f{border-color:red}")
+    var checker = new Checker('.foo5 {\
+        line-height: 1.6;\
+        font-style: italic;\
+        font-variant: small-caps;\
+        font-weight: 700;\
+        font-size: 12px;\
+        font-family: arial,"Lucida Grande",sans-serif;\
+    }\
+    ')
+
     checker.prepare();
     var res = checker.doCompress()
-    equal(res, '.f{border-color:red}');
+    equal(res, ".foo5{font:italic small-caps 700 12px/1.6 arial,'Lucida Grande',sans-serif}");
 }
 
 function _b() {
-    var checker = new Checker(".f{border-color:red; border-style: dashed}")
+    var checker = new Checker('.foo5 {\
+        line-height: 1.6;\
+        font-style: italic;\
+        font-variant: small-caps;\
+        font-weight: 700;\
+        font-size: 12px;\
+        font-style: normal;\
+        font-family: arial,"Lucida Grande",sans-serif;\
+    }\
+    ')
+
     checker.prepare();
     var res = checker.doCompress()
-    equal(res, '.f{border:medium dashed red}');
-}
-
-
-function _c() {
-    var checker = new Checker(".f{border:2px;border-width:1px}")
-    checker.prepare();
-    var res = checker.doCompress()
-    equal(res, '.f{border:1px}');
+    equal(res, ".foo5{font:normal small-caps 700 12px/1.6 arial,'Lucida Grande',sans-serif}");
 }

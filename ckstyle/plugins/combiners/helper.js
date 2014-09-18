@@ -1,5 +1,5 @@
 function containsHack(name, strippedName, value) {
-    return name != strippedName || value.indexOf('\\9') != -1
+    return value.indexOf('\\9') != -1
 }
 
 var canBeCombinedProps = {
@@ -24,6 +24,31 @@ var canBeCombinedProps = {
     'border-bottom': ['border-bottom-width', 'border-bottom-style', 'border-bottom-color'],
     'border-left': ['border-left-width', 'border-left-style', 'border-left-color'],
     'border-right': ['border-right-width', 'border-right-style', 'border-right-color'],
+    
+    transition: [
+        'transition-property',
+        'transition-duration',
+        'transition-timing-function',
+        'transition-delay'
+    ],
+    '-webkit-transition': [
+        '-webkit-transition-property',
+        '-webkit-transition-duration',
+        '-webkit-transition-timing-function',
+        '-webkit-transition-delay'
+    ],
+    '-moz-transition': [
+        '-moz-transition-property',
+        '-moz-transition-duration',
+        '-moz-transition-timing-function',
+        '-moz-transition-delay'
+    ],
+    '-o-transition': [
+        '-o-transition-property',
+        '-o-transition-duration',
+        '-o-transition-timing-function',
+        '-o-transition-delay'
+    ],
     border: [
         'border-width', 
         'border-style', 
