@@ -3,7 +3,7 @@ var Class = base.Class
 var helper = require('./helper')
 var Combiner = require('./Combiner')
 
-var BorderCombiner = new Class(Combiner, function() {
+var OutlineCombiner = new Class(Combiner, function() {
 
     this.__init__ = function(self, name, attrs) {
         self.name = name
@@ -55,18 +55,18 @@ var BorderCombiner = new Class(Combiner, function() {
     this.join = function(self) {
         var collector = [];
         var hasWidth, counter = 0;
-        if (self.collector['border-width']) {
+        if (self.collector['outline-width']) {
             hasWidth = 1
             counter++
-            collector.push(self.collector['border-width'])
+            collector.push(self.collector['outline-width'])
         }
-        if (self.collector['border-style']) {
+        if (self.collector['outline-style']) {
             counter++
-            collector.push(self.collector['border-style'])
+            collector.push(self.collector['outline-style'])
         }
-        if (self.collector['border-color']) {
+        if (self.collector['outline-color']) {
             counter++
-            collector.push(self.collector['border-color'])
+            collector.push(self.collector['outline-color'])
         }
         if (counter <= 1 && !hasWidth) {
             self.deleted = []
@@ -75,7 +75,7 @@ var BorderCombiner = new Class(Combiner, function() {
             return
         }
         if (counter > 1 && !hasWidth) {
-            collector.unshift('medium')
+            collector.unshift('invert')
         }
         self.combined = collector.join(' ')
     }
@@ -88,4 +88,4 @@ var BorderCombiner = new Class(Combiner, function() {
 
 })
 
-module.exports = BorderCombiner
+module.exports = OutlineCombiner

@@ -6,8 +6,10 @@ var combiners = {
     margin: require('./MarginCombiner'),
     padding: require('./PaddingCombiner'),
     background: require('./BackgroundCombiner'),
+    outline: require('./OutlineCombiner'),
     border: require('./BorderCombiner'),
-    font: require('./FontCombiner')
+    font: require('./FontCombiner'),
+    'border-radius': require('./BorderRadiusCombiner')
 }
 
 function doCombine(name, props) {

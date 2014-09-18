@@ -71,11 +71,12 @@
          -o-animation-delay: 1;
             animation-delay: 1;
 }
-
+/* ! should be combined now */
+/* 
 .border-radius-is-ok {
     border-top-left-radius: 0;
     border-radius: 0;
-}
+}*/
 
 .border-radius-is-not-ok-if-prefix {
     -webkit-border-radius: 0;

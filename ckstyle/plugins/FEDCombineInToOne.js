@@ -4,6 +4,7 @@ var Class = base.Class
 var RuleSetChecker = base.RuleSetChecker
 var helper = require('./helper')
 var combiner = require('./combiners/CombinerFactory')
+var combineHelper = require('./combiners/helper');
 
 module.exports = global.FEDCombineInToOne = new Class(RuleSetChecker, function() {
     
@@ -45,11 +46,10 @@ module.exports = global.FEDCombineInToOne = new Class(RuleSetChecker, function()
             // do not do any hack combine
             if (helper.containsHack(rule))
                 return
-            // -moz-border-radius, -o-border-radius is not for me
-            if (helper.isCss3PrefixProp(name))
+            if (helper.getCss3PrefixValue(rule.strippedName) != 0)
                 return
 
-            var bigger = helper.canBeCombined(name)
+            var bigger = combineHelper.canBeCombined(name)
             if (bigger) {
                 if (bigger in counter) {
                     if (forFix) {
