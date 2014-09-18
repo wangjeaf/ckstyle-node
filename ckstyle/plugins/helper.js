@@ -9,8 +9,8 @@ exports.heredoc = function(fn) {
 };
 
 var simpleOverridesNames = 'width height color display margin padding'.split(' ');
-exports.canOverride = function(name) {
-    return simpleOverridesNames.indexOf(name) != -1
+exports.canOverride = function(name, value) {
+    return value.indexOf('!important') == -1 && simpleOverridesNames.indexOf(name) != -1
 }
 
 exports.replaceFontWeights = function(value) {

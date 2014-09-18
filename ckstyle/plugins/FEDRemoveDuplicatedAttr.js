@@ -44,10 +44,11 @@ module.exports = global.FEDRemoveDuplicatedAttr = new Class(RuleSetChecker, func
 
     this.ruleInfo = function(self, rule) {
         var name = rule.fixedName || rule.strippedName
-        if (helper.canOverride(name)) {
+        var value = rule.fixedValue || rule.strippedValue
+        if (helper.canOverride(name, value)) {
             return name;
         }
-        return name + (rule.fixedValue || rule.strippedValue)
+        return name + ':' + value
     }
 
     this.__doc__ = {
