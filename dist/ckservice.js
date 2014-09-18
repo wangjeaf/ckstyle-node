@@ -12686,20 +12686,20 @@ CSSParser.prototype.doParse = function(config) {
         return;
     }
     var prevChar = null, inComment = false, length = self.totalLength,
-        text = self.roughCss, selector = '', commentText = '', i = -1 , 
-        comments = []
+        text = self.roughCss, selector = '', commentText = '', charIndex = -1 , 
+        comments = [], char
     var realComment;
     while (true) {
-        if (i == length - 1) {
+        if (charIndex >= length - 1) {
             break;
         }
-        i = i + 1
-        var char = text[i]
-        if (!inComment && isCommentStart(char, text, i)) {
+        charIndex = charIndex + 1
+        char = text[charIndex]
+        if (!inComment && isCommentStart(char, text, charIndex)) {
             commentText = ''
             inComment = true
         }
-        if (isCommentEnd(char, text, i)) {
+        if (isCommentEnd(char, text, charIndex)) {
             commentText = commentText + char
             inComment = false
             comments.push(commentText)
@@ -12711,7 +12711,7 @@ CSSParser.prototype.doParse = function(config) {
             continue;
         }
         if (isSpecialStart(char)) {
-            var tmp = handleSpecialStatement(text, i, length, char);
+            var tmp = handleSpecialStatement(text, charIndex, length, char);
             var nextPos = tmp[0];
             var attrs = tmp[1];
             var operator = tmp[2];
@@ -12722,7 +12722,7 @@ CSSParser.prototype.doParse = function(config) {
                     comments = []
                 }
                 self.styleSheet.addExtraStatement(operator, char + attrs + text[nextPos], realComment)
-                i = nextPos
+                charIndex = nextPos
                 selector = ''
                 commentText = ''
                 comments = []
@@ -12731,7 +12731,7 @@ CSSParser.prototype.doParse = function(config) {
         }
 
         if (char == '{') {
-            var tmp = findCharFrom(text, i, length, '{', '}');
+            var tmp = findCharFrom(text, charIndex, length, '{', '}');
             var nextBracePos = tmp[0];
             var attributes = tmp[1];
             // do not need the last brace
@@ -12741,14 +12741,16 @@ CSSParser.prototype.doParse = function(config) {
                 comments = []
             }
             if (isNestedStatement(selector)) {
-                var nestedCss = attributes.slice(0, -1)
+                var nestedCss = attributes
+                // remove end '}'
+                nestedCss = nestedCss.slice(0, -1)
                 var stmt = self.styleSheet.addNestedRuleSet(selector, nestedCss, realComment)
                 parseNestedStatment(stmt, nestedCss, this.fileName, this.config)
             } else {
                 self.styleSheet.addRuleSetByStr(selector, attributes.slice(0, -1), realComment)
             }
             commentText = ''
-            i = nextBracePos
+            charIndex = nextBracePos
             selector = ''
         } else if (char == '}') {
             selector = ''
