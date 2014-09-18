@@ -15,7 +15,6 @@ function go() {
 
     expectedFixed = '.theme-hot li {\n\
     float: left;\n\
-    padding: 0 10px 0 2px;\n\
     #padding: 1px 10px 0 2px;\n\
     padding: 1px 10px 0 2px\\0;\n\
     _padding: 3px 10px 0 2px;\n\

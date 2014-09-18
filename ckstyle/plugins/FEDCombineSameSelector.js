@@ -82,7 +82,6 @@ module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, fu
             <code>==></code><br>\
             <code>.a {width:100px; height: 200px;}</code><br>\
             <br>\
-            <strong>安全模式下将不执行此规则</strong><br>\
         "
     }
 })

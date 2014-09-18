@@ -8,6 +8,10 @@ exports.heredoc = function(fn) {
         .replace(/[\s\xA0]+$/, "");
 };
 
+var simpleOverridesNames = 'width height color display margin padding'.split(' ');
+exports.canOverride = function(name) {
+    return simpleOverridesNames.indexOf(name) != -1
+}
 
 exports.replaceFontWeights = function(value) {
     value = value.replace('bold', '700').replace('normal', '400')
