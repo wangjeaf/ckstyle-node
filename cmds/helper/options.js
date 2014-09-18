@@ -49,6 +49,11 @@ module.exports = {
         description: '修复后文件的扩展名 [.fixed.css]',
         defaultValue: '.fixed.css'
     },
+    formatextension: {
+        flags: '--extension [extension]',
+        description: '格式化后文件的扩展名 [.fmt.css]',
+        defaultValue: '.fmt.css'
+    },
     singleline: {
         flags: '--single-line',
         description: '是否自动修复成单行模式（所有selector在一行） [false]',

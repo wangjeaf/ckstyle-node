@@ -9,7 +9,7 @@ var args = require('./command/args');
 var defaultConfig = new args.CommandArgs()
 
 function endswith(filename, extname) {
-    return filename.indexOf(extname) == filename.length - extname.length;
+    return filename.slice(extname.length * -1) == extname;
 }
 
 function prepare(fileContent, fileName, config) {

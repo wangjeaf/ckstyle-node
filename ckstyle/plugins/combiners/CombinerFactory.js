@@ -8,8 +8,13 @@ var combiners = {
     background: require('./BackgroundCombiner'),
     outline: require('./OutlineCombiner'),
     border: require('./BorderCombiner'),
+    'border-top': require('./BorderCombiner'),
+    'border-left': require('./BorderCombiner'),
+    'border-bottom': require('./BorderCombiner'),
+    'border-right': require('./BorderCombiner'),
     font: require('./FontCombiner'),
-    'border-radius': require('./BorderRadiusCombiner')
+    'border-radius': require('./BorderRadiusCombiner'),
+    'list-style': require('./ListStyleCombiner')
 }
 
 function doCombine(name, props) {

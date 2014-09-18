@@ -12,7 +12,7 @@ function endswith(filename, extname) {
     return filename.slice(extname.length * -1) == extname;
 }
 
-function doFix(fileContent, fileName, config) {
+function doFormat(fileContent, fileName, config) {
     fileName = fileName || ''
     config = config || defaultConfig
 
@@ -23,14 +23,14 @@ function doFix(fileContent, fileName, config) {
     var checker = new CssChecker(parser, config)
     checker.prepare();
     //checker.loadPlugins(os.path.realpath(os.path.join(__file__, '../plugins')))
-    var fixed = checker.doFix()
+    var formatted = checker.doFormat()
 
-    return [checker, fixed]
+    return [checker, formatted]
 }
 
-function fixFile(filePath, config) {
+function formatFile(filePath, config) {
     if (!filePath || !fs.existsSync(filePath)) {
-        logger.error('[fix] file not exist: ' + filePath)
+        logger.error('[format] file not exist: ' + filePath)
         return;
     }
 
@@ -44,9 +44,9 @@ function fixFile(filePath, config) {
         return
     fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
     if (!config.print)
-        logger.ok('[fix] fixing ' + filePath)
+        logger.ok('[format] fixing ' + filePath)
 
-    var result = doFix(fileContent, filePath, config)
+    var result = doFormat(fileContent, filePath, config)
     checker = result[0]
     msg = result[1]
 
@@ -64,56 +64,56 @@ function fixFile(filePath, config) {
         logger.out(msg)
     } else {
         fs.writeFileSync(path, msg)
-        logger.ok('[fix] fixed ==> ' + path)
+        logger.ok('[format] fixed ==> ' + path)
     }
 } 
 
-function fix(file, config) {
+function format(file, config) {
     if (!file || !fs.existsSync(file)) {
-        logger.error('[fix] file not exist: ' + file)
+        logger.error('[format] file not exist: ' + file)
         return;
     }
     if (fs.statSync(file).isDirectory()){
         if (config.recursive) {
-            fixDirRecursively(file, config)
+            formatDirRecursively(file, config)
         } else {
-            fixDirSubFiles(file, config)
+            formatDirSubFiles(file, config)
         }
     } else {
-        fixFile(file, config)
+        formatFile(file, config)
     }
 }
 
-function fixDir(directory, config) {
+function formatDir(directory, config) {
     config = config || defaultConfig
     if (config.recursive)
-        fixDirRecursively(directory, config)
+        formatDirRecursively(directory, config)
     else
-        fixDirSubFiles(directory, config)
+        formatDirSubFiles(directory, config)
 }
 
-function fixDirSubFiles(directory, config) {
+function formatDirSubFiles(directory, config) {
     config = config || defaultConfig
     fs.readdirSync(dirname).forEach(function(filename) {
         if ((!endswith(filename, '.css')) || filename.indexOf('_') == 0)
             return
-        fixFile(pathm.join(directory, filename), config)
+        formatFile(pathm.join(directory, filename), config)
     });
 }
 
-function fixDirRecursively(directory, config) {
+function formatDirRecursively(directory, config) {
     config = config || defaultConfig
 
     fs.readdirSync(dirname).forEach(function(filename) {
         if ((!endswith(filename, '.css')) || filename.indexOf('_') == 0)
             return
         if (fs.statSync(filename).isDirectory()){
-            fixDirRecursively(pathm.join(directory, fileName), config)
+            formatDirRecursively(pathm.join(directory, fileName), config)
             return
         }
-        fixFile(pathm.join(directory, filename), config)
+        formatFile(pathm.join(directory, filename), config)
     });
 }
 
-exports.doFix = doFix
-exports.fix = fix
+exports.doFormat = doFormat
+exports.format = format

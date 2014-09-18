@@ -3,7 +3,7 @@ var Class = base.Class
 var helper = require('./helper')
 var Combiner = require('./Combiner')
 
-var BorderCombiner = new Class(Combiner, function() {
+var ListStyleCombiner = new Class(Combiner, function() {
 
     this.__init__ = function(self, name, attrs) {
         self.name = name
@@ -22,14 +22,14 @@ var BorderCombiner = new Class(Combiner, function() {
         var splited = value.split(' ')
         var length = helper.len(splited)
         if (length == 1) {
-            this.fill('width', value)
+            this.fill('type', value)
         } else if (length == 2) {
-            this.fill('width', splited[0])
-            this.fill('style', splited[1])
+            this.fill('type', splited[0])
+            this.fill('position', splited[1])
         } else if (length == 3) {
-            this.fill('width', splited[0])
-            this.fill('style', splited[1])
-            this.fill('color', splited[2])
+            this.fill('type', splited[0])
+            this.fill('position', splited[1])
+            this.fill('image', splited[2])
         }
     }
 
@@ -54,28 +54,24 @@ var BorderCombiner = new Class(Combiner, function() {
 
     this.join = function(self) {
         var collector = [];
-        var hasWidth, counter = 0;
-        if (self.collector[self.name + '-width']) {
-            hasWidth = 1
+        var counter = 0, hasImage;
+        if (self.collector['list-style-type']) {
             counter++
-            collector.push(self.collector[self.name + '-width'])
+            collector.push(self.collector['list-style-type'])
         }
-        if (self.collector[self.name + '-style']) {
+        if (self.collector['list-style-position']) {
             counter++
-            collector.push(self.collector[self.name + '-style'])
+            collector.push(self.collector['list-style-position'])
         }
-        if (self.collector[self.name + '-color']) {
+        if (self.collector['list-style-image']) {
             counter++
-            collector.push(self.collector[self.name + '-color'])
+            hasImage = false
+            collector.push(self.collector['list-style-image'])
         }
-        if (counter <= 1 && !hasWidth) {
+        if (counter != 3 && !(counter == 2 && !hasImage)) {
+            self.combined = ''
             self.deleted = []
             self.hasFather = false
-            self.combined = ''
-            return
-        }
-        if (counter > 1 && !hasWidth) {
-            collector.unshift('medium')
         }
         self.combined = collector.join(' ')
     }
@@ -88,4 +84,4 @@ var BorderCombiner = new Class(Combiner, function() {
 
 })
 
-module.exports = BorderCombiner
+module.exports = ListStyleCombiner

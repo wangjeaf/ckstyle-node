@@ -7,6 +7,7 @@ var analyse = require('../browsers/Analyser').analyse
 var EXTS = {
     check: '.ckstyle.txt',
     fix: '.fixed.css',
+    format: '.fmt.css',
     compress: '.min.css'
 }
 

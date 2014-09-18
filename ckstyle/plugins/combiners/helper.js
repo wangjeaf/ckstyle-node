@@ -9,6 +9,21 @@ var canBeCombinedProps = {
         'border-bottom-right-radius',
         'border-bottom-left-radius'
     ],
+    'border-radius': [
+        'border-top-left-radius',
+        'border-top-right-radius',
+        'border-bottom-right-radius',
+        'border-bottom-left-radius'
+    ],
+    'list-style': [
+        'list-style-image',
+        'list-style-position',
+        'list-style-type'
+    ],
+    'border-top': ['border-top-width', 'border-top-style', 'border-top-color'],
+    'border-bottom': ['border-bottom-width', 'border-bottom-style', 'border-bottom-color'],
+    'border-left': ['border-left-width', 'border-left-style', 'border-left-color'],
+    'border-right': ['border-right-width', 'border-right-style', 'border-right-color'],
     border: [
         'border-width', 
         'border-style', 
@@ -39,11 +54,12 @@ var canBeCombinedProps = {
         'background-position'
     ],
     font: [
-        'font-style', 
-        'font-weight', 
+        'font-style',
+        'font-variant',
+        'font-weight',
         'font-size', 
-        'line-height', 
-        'font-family'
+        'font-family',
+        'line-height'
     ]
 }
 

@@ -13,6 +13,9 @@ Cleaner.clean = function(msg) {
     msg = msg.replace(/\s+\)/g, ')')
     msg = msg.replace(/\s+,/g, ',')
     msg = msg.replace(/,\s+/g, ',')
+    msg = msg.replace(/(\.[0-9]*[1-9])0*([a-zA-Z]*)/g, function(a, b, c) {
+        return b + c;
+    })
     msg = msg.trim()
     return msg
 }

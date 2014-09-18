@@ -3,7 +3,6 @@ var Class = base.Class
 var helper = require('./helper')
 var Combiner = require('./Combiner')
 
-
 var BorderRadiusCombiner = new Class(Combiner, function() {
 
     this.__init__ = function(self, name, attrs) {

@@ -8,6 +8,10 @@ var ReporterUtil = require('./reporter/index').ReporterUtil
 
 var defaultConfig = new args.CommandArgs()
 
+function endswith(filename, extname) {
+    return filename.slice(extname.length * -1) == extname;
+}
+
 function doCheck(fileContent, fileName, config) {
     fileName = fileName || ''
     config = config || defaultConfig
@@ -84,10 +88,6 @@ function checkDir(directory, config) {
         checkDirRecursively(directory, config)
     else
         checkDirSubFiles(directory, config)
-}
-
-function endswith(filename, extname) {
-    return filename.indexOf(extname) == filename.length - extname.length;
 }
 
 function checkDirSubFiles(directory, config) {

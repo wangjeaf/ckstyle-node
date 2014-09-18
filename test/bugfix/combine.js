@@ -4,6 +4,7 @@ exports.doTest = function() {
     _a()
     _b()
     _border_radius()
+    _padding()
 }
 
 function _a() {
@@ -26,6 +27,19 @@ function _b() {
     checker.prepare();
     var res = checker.doCompress()
     equal(res, '.foo2{margin:10px 20px 9em}');
+}
+
+function _padding() {
+    var checker = new Checker(".foo2 {\
+  padding-top: 50%;\
+  padding-right: .90em;\
+  padding-bottom: 10px;\
+  padding-left: .90em;\
+}")
+
+    checker.prepare();
+    var res = checker.doCompress()
+    equal(res, '.foo2{padding:50% .9em 10px}');
 }
 
 function _border_radius() {
