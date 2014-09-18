@@ -295,6 +295,13 @@ RuleSet.prototype.getRuleByName = function(name) {
         }
     }
 }
+
+RuleSet.prototype.extendRules = function(ruleSet) {
+    var self = this;
+    var rules = self._rules;
+    var other = ruleSet.getRules();
+    self._rules = rules.concat(other);
+}
 RuleSet.prototype.getRules = function() {
     var self = this;
     return self._rules

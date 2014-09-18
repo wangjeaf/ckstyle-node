@@ -112,7 +112,6 @@ var CssChecker = new Class(function() {
         var include = self.config.include || 'all'
         var exclude = self.config.exclude || []
         var safe = self.config.safe
-        var safeModeExcludes = 'combine-same-rulesets'
         var instance = null;
 
         if (isFunction(pluginClass)) {
@@ -128,7 +127,7 @@ var CssChecker = new Class(function() {
                 return
             } else if (exclude != 'none' && exclude.indexOf(instance.id) != -1) {
                 return
-            } else if (safe && safeModeExcludes.indexOf(instance.id) != -1) {
+            } else if (safe && instance.notSafe) {
                 return
             }
         }

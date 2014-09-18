@@ -12,6 +12,7 @@ var doRuleSetDetect = require('../browsers/Hacks').doRuleSetDetect
 module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, function() {
     
     this.__init__ = function(self) {
+        this.notSafe = true
         self.id = 'combine-same-rulesets'
         self.errorLevel = ERROR_LEVEL.WARNING
         self.errorMsg_empty = '"%s" contains the same rules in "${file}"'
