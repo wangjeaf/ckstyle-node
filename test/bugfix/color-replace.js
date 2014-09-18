@@ -10,7 +10,7 @@ function _a() {
     var checker = new Checker(".a {color: antiquewhite, antiquewhite, #a52a2a}")
     checker.prepare();
     var res = checker.doCompress()
-    equal(res, '.a{color:#faebd7,#faebd7,brown}');
+    equal(res, '.a{color:#FAEBD7,#FAEBD7,brown}');
 }
 
 function _b() {
@@ -24,5 +24,5 @@ function _b() {
 
     checker.prepare();
     var res = checker.doCompress()
-    equal(res, '.test{border-color:silver;border-top-color:red;background:#FFF;color:#ff0;outline-color:rgb(0,0,0)}');
+    equal(res, '.test{border-color:silver;border-top-color:red;background:#FFF;color:#FF0;outline-color:rgb(0,0,0)}');
 }

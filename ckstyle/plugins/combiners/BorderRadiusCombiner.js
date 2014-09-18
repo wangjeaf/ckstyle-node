@@ -63,7 +63,7 @@ var BorderRadiusCombiner = new Class(Combiner, function() {
                 if (!(prop[1] in self.deleted)) {
                     self.deleted.push(prop[1])
                 }
-                self.collector[prop[0]] = prop[2]
+                self.collector[prop[0]] = prop[2].split(' ')[0]
             }
         })
     }

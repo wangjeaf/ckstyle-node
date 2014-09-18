@@ -28,11 +28,11 @@ exports.replaceColors = function(value) {
         var lower = value.toLowerCase()
         if (a > b) {
             if (lower.indexOf(prop) != -1) {
-                value = value.replace(new RegExp(prop, 'gim'), colors[prop]);
+                value = value.replace(new RegExp(prop, 'gim'), colors[prop]).toUpperCase();
             }
         } else {
             if (lower.indexOf(colors[prop]) != -1) {
-                value = value.replace(new RegExp(colors[prop], 'gim'), prop);
+                value = value.replace(new RegExp(colors[prop], 'gim'), prop)
             }
         }
     }
