@@ -17,10 +17,10 @@ function prepare(fileContent, fileName, config) {
     config = config || defaultConfig
     config.operation = 'compress'
 
-    parser = new CssParser(fileContent, fileName)
+    var parser = new CssParser(fileContent, fileName)
     //parser.doParse(config)
 
-    checker = new CssChecker(parser, config)
+    var checker = new CssChecker(parser, config)
     checker.prepare();
     return checker
 }

@@ -883,7 +883,7 @@ var CssChecker = new Class(function() {
         browser = browser || ALL;
         self.resetStyleSheet()
         // 忽略的规则集（目前只忽略单元测试的selector）
-        ignoreRulesets = self.config.ignoreRulesets
+        var ignoreRulesets = self.config.ignoreRulesets
 
         // fix规则集
         function fixRuleSet(ruleSet) {
@@ -932,7 +932,7 @@ var CssChecker = new Class(function() {
             });
         }
 
-        styleSheet = self.parser.styleSheet
+        var styleSheet = self.parser.styleSheet
 
         styleSheet.getRuleSets().forEach(function(ruleSet) {
             if (ruleSet.extra) {
@@ -945,6 +945,7 @@ var CssChecker = new Class(function() {
             }
             // 先fix rule
             fixRules(ruleSet)
+
             // 再fix ruleSet
             fixRuleSet(ruleSet)
         });
@@ -1046,7 +1047,6 @@ var CssChecker = new Class(function() {
                 logger.error('check should be boolean/list, ' + checker.id + ' is not.')
             }
         });
-
         styleSheet.getRuleSets().forEach(function(ruleSet) {
             if (ruleSet.extra) {
                 checkExtraRule(ruleSet)
@@ -1168,11 +1168,11 @@ function doCheck(fileContent, fileName, config) {
     fileName = fileName || ''
     config = config || defaultConfig
 
-    config.operation = 'ckstyle'
-    parser = new CssParser(fileContent, fileName)
+    config.operation = 'check'
+    var parser = new CssParser(fileContent, fileName)
     //parser.doParse(config)
 
-    checker = new CssChecker(parser, config)
+    var checker = new CssChecker(parser, config)
     checker.prepare();
     //checker.loadPlugins(os.path.realpath(os.path.join(__file__, '../plugins')))
     checker.doCheck()
@@ -1302,10 +1302,10 @@ function prepare(fileContent, fileName, config) {
     config = config || defaultConfig
     config.operation = 'compress'
 
-    parser = new CssParser(fileContent, fileName)
+    var parser = new CssParser(fileContent, fileName)
     //parser.doParse(config)
 
-    checker = new CssChecker(parser, config)
+    var checker = new CssChecker(parser, config)
     checker.prepare();
     return checker
 }
@@ -1450,11 +1450,11 @@ function doFix(fileContent, fileName, config) {
     fileName = fileName || ''
     config = config || defaultConfig
 
-    config.operation = 'fixstyle'
-    parser = new CssParser(fileContent, fileName)
+    config.operation = 'fix'
+    var parser = new CssParser(fileContent, fileName)
     //parser.doParse(config)
 
-    checker = new CssChecker(parser, config)
+    var checker = new CssChecker(parser, config)
     checker.prepare();
     //checker.loadPlugins(os.path.realpath(os.path.join(__file__, '../plugins')))
     var fixed = checker.doFix()
@@ -1744,7 +1744,11 @@ NestedStatement.prototype.compress = function(browser) {
     var self = this;
     if (!(self.browser & browser))
         return ''
-    return self.fixedSelector + self._compressedStatement(browser)
+    var value = self._compressedStatement(browser);
+    if (value == '{}') {
+        return ''
+    }
+    return self.fixedSelector + value
 }
 
 NestedStatement.prototype.fixed = function(config) {
@@ -3034,6 +3038,7 @@ var ALL = BinaryRule.ALL
 var STD = BinaryRule.STD
 
 var doRuleSetDetect = require('../browsers/Hacks').doRuleSetDetect
+
 module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, function() {
     
     this.__init__ = function(self) {
@@ -3063,16 +3068,15 @@ module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, fu
             });
         })
 
-        
         for(var prop in mapper) {
             var sameSelectorRuleSets = mapper[prop]
             if (sameSelectorRuleSets.length > 1) {
-                self._combine(sameSelectorRuleSets, config)
+                self._combine(styleSheet, sameSelectorRuleSets, config)
             }
         }
     }
 
-    this._combine = function(self, rulesets, config) {
+    this._combine = function(self, styleSheet, rulesets, config) {
         if (!config.safe) {
             var first = rulesets[0].ruleset;
             for(var i = 1; i < rulesets.length; i++) {
@@ -3107,7 +3111,6 @@ module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, fu
             <code>==></code><br>\
             <code>.a {width:100px; height: 200px;}</code><br>\
             <br>\
-            <strong>安全模式下将不执行此规则</strong><br>\
         "
     }
 })
@@ -4858,15 +4861,17 @@ module.exports = global.FEDRemoveDuplicatedAttr = new Class(RuleSetChecker, func
                 newRules.push(rule)
             }
         })
-            
         newRules = newRules.reverse()
         ruleSet.setRules(newRules)
     }
 
     this.ruleInfo = function(self, rule) {
-        if (rule.fixedName != '')
-            return rule.fixedName + ':' + rule.fixedValue
-        return rule.strippedName + ':' + rule.strippedValue
+        var name = rule.fixedName || rule.strippedName
+        var value = rule.fixedValue || rule.strippedValue
+        if (helper.canOverride(name, value)) {
+            return name;
+        }
+        return name + ':' + value
     }
 
     this.__doc__ = {
@@ -6375,6 +6380,10 @@ exports.heredoc = function(fn) {
         .replace(/[\s\xA0]+$/, "");
 };
 
+var simpleOverridesNames = 'width height color display margin padding'.split(' ');
+exports.canOverride = function(name, value) {
+    return value.indexOf('!important') == -1 && simpleOverridesNames.indexOf(name) != -1
+}
 
 exports.replaceFontWeights = function(value) {
     value = value.replace('bold', '700').replace('normal', '400')

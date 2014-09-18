@@ -9,6 +9,7 @@ var ALL = BinaryRule.ALL
 var STD = BinaryRule.STD
 
 var doRuleSetDetect = require('../browsers/Hacks').doRuleSetDetect
+
 module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, function() {
     
     this.__init__ = function(self) {
@@ -38,16 +39,15 @@ module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, fu
             });
         })
 
-        
         for(var prop in mapper) {
             var sameSelectorRuleSets = mapper[prop]
             if (sameSelectorRuleSets.length > 1) {
-                self._combine(sameSelectorRuleSets, config)
+                self._combine(styleSheet, sameSelectorRuleSets, config)
             }
         }
     }
 
-    this._combine = function(self, rulesets, config) {
+    this._combine = function(self, styleSheet, rulesets, config) {
         if (!config.safe) {
             var first = rulesets[0].ruleset;
             for(var i = 1; i < rulesets.length; i++) {

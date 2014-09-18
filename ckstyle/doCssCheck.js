@@ -12,11 +12,11 @@ function doCheck(fileContent, fileName, config) {
     fileName = fileName || ''
     config = config || defaultConfig
 
-    config.operation = 'ckstyle'
-    parser = new CssParser(fileContent, fileName)
+    config.operation = 'check'
+    var parser = new CssParser(fileContent, fileName)
     //parser.doParse(config)
 
-    checker = new CssChecker(parser, config)
+    var checker = new CssChecker(parser, config)
     checker.prepare();
     //checker.loadPlugins(os.path.realpath(os.path.join(__file__, '../plugins')))
     checker.doCheck()

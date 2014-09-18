@@ -36,7 +36,11 @@ NestedStatement.prototype.compress = function(browser) {
     var self = this;
     if (!(self.browser & browser))
         return ''
-    return self.fixedSelector + self._compressedStatement(browser)
+    var value = self._compressedStatement(browser);
+    if (value == '{}') {
+        return ''
+    }
+    return self.fixedSelector + value
 }
 
 NestedStatement.prototype.fixed = function(config) {

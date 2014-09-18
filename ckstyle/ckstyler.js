@@ -268,7 +268,7 @@ var CssChecker = new Class(function() {
         browser = browser || ALL;
         self.resetStyleSheet()
         // 忽略的规则集（目前只忽略单元测试的selector）
-        ignoreRulesets = self.config.ignoreRulesets
+        var ignoreRulesets = self.config.ignoreRulesets
 
         // fix规则集
         function fixRuleSet(ruleSet) {
@@ -317,7 +317,7 @@ var CssChecker = new Class(function() {
             });
         }
 
-        styleSheet = self.parser.styleSheet
+        var styleSheet = self.parser.styleSheet
 
         styleSheet.getRuleSets().forEach(function(ruleSet) {
             if (ruleSet.extra) {
@@ -330,6 +330,7 @@ var CssChecker = new Class(function() {
             }
             // 先fix rule
             fixRules(ruleSet)
+
             // 再fix ruleSet
             fixRuleSet(ruleSet)
         });
@@ -431,7 +432,6 @@ var CssChecker = new Class(function() {
                 logger.error('check should be boolean/list, ' + checker.id + ' is not.')
             }
         });
-
         styleSheet.getRuleSets().forEach(function(ruleSet) {
             if (ruleSet.extra) {
                 checkExtraRule(ruleSet)
