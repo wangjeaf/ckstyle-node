@@ -14513,33 +14513,41 @@ module.exports = global.FEDCombineInToOne = new Class(RuleSetChecker, function()
         ruleSet.setRules(rules)
     }
 
+    // TODO should use nested loop
     this._countCanBeCombined = function(self, rules, forFix) {
         var counter = {}
         rules.forEach(function(rule) {
             var name = rule.name
-            if (rule.name != rule.strippedName)
-                return
             if (rule.fixedValue.indexOf('!important') != -1)
                 return
             // do not do any hack combine
-            if (helper.containsHack(rule))
+            if (helper.containsHack(rule)) {
+                shouldStop = true;
                 return
-            if (helper.getCss3PrefixValue(rule.strippedName) != 0)
-                return
+            }
+            // if (helper.getCss3PrefixValue(rule.strippedName) != 0)
+            //     return
 
-            var bigger = combineHelper.canBeCombined(name)
+            var bigger;
+            var css3 = helper.getCss3PrefixValue(rule.strippedName)
+            if (css3 != 0) {
+                bigger = combineHelper.canBeCombined(rule.strippedName)
+            } else {
+                bigger = combineHelper.canBeCombined(name)
+            }
+            var finalName = css3 ? rule.fixedName : name;
             if (bigger) {
                 if (bigger in counter) {
                     if (forFix) {
-                        counter[bigger].push([name, rule.fixedName, rule.fixedValue])
+                        counter[bigger].push([finalName, rule.fixedName, rule.fixedValue])
                     } else {
-                        counter[bigger].push(name)
+                        counter[bigger].push(finalName)
                     }
                 } else {
                     if (forFix) {
-                        counter[bigger] = [[name, rule.fixedName, rule.fixedValue]]
+                        counter[bigger] = [[finalName, rule.fixedName, rule.fixedValue]]
                     } else {
-                        counter[bigger] = [name]
+                        counter[bigger] = [finalName]
                     }
                 }
             }
@@ -16509,6 +16517,10 @@ var combiners = {
     'border-right': require('./BorderCombiner'),
     font: require('./FontCombiner'),
     'border-radius': require('./BorderRadiusCombiner'),
+    'transition': require('./TransitionCombiner'),
+    '-webkit-transition': require('./TransitionCombiner'),
+    '-moz-transition': require('./TransitionCombiner'),
+    '-o-transition': require('./TransitionCombiner'),
     'list-style': require('./ListStyleCombiner')
 }
 
@@ -16556,19 +16568,86 @@ var FontCombiner = new Class(Combiner, function() {
         self.deleted = []
     }
 
-    this.join = function(self) {
-        //console.log(self.collector)
-        // border: 1px solid red
-        // border-width: 2px
-        // border-top-width
+    this.fill = function(self, prop, val) {
+        self.collector[self.name + '-' + prop] = val
+    }
 
+    this._seperate = function(self, value) {
+        value = value.replace(/\s*,\s*/g, ',')
+        var splited = value.split(' ')
+        var length = helper.len(splited)
+        if (length == 1) {
+            this.fill('width', value)
+        } else if (length == 2) {
+            this.fill('width', splited[0])
+            this.fill('style', splited[1])
+        } else if (length == 3) {
+            this.fill('width', splited[0])
+            this.fill('style', splited[1])
+            this.fill('color', splited[2])
+        }
+    }
+
+    this.collect = function(self) {
+        var name = self.name
+        var attrs = self.attrs
+        attrs.forEach(function(prop) {
+            if (helper.containsHack(prop[0], prop[1], prop[2]))
+                return
+
+            if (prop[1] == name) {
+                self.hasFather = true
+                self._seperate(prop[2])
+            } else {
+                if (!(prop[1] in self.deleted)) {
+                    self.deleted.push(prop[1])
+                }
+                self.collector[prop[0]] = prop[2]
+            }
+        })
+    }
+
+    this.join = function(self) {
+        var collector = [];
+        var counter = 0;
+        if (self.collector['font-style']) {
+            counter++
+            collector.push(self.collector['font-style'])
+        }
+        if (self.collector['font-variant']) {
+            counter++
+            collector.push(self.collector['font-variant'])
+        }
+        if (self.collector['font-weight']) {
+            counter++
+            collector.push(self.collector['font-weight'])
+        }
+        var sizeHeight = '';
+        if (self.collector['font-size']) {
+            sizeHeight = self.collector['font-size']
+            if (self.collector['line-height']) {
+                sizeHeight += '/' + self.collector['line-height']
+            }
+            collector.push(sizeHeight)
+            counter ++
+        }
+        if (self.collector['font-family']) {
+            counter++
+            collector.push(self.collector['font-family'])
+        }
+        if (counter < 4) {
+            self.combined = ''
+            self.deleted = []
+            self.hasFather = false
+            return
+        }
+        self.combined = collector.join(' ')
     }
 
     this.combine = function(self) {
-        // self.collect()
-        // self.join()
-        return [null, [], false]
-        //return [self.combined, self.deleted, self.hasFather]
+        self.collect()
+        self.join()
+        return [self.combined, self.deleted, self.hasFather]
     }
 
 })
@@ -16979,10 +17058,120 @@ module.exports = PaddingCombiner
 
 })
 // auto generated by concat 
+;define('ckstyle/plugins/combiners/TransitionCombiner', function(require, exports, module) {
+
+var base = require('../../base')
+var Class = base.Class
+var helper = require('./helper')
+var Combiner = require('./Combiner')
+
+/*
+// ==> transiton: padding .36s ease -1s;
+
+.transition {
+  transition-property: padding;
+  transition-duration: .36s;
+  transition-timing-function: ease;
+  transition-delay: -1s;
+}
+*/
+var TransitionCombiner = new Class(Combiner, function() {
+
+    this.__init__ = function(self, name, attrs) {
+        self.name = name.trim()
+        self.attrs = attrs
+        self.combined = ''
+        self.collector = {}
+        self.deleted = []
+    }
+
+    this.fill = function(self, prop, val) {
+        self.collector[self.name + '-' + prop] = val
+    }
+
+    this._seperate = function(self, value) {
+        value = value.replace(/\s*,\s*/g, ',')
+        var splited = value.split(' ')
+        var length = helper.len(splited)
+        if (length == 1) {
+            this.fill('duration', value)
+        } else if (length == 2) {
+            this.fill('property', splited[0])
+            this.fill('duration', splited[1])
+        } else if (length == 3) {
+            this.fill('property', splited[0])
+            this.fill('duration', splited[1])
+            this.fill('timing-function', splited[2])
+        } else if (length == 4) {
+            this.fill('property', splited[0])
+            this.fill('duration', splited[1])
+            this.fill('timing-function', splited[2])
+            this.fill('delay', splited[3])
+        }
+    }
+
+    this.collect = function(self) {
+        var name = self.name
+        var attrs = self.attrs
+        attrs.forEach(function(prop) {
+            if (helper.containsHack(prop[0], prop[1], prop[2]))
+                return
+            if (prop[1] == name) {
+                self.hasFather = true
+                self._seperate(prop[2])
+            } else {
+                if (!(prop[1] in self.deleted)) {
+                    self.deleted.push(prop[1])
+                }
+                self.collector[prop[0].trim()] = prop[2]
+            }
+        })
+    }
+
+    this.join = function(self) {
+        var collector = [];
+        var counter = 0;
+        // console.log(self.collector)
+        if (self.collector[self.name + '-property']) {
+            counter++
+            collector.push(self.collector[self.name + '-property'])
+        }
+        if (self.collector[self.name + '-duration']) {
+            counter++
+            collector.push(self.collector[self.name + '-duration'])
+        }
+        if (self.collector[self.name + '-timing-function']) {
+            counter++
+            collector.push(self.collector[self.name + '-timing-function'])
+        }
+        if (self.collector[self.name + '-delay']) {
+            counter++
+            collector.push(self.collector[self.name + '-delay'])
+        }
+        if (counter != 2 && counter != 4) {
+            self.combined = ''
+            self.deleted = []
+            self.hasFather = false
+        }
+        self.combined = collector.join(' ')
+    }
+
+    this.combine = function(self) {
+        self.collect()
+        self.join()
+        return [self.combined, self.deleted, self.hasFather]
+    }
+
+})
+
+module.exports = TransitionCombiner
+
+})
+// auto generated by concat 
 ;define('ckstyle/plugins/combiners/helper', function(require, exports, module) {
 
 function containsHack(name, strippedName, value) {
-    return name != strippedName || value.indexOf('\\9') != -1
+    return value.indexOf('\\9') != -1
 }
 
 var canBeCombinedProps = {
@@ -17007,6 +17196,31 @@ var canBeCombinedProps = {
     'border-bottom': ['border-bottom-width', 'border-bottom-style', 'border-bottom-color'],
     'border-left': ['border-left-width', 'border-left-style', 'border-left-color'],
     'border-right': ['border-right-width', 'border-right-style', 'border-right-color'],
+    
+    transition: [
+        'transition-property',
+        'transition-duration',
+        'transition-timing-function',
+        'transition-delay'
+    ],
+    '-webkit-transition': [
+        '-webkit-transition-property',
+        '-webkit-transition-duration',
+        '-webkit-transition-timing-function',
+        '-webkit-transition-delay'
+    ],
+    '-moz-transition': [
+        '-moz-transition-property',
+        '-moz-transition-duration',
+        '-moz-transition-timing-function',
+        '-moz-transition-delay'
+    ],
+    '-o-transition': [
+        '-o-transition-property',
+        '-o-transition-duration',
+        '-o-transition-timing-function',
+        '-o-transition-delay'
+    ],
     border: [
         'border-width', 
         'border-style', 
@@ -17173,13 +17387,21 @@ function hasHackChars(text) {
 exports.hasHackChars = hasHackChars;
 
 function containsHack(rule) {
-    var text = rule.value;
-    if (!text) {
+    if (!rule.value) {
         text = rule;
+        var flag = text.indexOf('\\0') != -1 || text.indexOf('\\9') != -1
+        return flag;
     }
-    var flag = text.indexOf('\\0') != -1 || text.indexOf('\\9') != -1
-    return flag
+    var text = rule.value;
+    if (text.indexOf('\\0') != -1 || text.indexOf('\\9') != -1) {
+        return true;
+    }
+    if (getCss3PrefixValue(rule.strippedName) == 0 && rule.name != rule.strippedName) {
+        return true;
+    }
+    return false
 }
+
 exports.containsHack = containsHack;
 
 function getAttrOrder(attr, strippedName) {
