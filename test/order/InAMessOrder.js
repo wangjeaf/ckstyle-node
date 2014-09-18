@@ -5,7 +5,7 @@ exports.doTest = function() {
     fixer = result[0]
     msg = result[1]
 
-    equal(fixer.doCompress(), "a.feed-back-v6{display:block;position:fixed;_position:absolute;top:155px;_top:expression(documentElement.scrollTop + 'px');right:0;width:1em;_margin-top:155px;padding:10px;background:#F7F7FF;font-size:14px;font-weight:bold;z-index:1999}", 'compress feed-back-v6 is ok')
+    equal(fixer.doCompress(), "a.feed-back-v6{display:block;position:fixed;_position:absolute;top:155px;_top:expression(documentElement.scrollTop + 'px');right:0;width:1em;_margin-top:155px;padding:10px;background:#F7F7FF;font-size:14px;font-weight:700;z-index:1999}", 'compress feed-back-v6 is ok')
 
     styleSheet = fixer.getStyleSheet()
     equal(len(styleSheet.getRuleSets()), 1, 'one ruleset')

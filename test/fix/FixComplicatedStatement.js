@@ -33,7 +33,7 @@ function _handle_complicated_statement() {
     background: #111;\n\
     background-image:         linear-gradient(#3C3C3C,#111);\n\
     color: #FFF;\n\
-    font-weight: bold;\n\
+    font-weight: 700;\n\
     text-shadow: 0 -1px 1px #000;\n\
 }\n\
 \n\

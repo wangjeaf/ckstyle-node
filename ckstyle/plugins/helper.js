@@ -8,6 +8,12 @@ exports.heredoc = function(fn) {
         .replace(/[\s\xA0]+$/, "");
 };
 
+
+exports.replaceFontWeights = function(value) {
+    value = value.replace('bold', '700').replace('normal', '400')
+    return value;
+}
+
 exports.replaceColors = function(value) {
     for(var prop in colors) {
         var a = prop.length;
