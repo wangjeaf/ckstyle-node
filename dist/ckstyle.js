@@ -6243,7 +6243,7 @@ var BorderRadiusCombiner = new Class(Combiner, function() {
                 if (!(prop[1] in self.deleted)) {
                     self.deleted.push(prop[1])
                 }
-                self.collector[prop[0]] = prop[2]
+                self.collector[prop[0]] = prop[2].split(' ')[0]
             }
         })
     }
@@ -7120,11 +7120,11 @@ exports.replaceColors = function(value) {
         var lower = value.toLowerCase()
         if (a > b) {
             if (lower.indexOf(prop) != -1) {
-                value = value.replace(new RegExp(prop, 'gim'), colors[prop]);
+                value = value.replace(new RegExp(prop, 'gim'), colors[prop]).toUpperCase();
             }
         } else {
             if (lower.indexOf(colors[prop]) != -1) {
-                value = value.replace(new RegExp(colors[prop], 'gim'), prop);
+                value = value.replace(new RegExp(colors[prop], 'gim'), prop)
             }
         }
     }
