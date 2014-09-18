@@ -46,10 +46,10 @@ NestedStatement.prototype.compress = function(browser) {
 NestedStatement.prototype.fixed = function(config) {
     var self = this;
     self.fixedSelector = self.fixedSelector || self.selector
+    if (!self.fixedStatement && self.innerStyleSheet) {
+        self.fixedStatement = self.innerStyleSheet.fixed(config)
+    }
     self.fixedStatement = self.fixedStatement || self.statement
-    // if (self.innerStyleSheet) {
-    //     self.fixedStatement = self.innerStyleSheet.fixed(config)
-    // }
     return self.fixedSelector + ' {\n    ' + self.fixedStatement.split('\n').join('\n    ') + '\n}'
 }
 NestedStatement.prototype._compressedStatement = function(browser) {
