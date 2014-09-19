@@ -64,3 +64,6 @@ exports.CssParser = require('./ckstyle/parser/index').CssParser
 exports.CssChecker = require('./ckstyle/ckstyler').CssChecker
 exports.Detector = require('./ckstyle/browsers/Hacks')
 
+exports.compressStr = require('./ckstyle/doCssCompress').compressStr
+exports.fixStr = require('./ckstyle/doCssFix').fixStr
+exports.formatStr = require('./ckstyle/doCssFix').formatStr

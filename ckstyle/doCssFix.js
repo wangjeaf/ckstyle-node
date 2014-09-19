@@ -28,6 +28,10 @@ function doFix(fileContent, fileName, config) {
     return [checker, fixed]
 }
 
+function forJsFix(fileContent, config) {
+    return doFix(fileContent, '', config)[1]
+}
+
 function fixFile(filePath, config) {
     if (!filePath || !fs.existsSync(filePath)) {
         logger.error('[fix] file not exist: ' + filePath)
@@ -117,3 +121,4 @@ function fixDirRecursively(directory, config) {
 
 exports.doFix = doFix
 exports.fix = fix
+exports.fixStr = forJsFix

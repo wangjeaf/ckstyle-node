@@ -31,6 +31,10 @@ function doCompress(fileContent, fileName, config) {
     return [checker, message]
 }
 
+function forJsCompress(fileContent, config) {
+    return doCompress(fileContent, '', config)[1]
+}
+
 function compressFile(filePath, config) {
     config = config || defaultConfig
     if (!filePath || !fs.existsSync(filePath)) {
@@ -142,3 +146,4 @@ exports.prepare = prepare
 
 exports.doCompress = doCompress;
 exports.compress = compress;
+exports.compressStr = forJsCompress;

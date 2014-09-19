@@ -28,6 +28,10 @@ function doFormat(fileContent, fileName, config) {
     return [checker, formatted]
 }
 
+function forJsFormat(fileContent, config) {
+    return doFormat(fileContent, '', config)[1]
+}
+
 function formatFile(filePath, config) {
     if (!filePath || !fs.existsSync(filePath)) {
         logger.error('[format] file not exist: ' + filePath)
@@ -117,3 +121,4 @@ function formatDirRecursively(directory, config) {
 
 exports.doFormat = doFormat
 exports.format = format
+exports.formatStr = forJsFormat
