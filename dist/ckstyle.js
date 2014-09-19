@@ -4330,11 +4330,16 @@ module.exports = global.FEDCombineInToOne = new Class(RuleSetChecker, function()
         var counter = {}
         rules.forEach(function(rule) {
             var name = rule.name
-            if (rule.fixedValue.indexOf('!important') != -1)
+            if (rule.fixedValue.indexOf('!important') != -1) {
                 return
+            }
             // do not do any hack combine
             if (helper.containsHack(rule)) {
-                shouldStop = true;
+                // must not be css3 props
+                var bigger = combineHelper.canBeCombined(name)
+                if (bigger && counter[bigger]) {
+                    counter[bigger].stop = 1
+                }
                 return
             }
             // if (helper.getCss3PrefixValue(rule.strippedName) != 0)
@@ -4347,9 +4352,13 @@ module.exports = global.FEDCombineInToOne = new Class(RuleSetChecker, function()
             } else {
                 bigger = combineHelper.canBeCombined(name)
             }
+            
             var finalName = css3 ? rule.fixedName : name;
             if (bigger) {
                 if (bigger in counter) {
+                    if (counter[bigger].stop) {
+                        return
+                    }
                     if (forFix) {
                         counter[bigger].push([finalName, rule.fixedName, rule.fixedValue])
                     } else {
