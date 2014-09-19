@@ -8,7 +8,7 @@ module.exports = global.FEDShorterColors = new Class(RuleChecker, function() {
 
     this.__init__ = function(self) {
         self.id = 'use-shorter-colors'
-        self.errorLevel = ERROR_LEVEL.LOG
+        self.errorLevel = ERROR_LEVEL.WARNING
         self.errorMsg = ''
     }
 
