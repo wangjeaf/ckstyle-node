@@ -14,6 +14,7 @@ module.exports = global.FEDShorterColors = new Class(RuleChecker, function() {
 
     this.fix = function(self, rule, config) {
         rule.fixedValue = helper.replaceColors(rule.fixedValue)
+        rule.fixedValue = helper.replaceRGB(rule.fixedValue)
     }
 
     this.__doc__ = {

@@ -14088,6 +14088,7 @@ module.exports = global.FEDShorterColors = new Class(RuleChecker, function() {
 
     this.fix = function(self, rule, config) {
         rule.fixedValue = helper.replaceColors(rule.fixedValue)
+        rule.fixedValue = helper.replaceRGB(rule.fixedValue)
     }
 
     this.__doc__ = {
@@ -17579,7 +17580,29 @@ exports.replaceFontWeights = function(value) {
     return value;
 }
 
+exports.replaceRGB = function(value) {
+    if (value.indexOf('rgb') != -1) {
+        // from clean-css: https://github.com/jakubpawlowicz/clean-css/blob/master/lib/colors/rgb-to-hex.js
+        value = value.replace(/rgb\(\s*(\-?\d+)\s*,\s*(\-?\d+)\s*,\s*(\-?\d+)\)/g, function(match, red, green, blue) {
+            red = Math.max(0, Math.min(~~red, 255));
+            green = Math.max(0, Math.min(~~green, 255));
+            blue = Math.max(0, Math.min(~~blue, 255));
+
+            // Credit: Asen  http://jsbin.com/UPUmaGOc/2/edit?js,console
+            var result = ('00000' + (red << 16 | green << 8 | blue).toString(16)).slice(-6);
+            if (result[0] == result[1] && result[2] == result[3] && result[4] == result[5]) {
+                result = result[0] + result[1] + result[2]
+            }
+            return '#' + result
+        });
+    }
+    return value
+}
+
+
 exports.replaceColors = function(value) {
+    
+
     for(var prop in colors) {
         var a = prop.length;
         var b = colors[prop].length;
