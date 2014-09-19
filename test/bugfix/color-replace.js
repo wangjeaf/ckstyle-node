@@ -4,6 +4,7 @@ var Checker = require('./helper').Checker
 exports.doTest = function() {
     _a()
     _b()
+    _upper_case_eng_name()
 }
 
 function _a() {
@@ -25,4 +26,11 @@ function _b() {
     checker.prepare();
     var res = checker.doCompress()
     equal(res, '.test{border-color:silver;border-top-color:red;background:#FFF;color:#FF0;outline-color:rgb(0,0,0)}');
+}
+
+function _upper_case_eng_name() {
+    var checker = new Checker('a{color: black; font: black 60px fdUPPPER fdafdF Black , white ,sarif;}')
+    checker.prepare();
+    var res = checker.doCompress()
+    equal(res, 'a{color:#000;font:#000 60px fdUPPPER fdafdF Black,#FFF,sarif}');
 }

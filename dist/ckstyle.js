@@ -7180,7 +7180,7 @@ exports.replaceColors = function(value) {
         var lower = value.toLowerCase()
         if (a > b) {
             if (lower.indexOf(prop) != -1) {
-                value = value.replace(new RegExp(prop, 'gim'), colors[prop]).toUpperCase();
+                value = value.replace(new RegExp(prop, 'gim'), colors[prop].toUpperCase());
             }
         } else {
             if (lower.indexOf(colors[prop]) != -1) {

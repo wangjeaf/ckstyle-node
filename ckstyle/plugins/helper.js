@@ -27,8 +27,10 @@ exports.replaceColors = function(value) {
         }
         var lower = value.toLowerCase()
         if (a > b) {
-            if (lower.indexOf(prop) != -1) {
-                value = value.replace(new RegExp(prop, 'gim'), colors[prop]).toUpperCase();
+            var start = lower.indexOf(prop);
+            if (start != -1) {
+                // do not replace upper case color names.
+                value = value.replace(new RegExp(prop, 'g'), colors[prop].toUpperCase());
             }
         } else {
             if (lower.indexOf(colors[prop]) != -1) {

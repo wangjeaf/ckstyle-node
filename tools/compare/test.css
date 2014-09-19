@@ -1,0 +1,99 @@
+
+/*!
+ * test.css
+ */
+ .aa {
+  width: calc(20px+5%);
+ }
+
+.foo{
+  _margin-left: 300px;
+  *margin-right: 10.6%;
+  margin-top: auto \9;
+  margin-bottom: .3em;
+
+  transform: translate3d(0px,0px,0px);
+  transform: translateX(0px);
+  transform: translateY(0px);
+  transform: translateZ(0px);
+  transform: rotate3d(0deg,0deg,0deg);
+  transform: scale3d(0,0,0);
+  transform: rotate(0deg);
+  transform: translateX(0px) rotate(0deg);
+  transition: 0s;
+  animation: 0s;
+}
+
+/*!*/
+.foo2 {
+  padding-top: 50%;
+  padding-right: .90em;
+  padding-bottom: 10px;
+  padding-left: .90em;
+}
+/*!*/
+.foo3 {
+  color: #333;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #333;
+  border-top-width: 2px;
+  border-top-style: solid;
+  border-top-color: blue;
+}
+/*!*/
+.foo4 {
+  border-top-left-radius: 10px 3em;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 20px;
+
+  /* border: 10px 20px 10px 20px / 3em 20px 10px 20px; */
+}
+
+/*   transiton: padding .36s ease -1s; */
+.transition {
+  transition-property: padding;
+  transition-duration: .36s;
+  transition-timing-function: ease;
+  transition-delay: -1s;
+}
+
+.foo5 {
+  outline-style: solid;
+  outline-width: 10px;
+  outline-color: lightblue;
+
+
+  line-height: 1.6;
+  font-style: italic;
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: arial, "Lucida Grande", sans-serif;
+
+  list-style-type: square;
+  list-style-position: inside;
+  list-style-image: url(../image.gif);
+
+  color: #113366;
+}
+
+.demo {
+  animation-name: foo;
+  animation-duration: 200ms;
+  animation-timing-function: ease;
+  animation-delay: .8s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: both;
+  animation-play-state: paused;
+}
+
+@keyframes blink {
+  /* 重复的 keyframes 应当被压缩 */
+  0%   { background-color: #fff; }
+  50%  { background-color: #000; }
+  100% { background-color: #fff; }
+}
+

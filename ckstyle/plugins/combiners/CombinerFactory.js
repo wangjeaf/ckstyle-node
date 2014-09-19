@@ -18,6 +18,10 @@ var combiners = {
     '-webkit-transition': require('./TransitionCombiner'),
     '-moz-transition': require('./TransitionCombiner'),
     '-o-transition': require('./TransitionCombiner'),
+    'animation': require('./AnimationCombiner'),
+    '-webkit-animation': require('./AnimationCombiner'),
+    '-moz-animation': require('./AnimationCombiner'),
+    '-o-animation': require('./AnimationCombiner'),
     'list-style': require('./ListStyleCombiner')
 }
 

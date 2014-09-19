@@ -49,6 +49,38 @@ var canBeCombinedProps = {
         '-o-transition-timing-function',
         '-o-transition-delay'
     ],
+    animation: [
+        'animation-property',
+        'animation-duration',
+        'animation-timing-function',
+        'animation-delay',
+        'animation-iteration-count',
+        'animation-direction'
+    ],
+    '-webkit-animation': [
+        '-webkit-animation-property',
+        '-webkit-animation-duration',
+        '-webkit-animation-timing-function',
+        '-webkit-animation-delay',
+        '-webkit-animation-iteration-count',
+        '-webkit-animation-direction'
+    ],
+    '-moz-animation': [
+        '-moz-animation-property',
+        '-moz-animation-duration',
+        '-moz-animation-timing-function',
+        '-moz-animation-delay',
+        '-moz-animation-iteration-count',
+        '-moz-animation-direction'
+    ],
+    '-o-animation': [
+        '-o-animation-property',
+        '-o-animation-duration',
+        '-o-animation-timing-function',
+        '-o-animation-delay',
+        '-o-animation-iteration-count',
+        '-o-animation-direction'
+    ],
     border: [
         'border-width', 
         'border-style', 
