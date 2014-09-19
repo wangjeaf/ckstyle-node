@@ -81,6 +81,15 @@ var canBeCombinedProps = {
         '-o-animation-iteration-count',
         '-o-animation-direction'
     ],
+    background: [
+        "background-color",
+        "background-image",
+        "background-repeat",
+        "background-attachment",
+        "background-position",
+        "background-position-x",
+        "background-position-y"
+    ],
     border: [
         'border-width', 
         'border-style', 

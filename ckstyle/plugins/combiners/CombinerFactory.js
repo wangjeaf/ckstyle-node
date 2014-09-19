@@ -13,6 +13,7 @@ var combiners = {
     'border-bottom': require('./BorderCombiner'),
     'border-right': require('./BorderCombiner'),
     font: require('./FontCombiner'),
+    background: require('./BackgroundCombiner'),
     'border-radius': require('./BorderRadiusCombiner'),
     'transition': require('./TransitionCombiner'),
     '-webkit-transition': require('./TransitionCombiner'),

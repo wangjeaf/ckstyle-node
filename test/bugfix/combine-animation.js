@@ -5,18 +5,16 @@ exports.doTest = function() {
 }
 
 function _a() {
-    var checker = new Checker('.demo {\
-        animation-delay: .8s;\
-        animation-direction: alternate;\
-        animation-duration: 200ms;\
-        animation-fill-mode: both;\
-        animation-iteration-count: infinite;\
-        animation-name: foo;\
-        animation-play-state: paused;\
-        animation-timing-function: ease;\
+    var checker = new Checker('.bg {\
+        background-color: #fff;\
+        background-image: url(a.png);\
+        background-repeat: repeat-x;\
+        background-attachment: scroll;\
+        background-position-x: left;\
+        background-position-y: top;\
     }')
 
     checker.prepare();
     var res = checker.doCompress()
-    equal(res, '.demo{animation:foo 200ms ease .8s infinite alternate paused both}');
+    equal(res, '.bg{background:#FFF url(a.png) repeat-x left top}');
 }
