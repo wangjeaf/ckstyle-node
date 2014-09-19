@@ -20,7 +20,7 @@ function _a() {
 
     checker.prepare();
     var res = checker.doCompress()
-    equal(res, ".foo5{font:italic small-caps 700 12px/1.6 arial,Lucida Grande,sans-serif}");
+    equal(res, ".foo5{font:italic small-caps 700 12px/1.6 arial,'Lucida Grande',sans-serif}");
 }
 
 function _b() {
@@ -37,7 +37,7 @@ function _b() {
 
     checker.prepare();
     var res = checker.doCompress()
-    equal(res, ".foo5{font:normal small-caps 700 12px/1.6 arial,Lucida Grande,sans-serif}");
+    equal(res, ".foo5{font:normal small-caps 700 12px/1.6 arial,'Lucida Grande',sans-serif}");
 }
 
 function _c() {
@@ -49,5 +49,5 @@ function _c() {
 
     checker.prepare();
     var res = checker.doCompress()
-    equal(res, ".test2{font-family:tahoma,arial,Microsoft Yahei}");
+    equal(res, ".test2{font-family:tahoma,arial,'Microsoft Yahei'}");
 }

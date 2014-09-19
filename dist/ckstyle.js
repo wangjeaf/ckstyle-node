@@ -2858,7 +2858,9 @@ module.exports = global.FEDCanNotSetFontFamily = new Class(RuleChecker, function
     // if font-family set, then make it clean.
     this.fix = function(self, rule, config) {
         if (rule.name == 'font-family' || rule.name == 'font') {
-            rule.fixedValue = rule.fixedValue.replace(/['"]/g, '');
+            rule.fixedValue = rule.fixedValue.replace(/['"](\w+)['"]/g, function(match, res) {
+                return res;
+            })
         }
     }
 

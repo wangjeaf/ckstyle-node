@@ -19,3 +19,6 @@ console.log('CKStyle : ' + cked.length)
 
 var cleaned = new CleanCSS().minify('a{color: black; font: white,black,white,black, Microsoft Yahei black, white ,sarif;}')
 console.log('CleanCSS: ' + cleaned);
+
+var a = '.a {font-family: "tahoma", "arial", "Microsoft Yahei"}'
+console.log(new CleanCSS().minify(a))
