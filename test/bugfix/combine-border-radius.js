@@ -3,6 +3,7 @@ var Checker = require('./helper').Checker
 exports.doTest = function() {
     _border_radius()
     _b()
+    _c()
 }
 
 function _border_radius() {
@@ -33,5 +34,19 @@ function _b() {
 
     checker.prepare();
     var res = checker.doCompress()
-    equal(res, '.foo4{border-radius:10px 20px}')
+    equal(res, '.foo4{border-radius:10px 20px/3em 20px 10px}')
 }
+
+function _c() {
+    var checker = new Checker('.foo4 {\
+        border-top-left-radius: 2em 0.5em;\
+        border-top-right-radius: 1em 3em;\
+        border-bottom-right-radius: 4em 0.5em;\
+        border-bottom-left-radius: 1em 3em;\
+    ')
+
+    checker.prepare();
+    var res = checker.doCompress()
+    equal(res, '.foo4{border-radius:2em 1em 4em/.5em 3em}')
+}
+
