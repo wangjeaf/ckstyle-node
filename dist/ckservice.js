@@ -15038,7 +15038,7 @@ var RuleSetChecker = base.RuleSetChecker;
 
 var helper = require('./helper');
 
-module.exports = global.FEDDoNotSetStyleForTagOnly = new Class(RuleSetChecker, function () {
+module.exports = global.FEDNoAppearanceNameInSelector = new Class(RuleSetChecker, function () {
 
     this.__init__ = function (self) {
         self.id = 'no-appearance-word-in-selector'
@@ -15660,6 +15660,7 @@ var ALL = BinaryRule.ALL
 var STD = BinaryRule.STD
 
 var doRuleSetDetect = require('../browsers/Hacks').doRuleSetDetect
+
 module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, function() {
     
     this.__init__ = function(self) {

@@ -5,7 +5,7 @@ var RuleSetChecker = base.RuleSetChecker;
 
 var helper = require('./helper');
 
-module.exports = global.FEDDoNotSetStyleForTagOnly = new Class(RuleSetChecker, function () {
+module.exports = global.FEDNoAppearanceNameInSelector = new Class(RuleSetChecker, function () {
 
     this.__init__ = function (self) {
         self.id = 'no-appearance-word-in-selector'

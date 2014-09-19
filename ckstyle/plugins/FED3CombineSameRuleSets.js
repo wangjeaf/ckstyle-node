@@ -9,6 +9,7 @@ var ALL = BinaryRule.ALL
 var STD = BinaryRule.STD
 
 var doRuleSetDetect = require('../browsers/Hacks').doRuleSetDetect
+
 module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, function() {
     
     this.__init__ = function(self) {
