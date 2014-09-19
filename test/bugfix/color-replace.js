@@ -6,6 +6,7 @@ exports.doTest = function() {
     _b()
     _upper_case_eng_name()
     _rgb_replace()
+    _rgb_replace2()
 }
 
 function _a() {
@@ -42,3 +43,12 @@ function _rgb_replace() {
     var res = checker.doCompress()
     equal(res, '.test1,.test2{color:#000}');
 }
+
+
+function _rgb_replace2() {
+  var checker = new Checker('.test1{color:rgb(255,255,255)} .test2{color:#fff}')
+    checker.prepare();
+    var res = checker.doCompress()
+    equal(res, '.test1,.test2{color:#FFF}');
+}
+

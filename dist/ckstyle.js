@@ -7390,7 +7390,7 @@ exports.replaceRGB = function(value) {
             if (result[0] == result[1] && result[2] == result[3] && result[4] == result[5]) {
                 result = result[0] + result[1] + result[2]
             }
-            return '#' + result
+            return '#' + result.toUpperCase()
         });
     }
     return value
