@@ -14121,7 +14121,7 @@ module.exports = global.FEDShorterFontWeight = new Class(RuleChecker, function()
     }
 
     this.__doc__ = {
-        "summary": "用更短的取值，替换等价的font-weight值",
+        "summary": "用更短的font-weight值",
         "desc": "有些颜色值是可以等价替换的，比如<code>normal: 400</code> <code>bold: 700</code>，后者更短",
         "w3c": 'http://www.w3.org/TR/CSS21/fonts.html#font-boldness'
     }
@@ -14163,7 +14163,7 @@ module.exports = global.FEDShouldAddSpaceForCalc = new Class(RuleChecker, functi
     }
 
     this.__doc__ = {
-        "summary":"为calc的计算式中的+/-前后添加空格",
+        "summary":"为calc中的+/-前后加空格",
         "desc":"在某些浏览器中，不加空格将导致计算错误"
     }
 })

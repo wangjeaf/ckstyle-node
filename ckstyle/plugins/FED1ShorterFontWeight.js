@@ -19,7 +19,7 @@ module.exports = global.FEDShorterFontWeight = new Class(RuleChecker, function()
     }
 
     this.__doc__ = {
-        "summary": "用更短的取值，替换等价的font-weight值",
+        "summary": "用更短的font-weight值",
         "desc": "有些颜色值是可以等价替换的，比如<code>normal: 400</code> <code>bold: 700</code>，后者更短",
         "w3c": 'http://www.w3.org/TR/CSS21/fonts.html#font-boldness'
     }

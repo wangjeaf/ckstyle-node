@@ -30,7 +30,7 @@ module.exports = global.FEDShouldAddSpaceForCalc = new Class(RuleChecker, functi
     }
 
     this.__doc__ = {
-        "summary":"为calc的计算式中的+/-前后添加空格",
+        "summary":"为calc中的+/-前后加空格",
         "desc":"在某些浏览器中，不加空格将导致计算错误"
     }
 })
