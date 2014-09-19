@@ -1,7 +1,7 @@
 var Checker = require('./helper').Checker
 
 exports.doTest = function() {
-    _a()
+    // _a()
 }
 
 function _a() {
