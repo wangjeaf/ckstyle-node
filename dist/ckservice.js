@@ -15840,7 +15840,7 @@ var STD = BinaryRule.STD
 
 var doRuleSetDetect = require('../browsers/Hacks').doRuleSetDetect
 
-module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, function() {
+module.exports = global.FEDCombineSameSelector = new Class(StyleSheetChecker, function() {
     
     this.__init__ = function(self) {
         self.id = 'combine-same-selector'
