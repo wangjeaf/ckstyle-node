@@ -10830,6 +10830,15 @@ var findInArray = base.findInArray
 var args = require('./command/args');
 var defaultConfig = new args.CommandArgs()
 
+function extend(target, src) {
+    for(var prop in src) {
+        if (prop in target) {
+            continue
+        }
+        target[prop] = src[prop]
+    }
+}
+
 var CssChecker = new Class(function() {
     this.__init__ = function(self, parser, config) {
         if (typeof parser == 'string') {
@@ -10837,6 +10846,10 @@ var CssChecker = new Class(function() {
         }
         self.parser = parser
         self.config = config || defaultConfig
+
+        if (self.config != defaultConfig) {
+            extend(self.config, defaultConfig)
+        }
 
         // 错误记录，log是2级，warn是1级，error是0级
         self.logMsgs = []
