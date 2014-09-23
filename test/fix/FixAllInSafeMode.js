@@ -14,12 +14,7 @@ function _singleLine() {
     var msg = result[1]
     defaultConfig.safe = false
     equal(msg, 
-".test {\n\
-    width: '100px';\n\
-    margin: 0 auto;\n\
-    color: #DDD;\n\
-}\n\
-\n\
+".test,\n\
 .test2 {\n\
     width: '100px';\n\
     margin: 0 auto;\n\

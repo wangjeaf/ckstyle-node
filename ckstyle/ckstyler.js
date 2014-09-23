@@ -12,6 +12,8 @@ var findInArray = base.findInArray
 var args = require('./command/args');
 var defaultConfig = new args.CommandArgs()
 
+var timer = require('./utils/timer')
+
 function extend(target, src) {
     for(var prop in src) {
         if (prop in target) {
@@ -54,7 +56,23 @@ var CssChecker = new Class(function() {
 
     this.prepare = function(self, pluginDir, config) {
         this.loadPlugins(pluginDir);
+        this.sortPlugins()
         this.doParse(config);
+    }
+
+    this.sortPlugins = function(self) {
+        self.ruleSetCheckers.sort(function(a, b) {
+            return (a.order || 10000) - (b.order || 10000)
+        })
+        self.ruleCheckers.sort(function(a, b) {
+            return (a.order || 10000) - (b.order || 10000)
+        })
+        self.styleSheetCheckers.sort(function(a, b) {
+            return (a.order || 10000) - (b.order || 10000)
+        })
+        self.extraCheckers.sort(function(a, b) {
+            return (a.order || 10000) - (b.order || 10000)
+        })
     }
 
     this.resetStyleSheet = function(self) {
@@ -280,12 +298,14 @@ var CssChecker = new Class(function() {
         self.config.operation = operation || 'fix'
         browser = browser || ALL;
         self.resetStyleSheet()
+
         // 忽略的规则集（目前只忽略单元测试的selector）
         var ignoreRulesets = self.config.ignoreRulesets
 
         // fix规则集
         function fixRuleSet(ruleSet) {
             self.ruleSetCheckers.forEach(function(checker) {
+                timer.start(checker.id)
                 if (!checker.fix) {
                     return;
                 }
@@ -294,6 +314,7 @@ var CssChecker = new Class(function() {
                     ruleSet.fixedComment = ruleSet.comment
                 }
                 checker.fix(ruleSet, self.config)
+                timer.end(checker.id)
             });
         }
 
@@ -304,6 +325,7 @@ var CssChecker = new Class(function() {
                     if (!checker.fix) {
                         return;
                     }
+                    timer.start(checker.id)
 
                     // 确保fixedName/fixedValue一定有值
                     // fix中一定要针对fixedName/fixedValue来判断，确保其他plugin的fix不会被覆盖
@@ -313,6 +335,7 @@ var CssChecker = new Class(function() {
                     }
                     // print checker.id, checker, rule.fixedValue
                     checker.fix(rule, self.config)
+                    timer.end(checker.id)
                 });
             });
         }
@@ -322,11 +345,13 @@ var CssChecker = new Class(function() {
                 if (!checker.fix) {
                     return;
                 }
+                timer.start(checker.id)
                 if (ruleSet.fixedSelector == '') {
                     ruleSet.fixedSelector = ruleSet.selector
                     ruleSet.fixedStatement = ruleSet.statement
                 }
                 checker.fix(ruleSet, self.config)
+                timer.end(checker.id)
             });
         }
 
@@ -351,10 +376,16 @@ var CssChecker = new Class(function() {
         // 最后fix styleSheet
         self.styleSheetCheckers.forEach(function(checker) {
             if (checker.fix) {
+                timer.start(checker.id)
                 checker.fix(styleSheet, self.config)
+                timer.end(checker.id)
             }
         });
-        return self.getStyleSheet().fixed(self.config)
+        timer.start('exports')
+        var res = self.getStyleSheet().fixed(self.config)
+        timer.end('exports')
+        timer.report()
+        return res
     }
 
     this.doCheck = function(self) {

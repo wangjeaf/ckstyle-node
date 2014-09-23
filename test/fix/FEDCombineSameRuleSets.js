@@ -15,10 +15,6 @@ function _combine_should_not_make_mistake() {
     expected = '.a,\n\
 .b {\n\
     width: 0;\n\
-}\n\
-\n\
-.a,\n\
-.b {\n\
     width: 1px;\n\
 }'
     // safe mode is not default mode.

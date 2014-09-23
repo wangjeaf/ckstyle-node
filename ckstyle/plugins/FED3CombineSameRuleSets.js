@@ -13,17 +13,17 @@ var doRuleSetDetect = require('../browsers/Hacks').doRuleSetDetect
 module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, function() {
     
     this.__init__ = function(self) {
-        this.notSafe = true
         self.id = 'combine-same-rulesets'
         self.errorLevel = ERROR_LEVEL.WARNING
         self.errorMsg_empty = '"%s" contains the same rules in "${file}"'
         self.errorMsg = ''
+        self.order = 1
     }
 
     // can be checked correctly only after reorder/fix/compress, so do not check
     this.check = function(self, styleSheet, config) {
         var ruleSets = styleSheet.getRuleSets()
-        var mapping = self._gen_hash(ruleSets, ALL)
+        var mapping = self.rulesetMapper(ruleSets, ALL)
         var length = helper.len(mapping)
 
         var errors = {}
@@ -55,29 +55,22 @@ module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, fu
     this.fix = function(self, styleSheet, config) {
         var browser = config._inner.curBrowser ? config._inner.curBrowser : ALL
         var ruleSets = styleSheet.getRuleSets()
-        var mapping = self._gen_hash(ruleSets, browser)
+        var mapping = self.rulesetMapper(ruleSets, browser)
 
         var length = helper.len(mapping)
 
-        var splitedSelectors = []
-        for (var i = 0; i < length; i++) {
-            var splited = mapping[i][0].split(',');
-            splited.forEach(function(x) {
-                x = x.trim();
-                if (x != '') {
-                    splitedSelectors.push(x);
-                }
-            })
-        }
-
-        for (var i = 0; i < length; i++) {          
+        for (var i = 0; i < mapping.length; i++) {     
             if (mapping[i][0] == 'extra')
                 continue
-            var selectorHistory = []
 
-            for (var j = i + 1; j < length; j++) {
+            var delta = 1;
+            for (var j = i + 1; j < mapping.length; j++) {
+                // 如果是safe模式，则只看紧贴在后面的
+                if (config.safe && j != i + delta) {
+                    continue
+                }
+
                 if (mapping[i][1] != mapping[j][1]) {
-                    selectorHistory = selectorHistory.concat(splitedSelectors[j])
                     continue
                 }
 
@@ -85,38 +78,16 @@ module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, fu
                 // 1、两者必须都与当前要求的浏览器兼容，即 browserI & browser != 0 and browserJ & browser != 0
                 // 2、两者的浏览器兼容性必须完全一致，即 browserI ^ browserJ == 0
                 // 第二点主要是因为有的属性合并以后，由于兼容性不同，受不兼容的selector影响，使本应该兼容的selector失效。
-                var browserI = doRuleSetDetect(mapping[i][0])
-                var browserJ = doRuleSetDetect(mapping[j][0])
+                var browserI = mapping[i][2]
+                var browserJ = mapping[j][2]
                 // mapping.debug && console.log(mapping[i][0], mapping[j][0], browserI, browserJ)
-                if (!((browserI & browser) != 0 && (browserJ & browser) != 0 && (browserI ^ browserJ) == 0))
+                if (!((browserI & browser) != 0 && 
+                      (browserJ & browser) != 0 && 
+                      (browserI ^ browserJ) == 0))
                     continue
 
                 // bakcground-position is dangerous, position设置必须在background-image之后
                 if (mapping[j][1].indexOf('background-position') != -1) {
-                    selectorHistory = selectorHistory.concat(splitedSelectors[j])
-                    continue
-                }
-
-                var hasFlag = false
-                // ".a {width:0} .a, .b{width:1}, .b{width:0}" 不应该被合并成 ".a, .b{width:0} .a, .b{width:1}"
-                // 但是目前还有一个最严重的问题：
-                // .c {width:1}, .d{width:0}, .b{width:1}, .a{width:0}
-                // class="a c" => width 0
-                // class="b d" => width 1
-                // 一旦合并成 .b,.c{width:1} .d,.a{width:0} （不论往前合并还是往后合并，都是这个结果，囧）
-                // class="a c" => width 0
-                // class="b d" => width 0(本来为1)
-                // 这是无法解决的问题，因为我不能在没有分析DOM的情况下，确定两个selector指向同一个dom
-                // 为此，安全模式 --safe 诞生。
-                for(var k = 0; k < splitedSelectors[j].length; k++) {
-                    var x = splitedSelectors[j][k];
-                    if (selectorHistory.indexOf(x) != -1) {
-                        hasFlag = true;
-                        break;
-                    }
-                }
-                if (hasFlag) {
-                    selectorHistory = selectorHistory.concat(splitedSelectors[j])
                     continue
                 }
 
@@ -131,31 +102,26 @@ module.exports = global.FEDCombineSameRuleSets = new Class(StyleSheetChecker, fu
 
                 // remove rule set
                 styleSheet.removeRuleSetByIndex(j)
-                selectorHistory = selectorHistory.concat(splitedSelectors[j])
+
+                delta ++;
             }
         }
         // remember to clean after remove ruleset
         styleSheet.clean()
     }
 
-    this._gen_hash = function(self, ruleSets, browser) {
+    this.rulesetMapper = function(self, ruleSets, browser) {
         var mapping = []
         var counter = 0
-        //var flag = false;
         ruleSets.forEach(function(r) {
-            if (r.extra) {// or doRuleSetDetect(r.selector) != STD:
+            if (r.extra) {
                 // make it impossible to equal
                 mapping.push(['extra', "do_not_combine_" + helper.str(counter)])
                 counter = counter + 1
                 return
             }
-            //flag = r.compressRules(browser).indexOf('width:300px;-moz-transform:1s') != -1;
-            mapping.push([r.selector, r.compressRules(browser)])
+            mapping.push([r.selector, r.compressRules(browser), r.browser])
         });
-        // if (flag) {
-        //     console.log(mapping)
-        // }
-        // mapping.debug = flag;
         return mapping
     }
 

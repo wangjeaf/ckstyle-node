@@ -28,7 +28,7 @@ function _b() {
 
   checker.prepare();
   var res = checker.doCompress()
-  equal(res, '.test0{padding:0}.test1{color:red}.test2{color:red}.test3{padding:0}'); 
+  equal(res, '.test0{padding:0}.test1,.test2{color:red}.test3{padding:0}'); 
   config.safe = false
 }
 

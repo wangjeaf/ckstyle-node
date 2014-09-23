@@ -17,6 +17,7 @@ module.exports = global.FEDCombineSameSelector = new Class(StyleSheetChecker, fu
         self.errorLevel = ERROR_LEVEL.WARNING
         self.errorMsg_empty = '"%s" contains the same selector in "${file}"'
         self.errorMsg = ''
+        self.order = 2
     }
 
     this.check = function(self, styleSheet, config) {
@@ -32,6 +33,7 @@ module.exports = global.FEDCombineSameSelector = new Class(StyleSheetChecker, fu
                 return
             }
             var fixedSelector = ruleset.fixedSelector
+            fixedSelector = fixedSelector.replace(/\s*,\s*/g, '')
             mapper[fixedSelector] = mapper[fixedSelector] || []
             mapper[fixedSelector].push({
                 counter: counter++,

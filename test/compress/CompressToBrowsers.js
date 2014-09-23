@@ -59,7 +59,7 @@ function _w3school_css3() {
 
 function _kimblim_selectors() {
     checker = doCssFileCompress2('_selectors_from_kimblim.css')
-    res = 'div,div span,:link,div:active,div:visited,div.classname,div#id,*,div:hover{width:100px}div:first-line,div:first-letter,.classname.classname,div > span,div:first-child,div + span,div[attr],div[attr="name"],div[attr~="name"],div ~ span,div[attr^="name"],div[attr$="name"],div[attr|="name"],div[attr*="name"]{width:100px}div:focus,div:before,div:after{width:100px}div:root,div:nth-of-type,div:nth-last-of-type,div:first-of-type,div:last-of-type,div:only-of-type,div:only-child,div:last-child,div:nth-child,div:nth-last-child,div:empty,div:target,div:checked,div::selection,div:enabled,div:disabled,div:not(s){width:100px}'
+    res = 'div,div span,:link,div:active,div:visited,div.classname,div#id,*,div:hover{width:100px}div:first-line,div:first-letter,.classname.classname,div > span,div:first-child,div + span,div[attr],div[attr="name"],div[attr~="name"],div ~ span,div[attr^="name"],div[attr$="name"],div[attr*="name"],div[attr|="name"]{width:100px}div:focus,div:before,div:after{width:100px}div:root,div:nth-of-type,div:nth-last-of-type,div:first-of-type,div:last-of-type,div:only-of-type,div:only-child,div:last-child,div:nth-child,div:nth-last-child,div:empty,div:target,div:checked,div::selection,div:enabled,div:disabled,div:not(s){width:100px}'
     equal(res, checker.doCompress(STD | NONEIE), 'std selectors is ok')
 
     checker = doCssFileCompress2('_selectors_from_kimblim.css')
@@ -67,23 +67,23 @@ function _kimblim_selectors() {
     equal(res, checker.doCompress(STD | IE6), 'ie6 selectors is ok')
 
     checker = doCssFileCompress2('_selectors_from_kimblim.css')
-    res = 'div,div span,:link,div:active,div:visited,div.classname,div#id,*,div:hover{width:100px}div:first-line,div:first-letter,.classname.classname,div > span,div:first-child,div + span,div[attr],div[attr="name"],div[attr~="name"],div ~ span,div[attr^="name"],div[attr$="name"],div[attr|="name"],div[attr*="name"]{width:100px}'
+    res = 'div,div span,:link,div:active,div:visited,div.classname,div#id,*,div:hover{width:100px}div:first-line,div:first-letter,.classname.classname,div > span,div:first-child,div + span,div[attr],div[attr="name"],div[attr~="name"],div ~ span,div[attr^="name"],div[attr$="name"],div[attr*="name"],div[attr|="name"]{width:100px}'
     equal(res, checker.doCompress(STD | IE7), 'ie7 selectors is ok')
 
     checker = doCssFileCompress2('_selectors_from_kimblim.css')
-    res = 'div,div span,:link,div:active,div:visited,div.classname,div#id,*,div:hover{width:100px}div:first-line,div:first-letter,.classname.classname,div > span,div:first-child,div + span,div[attr],div[attr="name"],div[attr~="name"],div ~ span,div[attr^="name"],div[attr$="name"],div[attr|="name"],div[attr*="name"]{width:100px}div:focus,div:before,div:after{width:100px}'
+    res = 'div,div span,:link,div:active,div:visited,div.classname,div#id,*,div:hover{width:100px}div:first-line,div:first-letter,.classname.classname,div > span,div:first-child,div + span,div[attr],div[attr="name"],div[attr~="name"],div ~ span,div[attr^="name"],div[attr$="name"],div[attr*="name"],div[attr|="name"]{width:100px}div:focus,div:before,div:after{width:100px}'
     equal(res, checker.doCompress(STD | IE8), 'ie8 selectors is ok')
 
     checker = doCssFileCompress2('_selectors_from_kimblim.css')
-    res = 'div,div span,:link,div:active,div:visited,div.classname,div#id,*,div:hover{width:100px}div:first-line,div:first-letter,.classname.classname,div > span,div:first-child,div + span,div[attr],div[attr="name"],div[attr~="name"],div ~ span,div[attr^="name"],div[attr$="name"],div[attr|="name"],div[attr*="name"]{width:100px}div:focus,div:before,div:after{width:100px}div:root,div:nth-of-type,div:nth-last-of-type,div:first-of-type,div:last-of-type,div:only-of-type,div:only-child,div:last-child,div:nth-child,div:nth-last-child,div:empty,div:target,div:checked,div::selection,div:enabled,div:disabled,div:not(s){width:100px}'
+    res = 'div,div span,:link,div:active,div:visited,div.classname,div#id,*,div:hover{width:100px}div:first-line,div:first-letter,.classname.classname,div > span,div:first-child,div + span,div[attr],div[attr="name"],div[attr~="name"],div ~ span,div[attr^="name"],div[attr$="name"],div[attr*="name"],div[attr|="name"]{width:100px}div:focus,div:before,div:after{width:100px}div:root,div:nth-of-type,div:nth-last-of-type,div:first-of-type,div:last-of-type,div:only-of-type,div:only-child,div:last-child,div:nth-child,div:nth-last-child,div:empty,div:target,div:checked,div::selection,div:enabled,div:disabled,div:not(s){width:100px}'
     equal(res, checker.doCompress(STD | IE9PLUS), 'ie9 selectors is ok')
 
     checker = doCssFileCompress2('_selectors_from_kimblim.css')
-    res = 'div,div span,:link,div:active,div:visited,div.classname,div#id,*,div:hover{width:100px}div:first-line,div:first-letter,.classname.classname,div > span,div:first-child,div + span,div[attr],div[attr="name"],div[attr~="name"],div ~ span,div[attr^="name"],div[attr$="name"],div[attr|="name"],div[attr*="name"]{width:100px}div:focus,div:before,div:after{width:100px}div:root,div:nth-of-type,div:nth-last-of-type,div:first-of-type,div:last-of-type,div:only-of-type,div:only-child,div:last-child,div:nth-child,div:nth-last-child,div:empty,div:target,div:checked,div::selection,div:enabled,div:disabled,div:not(s){width:100px}'
+    res = 'div,div span,:link,div:active,div:visited,div.classname,div#id,*,div:hover{width:100px}div:first-line,div:first-letter,.classname.classname,div > span,div:first-child,div + span,div[attr],div[attr="name"],div[attr~="name"],div ~ span,div[attr^="name"],div[attr$="name"],div[attr*="name"],div[attr|="name"]{width:100px}div:focus,div:before,div:after{width:100px}div:root,div:nth-of-type,div:nth-last-of-type,div:first-of-type,div:last-of-type,div:only-of-type,div:only-child,div:last-child,div:nth-child,div:nth-last-child,div:empty,div:target,div:checked,div::selection,div:enabled,div:disabled,div:not(s){width:100px}'
     equal(res, checker.doCompress(STD | OPERA), 'OPERA selectors is ok')
 
     checker = doCssFileCompress2('_selectors_from_kimblim.css')
-    res = 'div,div span,:link,div:active,div:visited,div.classname,div#id,*,div:hover{width:100px}div:first-line,div:first-letter,.classname.classname,div > span,div:first-child,div + span,div[attr],div[attr="name"],div[attr~="name"],div ~ span,div[attr^="name"],div[attr$="name"],div[attr|="name"],div[attr*="name"]{width:100px}div:focus,div:before,div:after{width:100px}div:root,div:nth-of-type,div:nth-last-of-type,div:first-of-type,div:last-of-type,div:only-of-type,div:only-child,div:last-child,div:nth-child,div:nth-last-child,div:empty,div:target,div:checked,div::selection,div:enabled,div:disabled,div:not(s){width:100px}'
+    res = 'div,div span,:link,div:active,div:visited,div.classname,div#id,*,div:hover{width:100px}div:first-line,div:first-letter,.classname.classname,div > span,div:first-child,div + span,div[attr],div[attr="name"],div[attr~="name"],div ~ span,div[attr^="name"],div[attr$="name"],div[attr*="name"],div[attr|="name"]{width:100px}div:focus,div:before,div:after{width:100px}div:root,div:nth-of-type,div:nth-last-of-type,div:first-of-type,div:last-of-type,div:only-of-type,div:only-child,div:last-child,div:nth-child,div:nth-last-child,div:empty,div:target,div:checked,div::selection,div:enabled,div:disabled,div:not(s){width:100px}'
     equal(res, checker.doCompress(STD | WEBKIT), 'WEBKIT selectors is ok')
 }
 
