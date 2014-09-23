@@ -34,6 +34,7 @@ module.exports = function(grunt) {
           'ckstyle/entity/**/*.js',
           'ckstyle/parser/**/*.js',
           'ckstyle/logger/**/*.js',
+          'ckstyle/utils/**/*.js',
           'ckstyle/browsers/**/*.js', 
           'ckstyle/plugins/**/*.js',
           'ckstyle/reporter/**/*.js',

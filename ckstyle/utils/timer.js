@@ -1,5 +1,7 @@
 var times = {}
 
+var logger = require('../logger/index')
+
 exports.start = function(id) {
     times[id] = times[id] || {}
     times[id].total = times[id].total || 0
@@ -17,7 +19,7 @@ exports.end = function(id) {
 exports.report = function() {
     for(var prop in times) {
         var total = times[prop].total;
-        total > 100 && console.log('[TIMER] ' + prop + ', ' + total)
+        total > 100 && logger.log('[timer] ' + prop + ', ' + total)
         delete times[prop]
     }
 }
