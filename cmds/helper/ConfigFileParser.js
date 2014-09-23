@@ -6,7 +6,7 @@ var colors = require('colors')
 var logger = require('../../ckstyle/logger/index')
 var CommandArgs = require('../../ckstyle/command/args').CommandArgs
 
-var FILE_NAMES = 'ckstyle.json ckstyle-config.js ckstyle.ini .ckstyle.json .ckstyle-config.js .ckstyle.ini'.split(' ')
+var FILE_NAMES = 'ckstyle.json ckstyle-config.js ckstyle.ini'.split(' ')
 
 var EXTS = '.json .js .ini'.split(' ')
 
