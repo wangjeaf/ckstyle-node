@@ -13,7 +13,9 @@ function compare(file, desc) {
     console.log((desc || file) + ' - YUI     : ' + yuied.length + ' in ' + time + 'ms')
 
     var start = + new Date
-    var cleaned = new CleanCSS().minify(content)
+    var cleaned = new CleanCSS({
+        compatibility: 'ie7'
+    }).minify(content)
     var time = + new Date - start
     console.log((desc || file) + ' - CleanCSS: ' + cleaned.length + ' in ' + time + 'ms');
 
@@ -29,8 +31,9 @@ function compare(file, desc) {
 // var a = '.a {font-family: "tahoma", "arial", "Microsoft Yahei"}'
 // console.log(new CleanCSS().minify(a))
 
-compare('test.css')
-compare('normalize.css')
-compare('bootstrap.css')
-compare('animate.css')
-compare('foundation.css')
+// compare('test.css')
+// compare('normalize.css')
+// compare('bootstrap.css')
+// compare('animate.css')
+// compare('foundation.css')
+compare('a.css')

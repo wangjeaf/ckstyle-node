@@ -4,11 +4,6 @@
 <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4567/public/css/a.css">
 <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4567/public/css/b.css">
 <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4567/public/css/c.css">
-<link rel="stylesheet" type="text/css" href="http://tb1.bdstatic.com/tb/cms/common/tbskin/skins/skin_0.css?v=20130803">
-<link rel="stylesheet" type="text/css" href="http://img.t.sinajs.cn/t5/style/css/module/base/home_frame.css?version=1a386bde78f5d832">
-<link rel="stylesheet" type="text/css" href="http://img.t.sinajs.cn/t5/style/css/module/combination/home_A.css?version=1a386bde78f5d832">
-<link rel="stylesheet" type="text/css" href="http://img.t.sinajs.cn/t4/appstyle/V5_webim/css/pages/wbim.css?version=e5a5d6d90da7c20f">
-<link rel="stylesheet" type="text/css" href="http://img.t.sinajs.cn/t5/style/css/module/combination/home_extra.css?version=1a386bde78f5d832">
 </head>
 
 <body>
@@ -18,6 +13,7 @@
 <script type="text/javascript" src="../ckservice/libs/difflib/difflib.js"></script>
 <script type="text/javascript" src="../ckservice/libs/difflib/diffview.js"></script>
 <script type="text/javascript" src="../dist/ckstyle.js"></script>
+<script type="text/javascript" src="../dist/cleancss.js"></script>
 
 <!-- 
 点击开始检查
@@ -25,5 +21,45 @@
 -->
 <script type="text/javascript" src="../ckservice/main.js"></script>
 
+<pre id="code">
+/**
+ * CKStyle online editor demo 
+ * @author wangjeaf
+ */
+.test1 {
+    *display: none;
+    border: 1px solid #FFFFFF;
+    _display: inline-block;
+    margin: 10px;
+    margin-top: 20px;
+}
+
+.test2 {
+    *display: none;
+    border: 1px solid #FFF;
+    _display: inline-block;
+    margin: 20px 10px 10px;
+}
+
+</pre>
+<script type="text/javascript">
+    window.process = {
+    cwd: function() {}
+}
+
+define('fs', {})
+define('path', {})
+define('http', {})
+define('https', {})
+define('url', {})
+
+
+    define('clean-css/go', function(require, exports) {
+        var A = require('./lib/clean')
+        var code = new A().minify(document.getElementById('code').innerHTML)
+        console.log(code);
+    });
+    seajs.use('clean-css/go', function() {})
+</script>
 </body>
 </html>

@@ -26,8 +26,31 @@ module.exports = function(grunt) {
     },
     copy: {
       ckservice: {
-        src: ['dist/ckservice.min.js', 'dist/ckservice.js', 'dist/ckstyle.min.js', 'dist/ckstyle.js'],
+        src: [
+          'dist/ckservice.min.js', 
+          'dist/ckservice.js', 
+          'dist/ckstyle.min.js', 
+          'dist/ckstyle.js',
+          'dist/cleancss.js',
+          'dist/cleancss.min.js'
+        ],
         dest:'../ckstyle.github.io/js/'
+      },
+      cleancss: {
+        src: [
+          'node_modules/clean-css/lib/**/*.js'
+        ],
+        flatten: true,
+        dest: 'dist/cleancss/',
+        options: {
+          processContent: function(src, filepath) {
+            var code = '';
+            var code = code + banner.replace('${path}', filepath.replace(/\.js$/, '').replace('node_modules/', ''));
+
+            code = code + src.trim() + '\n' + footer;
+            return code;
+          }
+        }
       },
       ckstyle: {
         src: [
@@ -74,6 +97,10 @@ module.exports = function(grunt) {
         src: ['dist/ckstyle/**/*.js', 'compatible/*.js'],
         dest: 'dist/<%= pkg.name %>.js'  
       },
+      cleancss: {
+        src: ['dist/cleancss/**/*.js'],
+        dest: 'dist/cleancss.js'
+      },
       ckservice: {
         src: [
           'ckservice/libs/jquery.js', 
@@ -88,8 +115,10 @@ module.exports = function(grunt) {
       }
     },
     clean: {
-      all: ["dist/ckstyle", "dist/ckstyle.js", "dist/ckstyle.min.js"],
-      dir: ["dist/ckstyle"]
+      all: ["dist/ckstyle", "dist/ckstyle.js", "dist/ckstyle.min.js", 
+            "dist/cleancss", 'dist/cleancss.js', 'dist/cleancss.min.js'],
+      dir: ["dist/ckstyle", 'dist/cleancss'],
+      cleancss: ["dist/cleancss", 'dist/cleancss.js', 'dist/cleancss.min.js']
     },
     uglify: {
       ckstyle: {
@@ -98,6 +127,11 @@ module.exports = function(grunt) {
         },
         files: {
           'dist/<%= pkg.name %>.min.js': ['<%= concat.ckstyle.dest %>']  
+        }
+      },
+      cleancss: {
+        files: {
+          'dist/cleancss.min.js': 'dist/cleancss.js'
         }
       },
       ckservice: {
@@ -126,4 +160,5 @@ module.exports = function(grunt) {
   ]);
   grunt.registerTask('dev', ['watch']);
   grunt.registerTask('dist', ['copy:ckservice'])
+  grunt.registerTask('cleancss', ['clean:cleancss', 'copy:cleancss', 'concat:cleancss', 'uglify:cleancss', 'clean:dir'])
 };

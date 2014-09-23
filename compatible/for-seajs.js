@@ -3,9 +3,9 @@
 ;;(function(global) {
     this.global = global;
 
-    define('fs', function(require, exports) {})
-    define('path', function(require, exports) {})
-    define('colors', function(require, exports) {})
+    define('fs', {})
+    define('path', {})
+    define('colors', {})
 
     if (!String.prototype.trim) {
         String.prototype.trim = function () {

@@ -25,6 +25,7 @@ var MarginCombiner = new Class(Combiner, function() {
     }
 
     this._seperate = function(self, value) {
+        value = helper.calc(value)
         var splited = value.split(' ')
         var top = right = bottom = left = ''
         var length = helper.len(splited)
@@ -95,6 +96,7 @@ var MarginCombiner = new Class(Combiner, function() {
     this.combine = function(self) {
         self.collect()
         self.join()
+        self.combined = helper.uncalc(self.combined)
         return [self.combined, self.deleted, self.hasFather]
     }
 })

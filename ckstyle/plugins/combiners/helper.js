@@ -2,6 +2,26 @@ function containsHack(name, strippedName, value) {
     return value.indexOf('\\9') != -1
 }
 
+exports.calc = function(str) {
+    if (!str) {
+        return str;
+    }
+    if (str.indexOf('calc') != -1) {
+        return str.replace(/\s*([+-])\s*/g, '$1')
+    }
+    return str;
+}
+
+exports.uncalc = function(str) {
+    if (!str) {
+        return str;
+    }
+    if (str.indexOf('calc') != -1) {
+        return str.replace(/\s*([+-])\s*/g, ' $1 ')
+    }
+    return str;
+}
+
 var canBeCombinedProps = {
     'border-radius': [
         'border-top-left-radius',

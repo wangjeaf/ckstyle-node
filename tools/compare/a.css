@@ -1,0 +1,18 @@
+/**
+ * CKStyle online editor demo 
+ * @author wangjeaf
+ */
+.test1 {
+    *display: none;
+    border: 1px solid #FFFFFF;
+    _display: inline-block;
+    margin: 10px;
+    margin-top: 20px;
+}
+
+.test2 {
+    *display: none;
+    border: 1px solid #FFF;
+    _display: inline-block;
+    margin: 20px 10px 10px;
+}
