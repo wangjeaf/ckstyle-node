@@ -25,19 +25,21 @@ module.exports = global.FEDFixNestedStatement = new Class(ExtraChecker, function
         
         var modulePath = '../doCssFix';
         var compressModulePath = '../doCssCompress'
-        
-        var statement = ruleSet.fixedStatement
 
-        var doFix = require(modulePath).doFix
-        var msg = doFix(statement, '', config)[1]
-        ruleSet.fixedStatement = msg
+        var statement = ruleSet.fixedStatement
+        
+        if (config.operation == 'fix') {
+            var doFix = require(modulePath).doFix
+            var msg = doFix(statement, '', config)[1]
+            ruleSet.fixedStatement = msg
+        }
 
         // compress it
-        var prepare = require(compressModulePath).prepare
-        var checker = prepare(statement, '', config)
-        // 嵌套的CSS，如果是压缩，也需要精简
-        var msg = checker.doCompress(config._inner.curBrowser)
-        ruleSet.compressedStatement = msg
+        if (config.operation == 'compress') {
+            var doCompress = require(compressModulePath).doCompress
+            var msg = doCompress(statement, '', config)[1]
+            ruleSet.compressedStatement = msg
+        }
     }
 
     this.__doc__ = {

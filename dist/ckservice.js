@@ -11085,7 +11085,7 @@ var CssChecker = new Class(function() {
     this.doCompress = function(self, browser) {
         browser = browser || ALL;
         self.config._inner.curBrowser = browser
-        self.doFix(browser)
+        self.doFix(browser, 'compress')
         return self.getStyleSheet().compress(browser).trim()
     }
 
@@ -11094,8 +11094,8 @@ var CssChecker = new Class(function() {
         return self.getStyleSheet().fixed()
     }
 
-    this.doFix = function(self, browser) {
-        self.config.operation = 'fix'
+    this.doFix = function(self, browser, operation) {
+        self.config.operation = operation || 'fix'
         browser = browser || ALL;
         self.resetStyleSheet()
         // 忽略的规则集（目前只忽略单元测试的selector）
@@ -11178,6 +11178,8 @@ var CssChecker = new Class(function() {
     this.doCheck = function(self) {
         // 忽略的规则集（目前只忽略单元测试的selector）
         var ignoreRulesets = self.config.ignoreRulesets
+
+        self.config.operation = 'check'
 
         function isBoolean(value) {
             return value === true || value === false;
@@ -16023,19 +16025,21 @@ module.exports = global.FEDFixNestedStatement = new Class(ExtraChecker, function
         
         var modulePath = '../doCssFix';
         var compressModulePath = '../doCssCompress'
-        
-        var statement = ruleSet.fixedStatement
 
-        var doFix = require(modulePath).doFix
-        var msg = doFix(statement, '', config)[1]
-        ruleSet.fixedStatement = msg
+        var statement = ruleSet.fixedStatement
+        
+        if (config.operation == 'fix') {
+            var doFix = require(modulePath).doFix
+            var msg = doFix(statement, '', config)[1]
+            ruleSet.fixedStatement = msg
+        }
 
         // compress it
-        var prepare = require(compressModulePath).prepare
-        var checker = prepare(statement, '', config)
-        // 嵌套的CSS，如果是压缩，也需要精简
-        var msg = checker.doCompress(config._inner.curBrowser)
-        ruleSet.compressedStatement = msg
+        if (config.operation == 'compress') {
+            var doCompress = require(compressModulePath).doCompress
+            var msg = doCompress(statement, '', config)[1]
+            ruleSet.compressedStatement = msg
+        }
     }
 
     this.__doc__ = {
