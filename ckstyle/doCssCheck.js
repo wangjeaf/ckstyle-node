@@ -37,14 +37,11 @@ function checkFile(filePath, config) {
     var fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
     logger.log('[check] checking ' + filePath)
     var checker = doCheck(fileContent, filePath, config)
-    var path = filePath + config.extension
+    var path = config.output
     if (checker.hasError()) {
         var reporter = ReporterUtil.getReporter(config.json ? 'json' : 'text', checker)
         reporter.doReport()
-        if (config.print) {
-            if (fs.existsSync(path)) {
-                fs.unlinkSync(path)
-            }
+        if (!path) {
             logger.out(reporter.export() + '\n')
         } else {
             fs.writeFileSync(path, reporter.export())
@@ -56,14 +53,9 @@ function checkFile(filePath, config) {
             logger.ok('{"status":"ok","result":"' + filePath + ' is ok"}')
         else
             logger.ok('[check] ' + filePath + ' is ok\n')
-        if (fs.existsSync(path)) {
-            fs.unlinkSync(path)
-        }
         return true
     }
 } 
-
-
 
 function check(file, config) {
     if (!file || !fs.existsSync(file)) {
@@ -80,7 +72,6 @@ function check(file, config) {
         checkFile(file, config)
     }
 }
-
 
 function checkDir(directory, config) {
     config = config || defaultConfig

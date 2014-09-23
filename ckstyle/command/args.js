@@ -19,7 +19,8 @@ var CommandArgs = new Class(function() {
 
         self.errorLevel = 2
         self.recursive = false
-        self.print = false
+        self.print = true
+        self.output = ''
         self.include = 'all'
         self.exclude = 'none'
         self.config = ''

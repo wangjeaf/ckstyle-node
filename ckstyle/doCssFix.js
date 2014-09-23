@@ -39,32 +39,19 @@ function fixFile(filePath, config) {
     }
 
     config = config || defaultConfig
+    
+    path = config.output
 
-    extension = config.extension
-
-    if (extension.toLowerCase() == 'none')
-        extension = null
-    if (extension != null && endswith(filePath, extension))
-        return
-    fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
-    if (!config.print)
+    if (path)
         logger.ok('[fix] fixing ' + filePath)
+
+    fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
 
     var result = doFix(fileContent, filePath, config)
     checker = result[0]
     msg = result[1]
 
-    path = filePath
-    if (extension == null) {
-        if (!config.noBak)
-            fs.writeFileSync(path + '.bak', fileContent)
-    } else {
-        path = filePath.split('.css')[0] + extension
-    }
-    if (config.print) {
-        if (extension && fs.existsSync(path)) {
-            fs.unlinkSync(path)
-        }
+    if (!path) {
         logger.out(msg)
     } else {
         fs.writeFileSync(path, msg)

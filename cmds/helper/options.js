@@ -11,8 +11,13 @@ module.exports = {
     },
     print: {
         flags: '-p, --print',
-        description: '把处理结果打印到控制台 [false]',
-        defaultValue: false
+        description: '把处理结果打印到控制台 [true]',
+        defaultValue: true
+    },
+    output: {
+        flags: '-o, --output [output]',
+        description: '处理结果导出的文件名，不指定则输出到控制台 [none]',
+        defaultValue: ''
     },
     include: {
         flags: '--include [include]',

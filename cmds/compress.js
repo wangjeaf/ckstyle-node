@@ -10,10 +10,11 @@ exports.meta = {
   options: [
     o.config,
     o.recursive, 
-    o.print, 
+    // o.print, 
+    o.output,
     o.include, 
     o.exclude, 
-    o.minextension, 
+    // o.minextension, 
     o.ignores, 
     o.safe, 
     o.combine, 

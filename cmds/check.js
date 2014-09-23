@@ -11,10 +11,11 @@ exports.meta = {
     o.config,
     o.error, 
     o.recursive, 
-    o.print, 
+    // o.print, 
+    o.output,
     o.include, 
     o.exclude, 
-    o.ckextension, 
+    // o.ckextension, 
     o.ignores, 
     o.tabs,
     o.json

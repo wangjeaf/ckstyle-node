@@ -42,31 +42,17 @@ function compressFile(filePath, config) {
         return;
     }
 
-    var extension = config.extension
-    if (extension.toLowerCase() == 'none')
-        extension = null
-    if (extension && endswith(filePath, extension))
-        return
+    var path = config.output
+
     var fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
-    if (!config.print)
+    if (path)
         logger.ok('[compress] compressing ' + filePath)
-    var path = filePath
-    var basic = filePath.split('.css')[0]
-    if (!extension) {
-        if (config.noBak === false)
-            fs.writeFileSync(path + '.bak', fileContent)
-    } else {
-        path = filePath.split('.css')[0] + extension
-    }
 
     if (!config.browsers) {
         var result = doCompress(fileContent, filePath, config)
         checker = result[0]
         message = result[1]
-        if (config.print) {
-            if (extension && fs.existsSync(path)) {
-                fs.unlinkSync(path)
-            }
+        if (!path) {
             logger.out(message)
         } else {
             fs.writeFileSync(path, message)
@@ -81,13 +67,10 @@ function compressFile(filePath, config) {
             // 尤其是合并过的CSS规则集
             checker = prepare(fileContent, filePath, config)
             message = checker.doCompress(value)
-            path = filePath.split('.css')[0] + '.' + key + '.min.css'
-            if (config.print) {
-                if (extension && fs.existsSync(path)) {
-                    fs.unlinkSync(path)
-                }
+            if (!config.output) {
                 logger.out((onlyOne ? '' : (key + ' : ')) + message)
             } else {
+                path = filePath.split('.css')[0] + '.' + key + '.min.css'
                 fs.writeFileSync(path, message)
                 logger.ok('[compress] compressed ==> ' + path)
             }

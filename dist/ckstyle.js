@@ -1102,7 +1102,8 @@ var CommandArgs = new Class(function() {
 
         self.errorLevel = 2
         self.recursive = false
-        self.print = false
+        self.print = true
+        self.output = ''
         self.include = 'all'
         self.exclude = 'none'
         self.config = ''
@@ -1207,14 +1208,11 @@ function checkFile(filePath, config) {
     var fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
     logger.log('[check] checking ' + filePath)
     var checker = doCheck(fileContent, filePath, config)
-    var path = filePath + config.extension
+    var path = config.output
     if (checker.hasError()) {
         var reporter = ReporterUtil.getReporter(config.json ? 'json' : 'text', checker)
         reporter.doReport()
-        if (config.print) {
-            if (fs.existsSync(path)) {
-                fs.unlinkSync(path)
-            }
+        if (!path) {
             logger.out(reporter.export() + '\n')
         } else {
             fs.writeFileSync(path, reporter.export())
@@ -1226,14 +1224,9 @@ function checkFile(filePath, config) {
             logger.ok('{"status":"ok","result":"' + filePath + ' is ok"}')
         else
             logger.ok('[check] ' + filePath + ' is ok\n')
-        if (fs.existsSync(path)) {
-            fs.unlinkSync(path)
-        }
         return true
     }
 } 
-
-
 
 function check(file, config) {
     if (!file || !fs.existsSync(file)) {
@@ -1250,7 +1243,6 @@ function check(file, config) {
         checkFile(file, config)
     }
 }
-
 
 function checkDir(directory, config) {
     config = config || defaultConfig
@@ -1341,31 +1333,17 @@ function compressFile(filePath, config) {
         return;
     }
 
-    var extension = config.extension
-    if (extension.toLowerCase() == 'none')
-        extension = null
-    if (extension && endswith(filePath, extension))
-        return
+    var path = config.output
+
     var fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
-    if (!config.print)
+    if (path)
         logger.ok('[compress] compressing ' + filePath)
-    var path = filePath
-    var basic = filePath.split('.css')[0]
-    if (!extension) {
-        if (config.noBak === false)
-            fs.writeFileSync(path + '.bak', fileContent)
-    } else {
-        path = filePath.split('.css')[0] + extension
-    }
 
     if (!config.browsers) {
         var result = doCompress(fileContent, filePath, config)
         checker = result[0]
         message = result[1]
-        if (config.print) {
-            if (extension && fs.existsSync(path)) {
-                fs.unlinkSync(path)
-            }
+        if (!path) {
             logger.out(message)
         } else {
             fs.writeFileSync(path, message)
@@ -1380,13 +1358,10 @@ function compressFile(filePath, config) {
             // 尤其是合并过的CSS规则集
             checker = prepare(fileContent, filePath, config)
             message = checker.doCompress(value)
-            path = filePath.split('.css')[0] + '.' + key + '.min.css'
-            if (config.print) {
-                if (extension && fs.existsSync(path)) {
-                    fs.unlinkSync(path)
-                }
+            if (!config.output) {
                 logger.out((onlyOne ? '' : (key + ' : ')) + message)
             } else {
+                path = filePath.split('.css')[0] + '.' + key + '.min.css'
                 fs.writeFileSync(path, message)
                 logger.ok('[compress] compressed ==> ' + path)
             }
@@ -1492,32 +1467,19 @@ function fixFile(filePath, config) {
     }
 
     config = config || defaultConfig
+    
+    path = config.output
 
-    extension = config.extension
-
-    if (extension.toLowerCase() == 'none')
-        extension = null
-    if (extension != null && endswith(filePath, extension))
-        return
-    fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
-    if (!config.print)
+    if (path)
         logger.ok('[fix] fixing ' + filePath)
+
+    fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
 
     var result = doFix(fileContent, filePath, config)
     checker = result[0]
     msg = result[1]
 
-    path = filePath
-    if (extension == null) {
-        if (!config.noBak)
-            fs.writeFileSync(path + '.bak', fileContent)
-    } else {
-        path = filePath.split('.css')[0] + extension
-    }
-    if (config.print) {
-        if (extension && fs.existsSync(path)) {
-            fs.unlinkSync(path)
-        }
+    if (!path) {
         logger.out(msg)
     } else {
         fs.writeFileSync(path, msg)
@@ -1621,32 +1583,19 @@ function formatFile(filePath, config) {
     }
 
     config = config || defaultConfig
+    path = config.output
 
-    extension = config.extension
-
-    if (extension.toLowerCase() == 'none')
-        extension = null
-    if (extension != null && endswith(filePath, extension))
-        return
     fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
-    if (!config.print)
+
+    if (path) {
         logger.ok('[format] formatting ' + filePath)
+    }
 
     var result = doFormat(fileContent, filePath, config)
     checker = result[0]
     msg = result[1]
 
-    path = filePath
-    if (extension == null) {
-        if (!config.noBak)
-            fs.writeFileSync(path + '.bak', fileContent)
-    } else {
-        path = filePath.split('.css')[0] + extension
-    }
-    if (config.print) {
-        if (extension && fs.existsSync(path)) {
-            fs.unlinkSync(path)
-        }
+    if (!path) {
         logger.out(msg)
     } else {
         fs.writeFileSync(path, msg)
