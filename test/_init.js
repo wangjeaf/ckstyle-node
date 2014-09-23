@@ -47,7 +47,7 @@ function checkUnitTestResult(expecteds, reals, level, fileName) {
             expecteds[real] = 0
         } else {
             errorCounter = errorCounter + 1
-            !globalSilent && console.log('[UnitTest] [unexpected but has] level ' + level + '( ' + real + ' )' + ' in ' + fileName)
+            console.log('[UnitTest] [unexpected but has] level ' + level + '( ' + real + ' )' + ' in ' + fileName)
         }
     });
     for (var key in expecteds) {
@@ -56,7 +56,7 @@ function checkUnitTestResult(expecteds, reals, level, fileName) {
             // console.log(key, fileName)
             // throw new Error(1)
             errorCounter = errorCounter + 1
-            !globalSilent && console.log('[UnitTest] [expect but has not] level ' + level + '( ' + key + ' )' + ' in ' + fileName)
+            console.log('[UnitTest] [expect but has not] level ' + level + '( ' + key + ' )' + ' in ' + fileName)
         }
     }
 }

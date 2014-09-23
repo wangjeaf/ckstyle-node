@@ -12010,7 +12010,6 @@ ExtraStatement.prototype.compress = function(browser) {
 
     if (!(self.browser & browser))
         return ''
-    
     msg = Cleaner.clean(self.statement)
     if (msg.slice(-1) != '}' && msg.slice(-1) != ';') {
         msg = msg + ';'
@@ -12094,6 +12093,7 @@ NestedStatement.prototype.compress = function(browser) {
 NestedStatement.prototype.fixed = function(config) {
     var self = this;
     self.fixedSelector = self.fixedSelector || self.selector
+    self.fixedSelector = Cleaner.clean(self.fixedSelector);
     if (!self.fixedStatement && self.innerStyleSheet) {
         self.fixedStatement = self.innerStyleSheet.fixed(config)
     }
