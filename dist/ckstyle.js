@@ -1102,13 +1102,13 @@ var CommandArgs = new Class(function() {
 
         self.errorLevel = 2
         self.recursive = false
-        self.print = true
+        // self.print = true
         self.output = ''
         self.include = 'all'
         self.exclude = 'none'
         self.config = ''
 
-        self.extension = EXTS[self.operation] || '.ckstyle.txt'
+        // self.extension = EXTS[self.operation] || '.ckstyle.txt'
 
         self.standard = ''
         self.json = false
@@ -1118,7 +1118,7 @@ var CommandArgs = new Class(function() {
 
         self.combine = true
         self.browsers = null
-        self.noBak = false
+        // self.noBak = false
 
         // for CKStyle inner use
         self._inner = {

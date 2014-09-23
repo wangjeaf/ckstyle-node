@@ -16,7 +16,7 @@ module.exports = {
     },
     output: {
         flags: '-o, --output [output]',
-        description: '处理结果导出的文件名，不指定则输出到控制台 [none]',
+        description: '导出的文件名，默认输出到控制台 [无]',
         defaultValue: ''
     },
     include: {
@@ -46,7 +46,7 @@ module.exports = {
     },
     ignores: {
         flags: '--ignore-rulesets [rulesets]',
-        description: '忽略的一些规则集 [@unit-test-expecteds]',
+        description: '忽略规则集 [@unit-test-expecteds]',
         defaultValue: '@unit-test-expecteds'
     },
     fixextension: {
@@ -66,7 +66,7 @@ module.exports = {
     },
     safe: {
         flags: '-s, --safe',
-        description: '是否尝试做某些“本工具不能完全保证正确”的修复，true为不尝试，false为尝试 [false]',
+        description: '安全模式，默认不开启 [false]',
         defaultValue: false
     },
     minextension: {
@@ -81,7 +81,7 @@ module.exports = {
     },
     browsers: {
         flags: '--browsers [browsers]',
-        description: '针对不同浏览器生成不同的压缩后文件，使用时如果多个浏览器，用逗号分隔 [无]',
+        description: '针对浏览器进行压缩，多个浏览器用逗号,分隔 [无]',
         defaultValue: ''
     },
     tabs: {
