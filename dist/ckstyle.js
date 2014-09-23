@@ -1630,7 +1630,7 @@ function formatFile(filePath, config) {
         return
     fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
     if (!config.print)
-        logger.ok('[format] fixing ' + filePath)
+        logger.ok('[format] formatting ' + filePath)
 
     var result = doFormat(fileContent, filePath, config)
     checker = result[0]
@@ -1650,7 +1650,7 @@ function formatFile(filePath, config) {
         logger.out(msg)
     } else {
         fs.writeFileSync(path, msg)
-        logger.ok('[format] fixed ==> ' + path)
+        logger.ok('[format] formatted ==> ' + path)
     }
 } 
 
@@ -6676,7 +6676,6 @@ var helper = require('./helper')
 var combiners = {
     margin: require('./MarginCombiner'),
     padding: require('./PaddingCombiner'),
-    background: require('./BackgroundCombiner'),
     outline: require('./OutlineCombiner'),
     border: require('./BorderCombiner'),
     'border-top': require('./BorderCombiner'),
@@ -6684,7 +6683,7 @@ var combiners = {
     'border-bottom': require('./BorderCombiner'),
     'border-right': require('./BorderCombiner'),
     font: require('./FontCombiner'),
-    // background: require('./BackgroundCombiner'),
+    background: require('./BackgroundCombiner'),
     'border-radius': require('./BorderRadiusCombiner'),
     'transition': require('./TransitionCombiner'),
     '-webkit-transition': require('./TransitionCombiner'),

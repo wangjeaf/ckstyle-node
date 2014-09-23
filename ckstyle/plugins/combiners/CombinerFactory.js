@@ -5,7 +5,6 @@ var helper = require('./helper')
 var combiners = {
     margin: require('./MarginCombiner'),
     padding: require('./PaddingCombiner'),
-    background: require('./BackgroundCombiner'),
     outline: require('./OutlineCombiner'),
     border: require('./BorderCombiner'),
     'border-top': require('./BorderCombiner'),
@@ -13,7 +12,7 @@ var combiners = {
     'border-bottom': require('./BorderCombiner'),
     'border-right': require('./BorderCombiner'),
     font: require('./FontCombiner'),
-    // background: require('./BackgroundCombiner'),
+    background: require('./BackgroundCombiner'),
     'border-radius': require('./BorderRadiusCombiner'),
     'transition': require('./TransitionCombiner'),
     '-webkit-transition': require('./TransitionCombiner'),

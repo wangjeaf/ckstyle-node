@@ -48,7 +48,7 @@ function formatFile(filePath, config) {
         return
     fileContent = fs.readFileSync(filePath, {encoding: 'utf-8'})
     if (!config.print)
-        logger.ok('[format] fixing ' + filePath)
+        logger.ok('[format] formatting ' + filePath)
 
     var result = doFormat(fileContent, filePath, config)
     checker = result[0]
@@ -68,7 +68,7 @@ function formatFile(filePath, config) {
         logger.out(msg)
     } else {
         fs.writeFileSync(path, msg)
-        logger.ok('[format] fixed ==> ' + path)
+        logger.ok('[format] formatted ==> ' + path)
     }
 } 
 

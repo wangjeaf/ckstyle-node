@@ -26,3 +26,11 @@ function doCssFileCompress(path) {
 
 exports.doCssCompress = doCssCompress
 exports.doCssFileCompress = doCssFileCompress
+
+
+var Checker = require('../../ckstyle/ckstyler').CssChecker;
+var CommandArgs = require('../../ckstyle/command/args').CommandArgs
+var config = new CommandArgs()
+
+exports.Checker = Checker;
+exports.config = config;
