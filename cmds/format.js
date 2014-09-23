@@ -11,9 +11,9 @@ exports.meta = {
     o.config,
     o.recursive, 
     // o.print, 
-    o.output,
+    o.output
     // o.formatextension,
-    o.nobak
+    // o.nobak
   ],
   description: '自动简单格式化CSS'
 }

@@ -17,9 +17,9 @@ exports.meta = {
     // o.minextension, 
     o.ignores, 
     o.safe, 
-    o.combine, 
-    o.browsers,
-    o.nobak
+    // o.combine, 
+    // o.nobak,
+    o.browsers
   ],
   description: '压缩CSS文件'
 }
