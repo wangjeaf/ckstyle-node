@@ -1,4 +1,4 @@
-CKStyle - 一个CSS工具集
+CKStyle - 一脉相承的CSS工具集
 ============
 
 [![Views in the last 24 hours](https://sourcegraph.com/api/repos/github.com/wangjeaf/ckstyle-node/counters/views-24h.png)](https://github.com/wangjeaf/ckstyle-node/)
@@ -15,34 +15,22 @@ CKStyle 是一个CSS的解析、检查、修复、压缩工具集。之前是 [P
 
 ## Usage
 
-```css
-/* 示例 */
-.test {-webkit-transition: 1s; -moz-transition: 1s; _width:10px; *color:#ffffff; padding:0; 
-padding-top: 20px }
-```
+- `ckstyle check` 检查CSS的风格和正确性（检查精确度超过CSSLint）
+- `ckstyle format` 简单格式化
+- `ckstyle fix` 自动修复代码问题 + 格式化
+- `ckstyle compress` 压缩CSS（目前已超过YUICompressor，局部超越clean-css）
+- `ckstyle serve` 启动CKService支持服务，一键分析网站所有CSS的不足
 
-`ckstyle compress -p --browsers="ie6,ie7,ie,chrome,firefox,safari,opera" ./test.css` `===>`
-```css
-firefox : .test{padding:20px 0 0;-moz-transition:1s}
-chrome  : .test{padding:20px 0 0;-webkit-transition:1s}
-ie7     : .test{padding:20px 0 0;*color:#FFF}
-ie6     : .test{_width:10px;padding:20px 0 0;*color:#FFF}
-opera   : .test{padding:20px 0 0}
-safari  : .test{padding:20px 0 0;-webkit-transition:1s}
-ie      : .test{_width:10px;padding:20px 0 0;*color:#FFF}
-```
+试用，请上官网 [http://ckstyle.github.io/#startup](http://ckstyle.github.io/#startup)
 
-更多使用，请上官网 [http://ckstyle.github.io/#startup](http://ckstyle.github.io/#startup)
+## Features
 
-## Service
-
-一次点击，分析任何网站的CSS。
-
-以 `淘宝网` 为例：
-
-![ckservice-taobao](http://ckstyle.github.io/img/ckservice-taobao.jpg)
-
-更多使用，请上官网 [http://ckstyle.github.io/#service](http://ckstyle.github.io/#service)
+- 更高的压缩率：压缩效果完整超越 `YUICompressor`，正极速追赶并局部超越 `clean-css`
+- 更完整的工具体系：CSS开发，再也无需安装 `CSSLint`、`CSSTiny`、`CSSComb`、`YUICompressor`、`clean-css` 等一堆工具。
+- 更强的扩展性：`功能即插件`，插件式开发，允许开发者自由扩展
+- 更新颖的使用方式：`CKServcie一键分析`，再也不需要 `下载-->本地压缩-->Charles/Fiddler-->线上查看`
+- 更多运行环境的支持：`Nodejs`、`命令行`、`浏览器环境` 都可使用
+- 对开发者，更开放，更自由：全工具采用插件式设计，`开放的架构，开放的源码，开放的心态`
 
 ## License
 
