@@ -64,9 +64,9 @@ exports.CssParser = require('./ckstyle/parser/index').CssParser
 exports.CssChecker = require('./ckstyle/ckstyler').CssChecker
 exports.Detector = require('./ckstyle/browsers/Hacks')
 
-exports.compressStr = require('./ckstyle/doCssCompress').compressStr
-exports.fixStr = require('./ckstyle/doCssFix').fixStr
-exports.formatStr = require('./ckstyle/doCssFormat').formatStr
+var compressStr = require('./ckstyle/doCssCompress').compressStr
+var fixStr = require('./ckstyle/doCssFix').fixStr
+var formatStr = require('./ckstyle/doCssFormat').formatStr
 
 var CKStyle = function(code, options) {
     this._cache = {
@@ -85,7 +85,7 @@ var CKStyle = function(code, options) {
 
 CKStyle.prototype = {
     plugin: function(plugin, options) {
-        this._cache.plugins.before.push([plugin, options])
+        this._cache.plugins.before.push([plugin, options || {}])
         return this
     },
     _before: function() {
@@ -107,7 +107,7 @@ CKStyle.prototype = {
     compress: function(callback) {
         var options = this._cache.options
         this._before()
-        var code = compressStr(this.code, options)
+        var code = CKStyle.compress(this.code, options)
         this._compress = this._latest = code
         callback && callback(code)
         return this
@@ -115,7 +115,7 @@ CKStyle.prototype = {
     format: function(callback) {
         var options = this._cache.options
         this._before()
-        var code = formatStr(this.code, options)
+        var code = CKStyle.format(this.code, options)
         this._format = this._latest =  code
         callback && callback(code)
         return this
@@ -123,7 +123,7 @@ CKStyle.prototype = {
     fix: function(callback) {
         var options = this._cache.options
         this._before()
-        var code = fixStr(this.code, options)
+        var code = CKStyle.fix(this.code, options)
         this._fix = this._latest =  code
         callback && callback(code)
         return this
@@ -145,8 +145,8 @@ CKStyle.start = function(css, options) {
     return new CKStyle(css, options)
 }
 
-CKStyle.compress = exports.compressStr
-CKStyle.format = exports.formatStr
-CKStyle.fix = exports.fixStr
+CKStyle.compress = compressStr
+CKStyle.format = formatStr
+CKStyle.fix = fixStr
 
 exports.CKStyle = CKStyle
