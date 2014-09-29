@@ -60,7 +60,7 @@ exports.command = function(args) {
   }
 }
 
-exports.CssParser = require('./ckstyle/parser/index').CssParser
+exports.CSSParser = require('./ckstyle/parser/index').CSSParser
 exports.CssChecker = require('./ckstyle/ckstyler').CssChecker
 exports.Detector = require('./ckstyle/browsers/Hacks')
 
@@ -143,6 +143,13 @@ CKStyle.prototype = {
 
 CKStyle.start = function(css, options) {
     return new CKStyle(css, options)
+}
+
+CKStyle.parse = function(code, options) {
+  options = options || {}
+  var parser = new exports.CSSParser(code, options.fileName, options);
+  parser.doParse(options);
+  return parser;
 }
 
 CKStyle.compress = compressStr
