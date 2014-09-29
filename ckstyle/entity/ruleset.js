@@ -171,8 +171,9 @@ RuleSet.prototype.getStyleSheet = function() {
     return self.styleSheet
 }
 
-RuleSet.prototype.addRuleByStr = function(selector, attr, value) {
+RuleSet.prototype.addRuleByStr = function(attr, value) {
     var self = this;
+    var selector = this.selector.trim()
     self._rules.push(new Rule(selector, attr, value, self))
 }
 RuleSet.prototype.indexOf = function(name) {
@@ -293,6 +294,17 @@ RuleSet.prototype.getRuleByName = function(name) {
         if (rule.name == name) {
             return rule
         }
+    }
+}
+
+RuleSet.prototype.eachRule = function(callback) {
+    if (!callback) {
+        return
+    }
+    var self = this;
+    for(var i = 0; i < self._rules.length; i++) {
+        var rule = self._rules[i];
+        callback.call(this, rule);
     }
 }
 

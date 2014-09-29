@@ -172,7 +172,7 @@ CSSParser.prototype.doParseRules = function(ruleSet) {
             if (value.trim().slice(-1) == ',') {
                 continue;
             }
-            ruleSet.addRuleByStr(selector, attr, value)
+            ruleSet.addRuleByStr(attr, value)
             attr = ''
             value = ''
             collector = ''
@@ -191,7 +191,7 @@ CSSParser.prototype.doParseRules = function(ruleSet) {
             collector = collector + char + attributes
             i = nextBracePos
             if (i == length - 1) {
-                ruleSet.addRuleByStr(selector, attr, collector)
+                ruleSet.addRuleByStr(attr, collector)
                 break;
             }
         } else {

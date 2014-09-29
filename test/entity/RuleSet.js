@@ -23,7 +23,7 @@ function _ruleSet() {
     equal(ruleSet.getRuleByName('width'), null, 'can not find width')
     equal(ruleSet.getRuleByRoughName('  _width '), null, 'can not find _width')
 
-    ruleSet.addRuleByStr(' .aaa', '  _width ', ' 100px; ')
+    ruleSet.addRuleByStr('  _width ', ' 100px; ')
     
     equal(len(ruleSet.getRules()), 1, 'one rule')
     equal(ruleSet.indexOf('_width'), 0, 'found width')
@@ -33,8 +33,13 @@ function _ruleSet() {
     equal(ruleSet.getRuleByRoughName('  _width ').value, '100px', 'find width by rough name')
     equal(ruleSet.getRuleByStrippedName('_width').value, '100px', 'find width by stripped name')
 
-    ruleSet.addRuleByStr(' .aaa', 'height', '100px; ')
+    ruleSet.addRuleByStr('height', '100px; ')
     equal(len(ruleSet.getRules()), 2, 'two rules')
     equal(ruleSet.getRules()[0].name, 'width', 'width is first')
     equal(ruleSet.getRules()[1].name, 'height', 'height is second')
+
+    ruleSet.eachRule(function(rule) {
+        equal(!!rule.name, true, 'name ok')
+        equal(!!rule.value, true, 'value ok')
+    })
 }
