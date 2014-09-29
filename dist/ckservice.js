@@ -17594,7 +17594,7 @@ exports.heredoc = function(fn) {
         .replace(/[\s\xA0]+$/, "");
 };
 
-var simpleOverridesNames = 'width height color display margin padding'.split(' ');
+var simpleOverridesNames = 'width height color margin padding'.split(' ');
 exports.canOverride = function(name, value) {
     return value.indexOf('!important') == -1 && simpleOverridesNames.indexOf(name) != -1
 }
