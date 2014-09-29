@@ -308,6 +308,20 @@ RuleSet.prototype.eachRule = function(callback) {
     }
 }
 
+RuleSet.prototype.insertBefore = function(name, value, rule) {
+    var self = this;
+    var index = 0;
+    if (rule) {
+        index = self._rules.indexOf(rule);
+    }
+    if (index == -1) {
+        index = 0;
+    }
+    var selector = this.selector.trim()
+    var rule = new Rule(attr, value, self)
+    self._rules.splice(index, 0, rule)
+}
+
 RuleSet.prototype.extendRules = function(ruleSet) {
     var self = this;
     var rules = self._rules;
