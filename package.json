@@ -14,7 +14,8 @@
     "grunt-contrib-uglify": "~0.2.2",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-markdown": "~0.4.0",
-    "load-grunt-tasks": "^0.6.0"
+    "load-grunt-tasks": "^0.6.0",
+    "ckstyle-serve": "*"
   },
   "dependencies": {
     "colors": "^0.6.2",
