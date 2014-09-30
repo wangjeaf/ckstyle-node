@@ -11139,7 +11139,7 @@ var CssChecker = new Class(function() {
         // fix规则
         function fixRules(ruleSet) {
             self.ruleCheckers.forEach(function(checker) {
-                ruleSet.getRules().forEach(function(rule) {
+                ruleSet.eachRule(function(rule) {
                     if (!checker.fix) {
                         return;
                     }
@@ -11175,7 +11175,7 @@ var CssChecker = new Class(function() {
 
         var styleSheet = self.parser.styleSheet
 
-        styleSheet.getRuleSets().forEach(function(ruleSet) {
+        styleSheet.eachRuleSet(function(ruleSet) {
             if (ruleSet.extra) {
                 fixExtraRules(ruleSet)
                 return
@@ -11226,7 +11226,7 @@ var CssChecker = new Class(function() {
                 if (!checker.check) {
                     return;
                 }
-                result = checker.check(ruleSet, self.config)
+                var result = checker.check(ruleSet, self.config)
                 if (isBoolean(result)) {
                     if (!result) {
                         self.logRuleSetMessage(checker, ruleSet)
@@ -11242,11 +11242,11 @@ var CssChecker = new Class(function() {
         // 检查规则
         function checkRule(ruleSet) {
             self.ruleCheckers.forEach(function(checker) {
-                ruleSet.getRules().forEach(function(rule) {
+                ruleSet.eachRule(function(rule) {
                     if (!checker.check) {
                         return;
                     }
-                    result = checker.check(rule, self.config)
+                    var result = checker.check(rule, self.config)
                     if (isBoolean(result)) {
                         if (!result) {
                             self.logRuleMessage(checker, rule)
@@ -11266,7 +11266,7 @@ var CssChecker = new Class(function() {
                 if (!checker.check) {
                     return;
                 }
-                result = checker.check(ruleSet, self.config)
+                var result = checker.check(ruleSet, self.config)
                 if (isBoolean(result)) {
                     if (!result) {
                         self.logRuleSetMessage(checker, ruleSet)
@@ -11296,7 +11296,7 @@ var CssChecker = new Class(function() {
                 logger.error('check should be boolean/list, ' + checker.id + ' is not.')
             }
         });
-        styleSheet.getRuleSets().forEach(function(ruleSet) {
+        styleSheet.eachRuleSet(function(ruleSet) {
             if (ruleSet.extra) {
                 checkExtraRule(ruleSet)
                 return;
@@ -12374,8 +12374,9 @@ RuleSet.prototype.getStyleSheet = function() {
     return self.styleSheet
 }
 
-RuleSet.prototype.addRuleByStr = function(selector, attr, value) {
+RuleSet.prototype.addRuleByStr = function(attr, value) {
     var self = this;
+    var selector = this.selector.trim()
     self._rules.push(new Rule(selector, attr, value, self))
 }
 RuleSet.prototype.indexOf = function(name) {
@@ -12499,6 +12500,31 @@ RuleSet.prototype.getRuleByName = function(name) {
     }
 }
 
+RuleSet.prototype.eachRule = function(callback) {
+    if (!callback) {
+        return
+    }
+    var self = this;
+    for(var i = 0; i < self._rules.length; i++) {
+        var rule = self._rules[i];
+        callback.call(this, rule);
+    }
+}
+
+RuleSet.prototype.insertBefore = function(name, value, rule) {
+    var self = this;
+    var index = 0;
+    if (rule) {
+        index = self._rules.indexOf(rule);
+    }
+    if (index == -1) {
+        index = 0;
+    }
+    var selector = this.selector.trim()
+    var rule = new Rule(attr, value, self)
+    self._rules.splice(index, 0, rule)
+}
+
 RuleSet.prototype.extendRules = function(ruleSet) {
     var self = this;
     var rules = self._rules;
@@ -12563,6 +12589,15 @@ StyleSheet.prototype.getRuleSets = function() {
     var self = this;
     return self._ruleSets
 };
+
+StyleSheet.prototype.eachRuleSet = function(callback) {
+    if (!callback) {
+        return;
+    }
+    this._ruleSets.forEach(function(rs) {
+        callback.call(this, rs);
+    })
+}
 
 StyleSheet.prototype.removeRuleSetByIndex = function(index) {
     var self = this;
@@ -12968,7 +13003,7 @@ CSSParser.prototype.doParseRules = function(ruleSet) {
             if (value.trim().slice(-1) == ',') {
                 continue;
             }
-            ruleSet.addRuleByStr(selector, attr, value)
+            ruleSet.addRuleByStr(attr, value)
             attr = ''
             value = ''
             collector = ''
@@ -12987,7 +13022,7 @@ CSSParser.prototype.doParseRules = function(ruleSet) {
             collector = collector + char + attributes
             i = nextBracePos
             if (i == length - 1) {
-                ruleSet.addRuleByStr(selector, attr, collector)
+                ruleSet.addRuleByStr(attr, collector)
                 break;
             }
         } else {
@@ -16394,6 +16429,7 @@ var BackgroundCombiner = new Class(Combiner, function() {
                 self.hasFather = true
                 self._seperate(prop[2])
             } else if (prop[1] == 'background-position') {
+                self.deleted.push(prop[1])
                 self._seperate2(prop[2])
             } else {
                 if (!(prop[1] in self.deleted)) {
@@ -16445,8 +16481,9 @@ var BackgroundCombiner = new Class(Combiner, function() {
             self.combined = ''
             self.deleted = []
             self.hasFather = false
+        } else {
+            self.combined = collector.join(' ')
         }
-        self.combined = collector.join(' ')
     }
 
     this.combine = function(self) {

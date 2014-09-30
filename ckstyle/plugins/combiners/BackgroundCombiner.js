@@ -81,6 +81,7 @@ var BackgroundCombiner = new Class(Combiner, function() {
                 self.hasFather = true
                 self._seperate(prop[2])
             } else if (prop[1] == 'background-position') {
+                self.deleted.push(prop[1])
                 self._seperate2(prop[2])
             } else {
                 if (!(prop[1] in self.deleted)) {
@@ -132,8 +133,9 @@ var BackgroundCombiner = new Class(Combiner, function() {
             self.combined = ''
             self.deleted = []
             self.hasFather = false
+        } else {
+            self.combined = collector.join(' ')
         }
-        self.combined = collector.join(' ')
     }
 
     this.combine = function(self) {

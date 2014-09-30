@@ -321,7 +321,7 @@ var CssChecker = new Class(function() {
         // fix规则
         function fixRules(ruleSet) {
             self.ruleCheckers.forEach(function(checker) {
-                ruleSet.getRules().forEach(function(rule) {
+                ruleSet.eachRule(function(rule) {
                     if (!checker.fix) {
                         return;
                     }
@@ -357,7 +357,7 @@ var CssChecker = new Class(function() {
 
         var styleSheet = self.parser.styleSheet
 
-        styleSheet.getRuleSets().forEach(function(ruleSet) {
+        styleSheet.eachRuleSet(function(ruleSet) {
             if (ruleSet.extra) {
                 fixExtraRules(ruleSet)
                 return
@@ -408,7 +408,7 @@ var CssChecker = new Class(function() {
                 if (!checker.check) {
                     return;
                 }
-                result = checker.check(ruleSet, self.config)
+                var result = checker.check(ruleSet, self.config)
                 if (isBoolean(result)) {
                     if (!result) {
                         self.logRuleSetMessage(checker, ruleSet)
@@ -424,11 +424,11 @@ var CssChecker = new Class(function() {
         // 检查规则
         function checkRule(ruleSet) {
             self.ruleCheckers.forEach(function(checker) {
-                ruleSet.getRules().forEach(function(rule) {
+                ruleSet.eachRule(function(rule) {
                     if (!checker.check) {
                         return;
                     }
-                    result = checker.check(rule, self.config)
+                    var result = checker.check(rule, self.config)
                     if (isBoolean(result)) {
                         if (!result) {
                             self.logRuleMessage(checker, rule)
@@ -448,7 +448,7 @@ var CssChecker = new Class(function() {
                 if (!checker.check) {
                     return;
                 }
-                result = checker.check(ruleSet, self.config)
+                var result = checker.check(ruleSet, self.config)
                 if (isBoolean(result)) {
                     if (!result) {
                         self.logRuleSetMessage(checker, ruleSet)
@@ -478,7 +478,7 @@ var CssChecker = new Class(function() {
                 logger.error('check should be boolean/list, ' + checker.id + ' is not.')
             }
         });
-        styleSheet.getRuleSets().forEach(function(ruleSet) {
+        styleSheet.eachRuleSet(function(ruleSet) {
             if (ruleSet.extra) {
                 checkExtraRule(ruleSet)
                 return;

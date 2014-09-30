@@ -38,6 +38,15 @@ StyleSheet.prototype.getRuleSets = function() {
     return self._ruleSets
 };
 
+StyleSheet.prototype.eachRuleSet = function(callback) {
+    if (!callback) {
+        return;
+    }
+    this._ruleSets.forEach(function(rs) {
+        callback.call(this, rs);
+    })
+}
+
 StyleSheet.prototype.removeRuleSetByIndex = function(index) {
     var self = this;
     self._ruleSets[index] = null
