@@ -1,9 +1,7 @@
 var colors = require('colors')
-var express = require('express')
-var http = require('http')
 var path = require('path')
 var o = require('./helper/options')
-var router = require('./helper/router')
+// var router = require('./helper/router')
 var logger = require('../ckstyle/logger/index')
 
 exports.meta = {
@@ -11,41 +9,52 @@ exports.meta = {
     options: [
         o.port
     ],
-    description: '启动ckservice服务器，用于接收ckservice的请求'
+    description: '启动ckservice服务 (需要安装 ckstyle-serve)'
 }
 
 exports.handle = function() {
-    startServer(arguments[0].port);
+    var service;
+    try {
+        service = require('ckstyle-serve');
+    } catch (e) {
+        logger.error('Please use \'npm install ckstyle-serve -g\' firstly')
+        return
+    }
+    service.startServer(arguments[0].port, __dirname, logger);
 }
 
-function startServer(port) {
-    var app = express();
-    var server = http.createServer(app);
+// function startServer(port) {
+//     var server 
+//     var express = require('express')
+//     var http = require('http')
 
-    if (port === true || port === false) {
-        port = null;
-    }
-    port = port || 4567;
-    app.set('port', port);
-    app.set('views', path.join(__dirname + '../views'))
-    app.set('view engine', 'jade');
-    app.use(express.favicon());
-    app.use(express.logger('dev'));
-    app.use(express.bodyParser());
-    app.use(express.methodOverride());
+//     var app = express();
+//     var server = http.createServer(app);
 
-    // routes
-    app.use(app.router);
-    app.use(express.static(path.join(__dirname, '../')));
+//     if (port === true || port === false) {
+//         port = null;
+//     }
+//     port = port || 4567;
+//     app.set('port', port);
+//     app.set('views', path.join(__dirname + '../views'))
+//     app.set('view engine', 'jade');
+//     app.use(express.favicon());
+//     app.use(express.logger('dev'));
+//     app.use(express.bodyParser());
+//     app.use(express.methodOverride());
 
-    // add error handler
-    if ('development' == app.get('env')) {
-        app.use(express.errorHandler());
-    }
+//     // routes
+//     app.use(app.router);
+//     app.use(express.static(path.join(__dirname, '../')));
 
-    router.route(app);
+//     // add error handler
+//     if ('development' == app.get('env')) {
+//         app.use(express.errorHandler());
+//     }
 
-    http.createServer(app).listen(port, function(){
-        logger.ok('Express server listening on port ' + port + ' in ' + app.get('env') + ' mode.');
-    });
-}
+//     router.route(app);
+
+//     http.createServer(app).listen(port, function(){
+//         logger.ok('Express server listening on port ' + port + ' in ' + app.get('env') + ' mode.');
+//     });
+// }
